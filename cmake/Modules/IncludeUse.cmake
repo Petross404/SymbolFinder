@@ -1,0 +1,13 @@
+function(handle_include_use NAME_OF_TARGET ENABLE_INCLUDE_WHAT_YOU_USE)
+	if(ENABLE_INCLUDE_WHAT_YOU_USE)
+		message(STATUS "Configuring include-what-you-use for TARGET: ${NAME_OF_TARGET}")
+		find_program(iwyu_path NAMES include-what-you-use iwyu)
+		if(NOT iwyu_path)
+			message(FATAL_ERROR "Could not find the program include-what-you-use.")
+			message(FATAL_ERROR "Configure the project with -DINCLUDE_WHAT_YOU_USE=OFF")
+		else()
+			set_property(TARGET "${NAME_OF_TARGET}" PROPERTY CXX_INCLUDE_WHAT_YOU_USE ${iwyu_path})
+		endif()
+	endif(ENABLE_INCLUDE_WHAT_YOU_USE)
+endfunction()
+

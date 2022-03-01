@@ -1,0 +1,592 @@
+\hypertarget{class_main_window}{}\doxysection{Main\+Window Class Reference}
+\label{class_main_window}\index{MainWindow@{MainWindow}}
+
+
+Main window for this program.  
+
+
+
+
+{\ttfamily \#include $<$findermainwindow.\+hpp$>$}
+
+
+
+Inheritance diagram for Main\+Window\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=249pt]{class_main_window__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Main\+Window\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=318pt]{class_main_window__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_main_window_a6e468e823327f69c522ee60e8d272bbd}{hide\+Error\+Tool\+Box}} ()
+\item 
+void \mbox{\hyperlink{class_main_window_a28d70106ea3fcefddb26fc6ec247ecd1}{show\+Error\+Tool\+Box}} ()
+\item 
+void \mbox{\hyperlink{class_main_window_aa66e91e51044d32b6dd552c4bdfceb6c}{enable\+Advanced\+Args}} (bool option)
+\item 
+void \mbox{\hyperlink{class_main_window_a23ef9a3747df16d9c4411333974ef750}{update\+Std\+Output\+Slot}} ()
+\item 
+void \mbox{\hyperlink{class_main_window_ae74d2e2ab6591d7c3181dd7bfe335e28}{update\+Std\+Error\+Slot}} ()
+\item 
+void \mbox{\hyperlink{class_main_window_a34e9793a83ec05b363d538b6bc32d5a0}{update\+Symbol\+Slot}} (const QString \&symbol)
+\item 
+void \mbox{\hyperlink{class_main_window_a91744bc0882d60aaa0800997adaa3da1}{update\+Advanced\+Arguments\+Slot}} ()
+\item 
+void \mbox{\hyperlink{class_main_window_af906dace68c310f5d7c78149a8b1fb38}{unblock\+Advanced\+Arguments\+Slot}} ()
+\item 
+void \mbox{\hyperlink{class_main_window_af77e3d2e5b308fb1b4942231372f4fdb}{set\+Invocation\+Slot}} (const QString \&advanced\+Args)
+\end{DoxyCompactItemize}
+\doxysubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_main_window_a786b6e12359052482c82d5c335fa665d}{advanced\+Argumentss\+Unblocked}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_main_window_a996c5a2b6f77944776856f08ec30858d}{Main\+Window}} (QWidget $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Constuctor for the main window. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_main_window_a1f7d2c56410fc1bfa135bb907d43313f}{$\sim$\+Main\+Window}} () override
+\item 
+void \mbox{\hyperlink{class_main_window_a7515b71993ba7ec465042516d6b57971}{initialize\+Scanner}} ()
+\item 
+void \mbox{\hyperlink{class_main_window_aaa96135a8025206612e8f7f40196732b}{unblock\+Helper}} (const QString \&text)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_main_window_a95dc085bf70bd0c1ad05bd80f897fd1d}{setup\+Connections}} ()
+\item 
+void \mbox{\hyperlink{class_main_window_af95c501d09cdc9122775f0b8881a4fdf}{setup\+Widgets}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{findermainwindow_8hpp_a5677512f2d34fa111fec7f34306d789e}{Window}} $>$ \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\+\_\+ui}}
+\begin{DoxyCompactList}\small\item\em Smart pointer to UI object. \end{DoxyCompactList}\item 
+gsl\+::owner$<$ \mbox{\hyperlink{class_scanner}{Scanner}} $\ast$ $>$ \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\+\_\+scanner}}
+\item 
+gsl\+::owner$<$ \mbox{\hyperlink{findermainwindow_8hpp_a7e940e7d364998e7ab8d08439989c770}{Args\+Line\+Edit}} $\ast$ $>$ \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\+\_\+line\+Edit\+Default\+Args}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main window for this program. 
+
+Definition at line 25 of file findermainwindow.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_main_window_a996c5a2b6f77944776856f08ec30858d}\label{class_main_window_a996c5a2b6f77944776856f08ec30858d}} 
+\index{MainWindow@{MainWindow}!MainWindow@{MainWindow}}
+\index{MainWindow@{MainWindow}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{MainWindow()}{MainWindow()}}
+{\footnotesize\ttfamily Main\+Window\+::\+Main\+Window (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constuctor for the main window. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & p\+\_\+parent\+: Pointer to the parent widget. Null by default. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 23 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{24         : QMainWindow( parent )}
+\DoxyCodeLine{25         , \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}( std::make\_unique<Ui::MainWindow>() )}
+\DoxyCodeLine{26         , \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}\{ \textcolor{keyword}{new} \mbox{\hyperlink{class_scanner}{Scanner}}\{ \textcolor{stringliteral}{"{}nm"{}}, \textcolor{keyword}{this} \} \}}
+\DoxyCodeLine{27         , \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}\{ \textcolor{keyword}{new} \mbox{\hyperlink{class_arguments_line_edit}{ArgsLineEdit}}\{ \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>invocation().join( \textcolor{charliteral}{' '} ),}
+\DoxyCodeLine{28                                                    \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>driver()-\/>stopString(),}
+\DoxyCodeLine{29                                                    \textcolor{keyword}{this} \} \}}
+\DoxyCodeLine{30 \{}
+\DoxyCodeLine{31         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>setupUi( \textcolor{keyword}{this} );}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33         \mbox{\hyperlink{class_main_window_a7515b71993ba7ec465042516d6b57971}{initializeScanner}}();}
+\DoxyCodeLine{34         \mbox{\hyperlink{class_main_window_af95c501d09cdc9122775f0b8881a4fdf}{setupWidgets}}();}
+\DoxyCodeLine{35         \mbox{\hyperlink{class_main_window_a95dc085bf70bd0c1ad05bd80f897fd1d}{setupConnections}}();}
+\DoxyCodeLine{36 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_a1f7d2c56410fc1bfa135bb907d43313f}\label{class_main_window_a1f7d2c56410fc1bfa135bb907d43313f}} 
+\index{MainWindow@{MainWindow}!````~MainWindow@{$\sim$MainWindow}}
+\index{````~MainWindow@{$\sim$MainWindow}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{$\sim$MainWindow()}{~MainWindow()}}
+{\footnotesize\ttfamily Main\+Window\+::$\sim$\+Main\+Window (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_main_window_a786b6e12359052482c82d5c335fa665d}\label{class_main_window_a786b6e12359052482c82d5c335fa665d}} 
+\index{MainWindow@{MainWindow}!advancedArgumentssUnblocked@{advancedArgumentssUnblocked}}
+\index{advancedArgumentssUnblocked@{advancedArgumentssUnblocked}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{advancedArgumentssUnblocked}{advancedArgumentssUnblocked}}
+{\footnotesize\ttfamily void Main\+Window\+::advanced\+Argumentss\+Unblocked (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_main_window_aa66e91e51044d32b6dd552c4bdfceb6c}\label{class_main_window_aa66e91e51044d32b6dd552c4bdfceb6c}} 
+\index{MainWindow@{MainWindow}!enableAdvancedArgs@{enableAdvancedArgs}}
+\index{enableAdvancedArgs@{enableAdvancedArgs}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{enableAdvancedArgs}{enableAdvancedArgs}}
+{\footnotesize\ttfamily void Main\+Window\+::enable\+Advanced\+Args (\begin{DoxyParamCaption}\item[{bool}]{option }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line 162 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{163 \{}
+\DoxyCodeLine{164         \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setEnabled( option );}
+\DoxyCodeLine{165         \textcolor{keywordflow}{if} ( option ) \{ \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setCursorPosition( 0 ); \}}
+\DoxyCodeLine{166 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_a6e468e823327f69c522ee60e8d272bbd}\label{class_main_window_a6e468e823327f69c522ee60e8d272bbd}} 
+\index{MainWindow@{MainWindow}!hideErrorToolBox@{hideErrorToolBox}}
+\index{hideErrorToolBox@{hideErrorToolBox}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{hideErrorToolBox}{hideErrorToolBox}}
+{\footnotesize\ttfamily void Main\+Window\+::hide\+Error\+Tool\+Box (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line 157 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{158 \{}
+\DoxyCodeLine{159         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>tabWidget-\/>setTabEnabled( 1, \textcolor{keyword}{false} );}
+\DoxyCodeLine{160 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_a7515b71993ba7ec465042516d6b57971}\label{class_main_window_a7515b71993ba7ec465042516d6b57971}} 
+\index{MainWindow@{MainWindow}!initializeScanner@{initializeScanner}}
+\index{initializeScanner@{initializeScanner}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{initializeScanner()}{initializeScanner()}}
+{\footnotesize\ttfamily void Main\+Window\+::initialize\+Scanner (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 168 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{169 \{}
+\DoxyCodeLine{170         \textcolor{keywordflow}{if} ( \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}} == \textcolor{keyword}{nullptr} )}
+\DoxyCodeLine{171         \{}
+\DoxyCodeLine{172                 \textcolor{keyword}{auto} driverName = \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>comboBoxDrivers-\/>currentText();}
+\DoxyCodeLine{173                 \textcolor{keywordflow}{if} ( driverName.isEmpty() )}
+\DoxyCodeLine{174                 \{}
+\DoxyCodeLine{175                         driverName = \mbox{\hyperlink{class_nm_driver_a15a17e4b6a5dbc6f1e8010a2f220d7bd}{NmDriver::stDriverName}}();      \textcolor{comment}{// nm as the default driver;}}
+\DoxyCodeLine{176                 \}}
+\DoxyCodeLine{177                 \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}} = \textcolor{keyword}{new} \mbox{\hyperlink{class_scanner}{Scanner}}\{ driverName, \textcolor{keyword}{this} \};}
+\DoxyCodeLine{178         \}}
+\DoxyCodeLine{179 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_af77e3d2e5b308fb1b4942231372f4fdb}\label{class_main_window_af77e3d2e5b308fb1b4942231372f4fdb}} 
+\index{MainWindow@{MainWindow}!setInvocationSlot@{setInvocationSlot}}
+\index{setInvocationSlot@{setInvocationSlot}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{setInvocationSlot}{setInvocationSlot}}
+{\footnotesize\ttfamily void Main\+Window\+::set\+Invocation\+Slot (\begin{DoxyParamCaption}\item[{const QString \&}]{advanced\+Args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line 270 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{271 \{}
+\DoxyCodeLine{272         \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>setInvocation( advancedArgs );}
+\DoxyCodeLine{273 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_a95dc085bf70bd0c1ad05bd80f897fd1d}\label{class_main_window_a95dc085bf70bd0c1ad05bd80f897fd1d}} 
+\index{MainWindow@{MainWindow}!setupConnections@{setupConnections}}
+\index{setupConnections@{setupConnections}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{setupConnections()}{setupConnections()}}
+{\footnotesize\ttfamily void Main\+Window\+::setup\+Connections (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+If the user clicked to edit the arguments, some actions should occur\+:
+
+A) Visually alter the QLine\+Edit that accepts the args B) Inform the \mbox{\hyperlink{class_scanner}{Scanner}} instance that other args will be passed to it\textquotesingle{}s nm/scanelf driver.
+
+Definition at line 40 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{41 \{}
+\DoxyCodeLine{42         \mbox{\hyperlink{class_connect_verifier}{ConnectVerifier}} v;}
+\DoxyCodeLine{43         v = connect( \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>actionQuit, \&QAction::triggered, qApp, \&QApplication::quit );}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45         v = connect( \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}},}
+\DoxyCodeLine{46                      \&QLineEdit::textEdited,}
+\DoxyCodeLine{47                      \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}},}
+\DoxyCodeLine{48                      \&\mbox{\hyperlink{class_scanner_a95c1cea2cccf7a151da09c2ea99d01cf}{Scanner::setInvocation}} );}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50         v = connect( \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}},}
+\DoxyCodeLine{51                      \&\mbox{\hyperlink{class_scanner_ae18d89f810ccb071562462529667153f}{Scanner::readyReadStandardError}},}
+\DoxyCodeLine{52                      \textcolor{keyword}{this},}
+\DoxyCodeLine{53                      \&\mbox{\hyperlink{class_main_window_a28d70106ea3fcefddb26fc6ec247ecd1}{MainWindow::showErrorToolBox}} );}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{55         v = connect( \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}},}
+\DoxyCodeLine{56                      \&\mbox{\hyperlink{class_scanner_a77e366b03d409fbca6b9c3f165cea913}{Scanner::readyReadStandardOutput}},}
+\DoxyCodeLine{57                      \textcolor{keyword}{this},}
+\DoxyCodeLine{58                      \&\mbox{\hyperlink{class_main_window_a23ef9a3747df16d9c4411333974ef750}{MainWindow::updateStdOutputSlot}} );}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60         v = connect( \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}},}
+\DoxyCodeLine{61                      \&\mbox{\hyperlink{class_scanner_ae18d89f810ccb071562462529667153f}{Scanner::readyReadStandardError}},}
+\DoxyCodeLine{62                      \textcolor{keyword}{this},}
+\DoxyCodeLine{63                      \&\mbox{\hyperlink{class_main_window_ae74d2e2ab6591d7c3181dd7bfe335e28}{MainWindow::updateStdErrorSlot}} );}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65         v = connect( \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>lineEditSymbols,}
+\DoxyCodeLine{66                      \&QLineEdit::textEdited,}
+\DoxyCodeLine{67                      \textcolor{keyword}{this},}
+\DoxyCodeLine{68                      \&\mbox{\hyperlink{class_main_window_a34e9793a83ec05b363d538b6bc32d5a0}{MainWindow::updateSymbolSlot}} );}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{79         v = connect( \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>checkBox, \&QCheckBox::toggled, \textcolor{keyword}{this}, \&\mbox{\hyperlink{class_main_window_aa66e91e51044d32b6dd552c4bdfceb6c}{MainWindow::enableAdvancedArgs}} );}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81         v = connect( \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>checkBox, \&QCheckBox::toggled, \textcolor{keyword}{this}, [\textcolor{keyword}{this}]() \{}
+\DoxyCodeLine{82                 auto args = m\_lineEditDefaultArgs-\/>text();}
+\DoxyCodeLine{83                 setInvocationSlot( args );}
+\DoxyCodeLine{84         \} );}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86         v = connect( \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}},}
+\DoxyCodeLine{87                      \&\mbox{\hyperlink{class_arguments_line_edit_ae291ea877f108d586a6e6b057588184c}{ArgsLineEdit::symbolManuallyChanged}},}
+\DoxyCodeLine{88                      \textcolor{keyword}{this},}
+\DoxyCodeLine{89                      \&\mbox{\hyperlink{class_main_window_af906dace68c310f5d7c78149a8b1fb38}{MainWindow::unblockAdvancedArgumentsSlot}} );}
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91         v = connect( \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}},}
+\DoxyCodeLine{92                      \&QLineEdit::textEdited,}
+\DoxyCodeLine{93                      \textcolor{keyword}{this},}
+\DoxyCodeLine{94                      \&\mbox{\hyperlink{class_main_window_af77e3d2e5b308fb1b4942231372f4fdb}{MainWindow::setInvocationSlot}} );}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{96         v = connect( \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}},}
+\DoxyCodeLine{97                      \&\mbox{\hyperlink{class_scanner_ac05af7015857d9460c6aaabe1699a2f9}{Scanner::argumentsUpdated}},}
+\DoxyCodeLine{98                      \textcolor{keyword}{this},}
+\DoxyCodeLine{99                      \&\mbox{\hyperlink{class_main_window_a91744bc0882d60aaa0800997adaa3da1}{MainWindow::updateAdvancedArgumentsSlot}},}
+\DoxyCodeLine{100                      Qt::UniqueConnection );}
+\DoxyCodeLine{101 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_af95c501d09cdc9122775f0b8881a4fdf}\label{class_main_window_af95c501d09cdc9122775f0b8881a4fdf}} 
+\index{MainWindow@{MainWindow}!setupWidgets@{setupWidgets}}
+\index{setupWidgets@{setupWidgets}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{setupWidgets()}{setupWidgets()}}
+{\footnotesize\ttfamily void Main\+Window\+::setup\+Widgets (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 103 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{104 \{}
+\DoxyCodeLine{105 \textcolor{comment}{        /****** No need to be enabled until they are needed ******/}}
+\DoxyCodeLine{106         \textcolor{keywordtype}{bool} b = \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>checkBox-\/>isChecked();}
+\DoxyCodeLine{107         \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setEnabled( b );}
+\DoxyCodeLine{108         \mbox{\hyperlink{class_main_window_a6e468e823327f69c522ee60e8d272bbd}{hideErrorToolBox}}();}
+\DoxyCodeLine{109         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>pbtnSearch-\/>setEnabled( !\mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>lineEditSymbols-\/>text().isEmpty() );}
+\DoxyCodeLine{110 \textcolor{comment}{        /**********************************************************/}}
+\DoxyCodeLine{111 }
+\DoxyCodeLine{112         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>gridLayout\_3-\/>addWidget( \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}, 3, 1 );}
+\DoxyCodeLine{113         \textcolor{keyword}{auto} symbolName   = \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>lineEditSymbols-\/>text();}
+\DoxyCodeLine{114         \textcolor{keyword}{auto} advancedArgs = \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>invocation().join( \textcolor{charliteral}{' '} );}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116         \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setToolTip(}
+\DoxyCodeLine{117                 tr( \textcolor{stringliteral}{"{}Enter here any additional arguments. Do not edit the "{}}}
+\DoxyCodeLine{118                     \textcolor{stringliteral}{"{}symbol name here!"{}} ) );}
+\DoxyCodeLine{119         \textcolor{keywordflow}{if} ( \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>text() != advancedArgs )}
+\DoxyCodeLine{120         \{}
+\DoxyCodeLine{121                 \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setText( advancedArgs );}
+\DoxyCodeLine{122         \}}
+\DoxyCodeLine{123 }
+\DoxyCodeLine{124         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>lineEditSymbols-\/>setClearButtonEnabled( \textcolor{keyword}{true} );}
+\DoxyCodeLine{125 }
+\DoxyCodeLine{126         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>tabWidget-\/>setTabText( 0, tr( \textcolor{stringliteral}{"{}Standard Output"{}} ) );}
+\DoxyCodeLine{127         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>tabWidget-\/>setTabText( 1, tr( \textcolor{stringliteral}{"{}Standard Error"{}} ) );}
+\DoxyCodeLine{128 }
+\DoxyCodeLine{129         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>tabWidget-\/>setTabToolTip( 0, tr( \textcolor{stringliteral}{"{}Standard output is redirected here"{}} ) );}
+\DoxyCodeLine{130         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>tabWidget-\/>setTabToolTip(}
+\DoxyCodeLine{131                 1,}
+\DoxyCodeLine{132                 tr( QString::fromLatin1(}
+\DoxyCodeLine{133                             \textcolor{stringliteral}{"{}Standard error is redirected here. The tab is "{}}}
+\DoxyCodeLine{134                             \textcolor{stringliteral}{"{}enabled when there is an actual error to print"{}} )}
+\DoxyCodeLine{135                             .toLatin1()}
+\DoxyCodeLine{136                             .data() ) );}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{138         setWindowIcon( QIcon\{ \textcolor{stringliteral}{"{}:resources/pngegg.png"{}} \} );}
+\DoxyCodeLine{139 }
+\DoxyCodeLine{140         \textcolor{keywordflow}{if} ( !\mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>comboBoxDrivers-\/>count() )}
+\DoxyCodeLine{141         \{}
+\DoxyCodeLine{142                 \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>comboBoxDrivers-\/>addItem( \textcolor{stringliteral}{"{}nm"{}} );}
+\DoxyCodeLine{143                 \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>comboBoxDrivers-\/>addItem( \textcolor{stringliteral}{"{}scanelf"{}} );}
+\DoxyCodeLine{144         \}}
+\DoxyCodeLine{145 }
+\DoxyCodeLine{146         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>textBrowserStdOut-\/>setTextBackgroundColor(}
+\DoxyCodeLine{147                 QColor\{ Qt::GlobalColor::black \} );}
+\DoxyCodeLine{148         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>textBrowserStdError-\/>setTextBackgroundColor(}
+\DoxyCodeLine{149                 QColor\{ Qt::GlobalColor::black \} );}
+\DoxyCodeLine{150 \}}
+
+\end{DoxyCode}
+
+
+Referenced by update\+Symbol\+Slot().
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_main_window_af95c501d09cdc9122775f0b8881a4fdf_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_main_window_a28d70106ea3fcefddb26fc6ec247ecd1}\label{class_main_window_a28d70106ea3fcefddb26fc6ec247ecd1}} 
+\index{MainWindow@{MainWindow}!showErrorToolBox@{showErrorToolBox}}
+\index{showErrorToolBox@{showErrorToolBox}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{showErrorToolBox}{showErrorToolBox}}
+{\footnotesize\ttfamily void Main\+Window\+::show\+Error\+Tool\+Box (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line 152 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{153 \{}
+\DoxyCodeLine{154         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>tabWidget-\/>setTabEnabled( 1, \textcolor{keyword}{true} );}
+\DoxyCodeLine{155 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_af906dace68c310f5d7c78149a8b1fb38}\label{class_main_window_af906dace68c310f5d7c78149a8b1fb38}} 
+\index{MainWindow@{MainWindow}!unblockAdvancedArgumentsSlot@{unblockAdvancedArgumentsSlot}}
+\index{unblockAdvancedArgumentsSlot@{unblockAdvancedArgumentsSlot}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{unblockAdvancedArgumentsSlot}{unblockAdvancedArgumentsSlot}}
+{\footnotesize\ttfamily void Main\+Window\+::unblock\+Advanced\+Arguments\+Slot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line 229 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{230 \{}
+\DoxyCodeLine{231         QString oldText = \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>text();}
+\DoxyCodeLine{232 }
+\DoxyCodeLine{233         \textcolor{comment}{/*}}
+\DoxyCodeLine{234 \textcolor{comment}{         * The name of the symbol should be altered only in the relevant widget.}}
+\DoxyCodeLine{235 \textcolor{comment}{         * This is the intended behavior since otherwise the program would infinitely alter}}
+\DoxyCodeLine{236 \textcolor{comment}{         * the arguments which would trigger another signal to alter them and back again.}}
+\DoxyCodeLine{237 \textcolor{comment}{         *}}
+\DoxyCodeLine{238 \textcolor{comment}{         * After showing a warning widget with the message to the user, we need to signal}}
+\DoxyCodeLine{239 \textcolor{comment}{         * this widget when to close and re-\/enable the advanced argument's QLineEdit.}}
+\DoxyCodeLine{240 \textcolor{comment}{         */}}
+\DoxyCodeLine{241 }
+\DoxyCodeLine{242         QString message\{ tr( \textcolor{stringliteral}{"{}Do not edit the symbol name in this widget."{}} ) \};}
+\DoxyCodeLine{243         gsl::owner<MessageWidget*> messageWidget\{}
+\DoxyCodeLine{244                 \textcolor{keyword}{new} \mbox{\hyperlink{class_message_widget}{MessageWidget}}\{ message, MessageWidget::Type::Error, \textcolor{keyword}{this} \} \};}
+\DoxyCodeLine{245 }
+\DoxyCodeLine{246         connect( \textcolor{keyword}{this},}
+\DoxyCodeLine{247                  \&\mbox{\hyperlink{class_main_window_a786b6e12359052482c82d5c335fa665d}{MainWindow::advancedArgumentssUnblocked}},}
+\DoxyCodeLine{248                  messageWidget,}
+\DoxyCodeLine{249                  \&MessageWidget::close,}
+\DoxyCodeLine{250                  Qt::UniqueConnection );}
+\DoxyCodeLine{251 }
+\DoxyCodeLine{252         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>gridLayout\_3-\/>addWidget( messageWidget, 3, 2, 1, 2, Qt::AlignCenter );}
+\DoxyCodeLine{253         statusBar()-\/>showMessage( message,}
+\DoxyCodeLine{254                                   \mbox{\hyperlink{findermainwindow_8cpp_ae2e86677805b9bcbe14b1b35c98d63cf}{std::chrono::milliseconds}}( \mbox{\hyperlink{findermainwindow_8cpp_ae2e86677805b9bcbe14b1b35c98d63cf}{milliseconds}} ).count() );}
+\DoxyCodeLine{255 }
+\DoxyCodeLine{256         \textcolor{comment}{/*}}
+\DoxyCodeLine{257 \textcolor{comment}{         * Toggle the "{}Advanced Arguments"{} checkbox so a chain reaction of the connections}}
+\DoxyCodeLine{258 \textcolor{comment}{         * can take place.}}
+\DoxyCodeLine{259 \textcolor{comment}{         *}}
+\DoxyCodeLine{260 \textcolor{comment}{         * The if(..) isn't really needed here since the signal that connects to this slot}}
+\DoxyCodeLine{261 \textcolor{comment}{         * can't be triggered when the checkbox isn't enabled (ie the QLineEdit is disbled).}}
+\DoxyCodeLine{262 \textcolor{comment}{         */}}
+\DoxyCodeLine{263         \textcolor{keywordflow}{if} ( \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>checkBox-\/>isChecked() ) \{ \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>checkBox-\/>toggle(); \}}
+\DoxyCodeLine{264 }
+\DoxyCodeLine{265         \textcolor{comment}{// Fire up a timer to countdown until the widget is "{}unblocked"{} again.}}
+\DoxyCodeLine{266         QTimer::singleShot( \mbox{\hyperlink{findermainwindow_8cpp_ae2e86677805b9bcbe14b1b35c98d63cf}{std::chrono::milliseconds}}( \mbox{\hyperlink{findermainwindow_8cpp_ae2e86677805b9bcbe14b1b35c98d63cf}{milliseconds}} ),}
+\DoxyCodeLine{267                             std::bind( \&\mbox{\hyperlink{class_main_window_aaa96135a8025206612e8f7f40196732b}{MainWindow::unblockHelper}}, \textcolor{keyword}{this}, oldText ) );}
+\DoxyCodeLine{268 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_aaa96135a8025206612e8f7f40196732b}\label{class_main_window_aaa96135a8025206612e8f7f40196732b}} 
+\index{MainWindow@{MainWindow}!unblockHelper@{unblockHelper}}
+\index{unblockHelper@{unblockHelper}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{unblockHelper()}{unblockHelper()}}
+{\footnotesize\ttfamily void Main\+Window\+::unblock\+Helper (\begin{DoxyParamCaption}\item[{const QString \&}]{text }\end{DoxyParamCaption})}
+
+
+
+Definition at line 218 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{219 \{}
+\DoxyCodeLine{220         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>checkBox-\/>toggle();}
+\DoxyCodeLine{221         \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setText( text );}
+\DoxyCodeLine{222         \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setFocus();}
+\DoxyCodeLine{223         \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setCursorPosition( 1 );}
+\DoxyCodeLine{224 }
+\DoxyCodeLine{225         \textcolor{comment}{// Signal any listener that the widget is unblocked.}}
+\DoxyCodeLine{226         emit \mbox{\hyperlink{class_main_window_a786b6e12359052482c82d5c335fa665d}{advancedArgumentssUnblocked}}();}
+\DoxyCodeLine{227 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_a91744bc0882d60aaa0800997adaa3da1}\label{class_main_window_a91744bc0882d60aaa0800997adaa3da1}} 
+\index{MainWindow@{MainWindow}!updateAdvancedArgumentsSlot@{updateAdvancedArgumentsSlot}}
+\index{updateAdvancedArgumentsSlot@{updateAdvancedArgumentsSlot}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{updateAdvancedArgumentsSlot}{updateAdvancedArgumentsSlot}}
+{\footnotesize\ttfamily void Main\+Window\+::update\+Advanced\+Arguments\+Slot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line 199 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{200 \{}
+\DoxyCodeLine{201         \textcolor{keyword}{static} \textcolor{keywordtype}{int} counter = 0;}
+\DoxyCodeLine{202         counter++;}
+\DoxyCodeLine{203         \textcolor{keywordtype}{int} cursorPosition = \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>cursorPosition();}
+\DoxyCodeLine{204 }
+\DoxyCodeLine{205         \textcolor{keyword}{auto} current = \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>text();}
+\DoxyCodeLine{206         \textcolor{keywordtype}{int}  bindex  = current.indexOf( \textcolor{stringliteral}{"{}'\(\backslash\)b"{}} );}
+\DoxyCodeLine{207         \textcolor{keywordflow}{if} ( cursorPosition > bindex ) \{ \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setText( \textcolor{stringliteral}{"{}"{}} ); \}}
+\DoxyCodeLine{208 }
+\DoxyCodeLine{209         qDebug() << current;}
+\DoxyCodeLine{210         \textcolor{keyword}{auto} args = \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>invocation();}
+\DoxyCodeLine{211         \textcolor{keywordflow}{if} ( current != args.join( \textcolor{charliteral}{' '} ) )}
+\DoxyCodeLine{212         \{}
+\DoxyCodeLine{213                 qDebug() << \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>invocation() << counter;}
+\DoxyCodeLine{214                 \mbox{\hyperlink{class_main_window_a8693e29bc659363a3d632c765ac25e6d}{m\_lineEditDefaultArgs}}-\/>setText( \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>invocation().join( \textcolor{charliteral}{' '} ) );}
+\DoxyCodeLine{215         \}}
+\DoxyCodeLine{216 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_ae74d2e2ab6591d7c3181dd7bfe335e28}\label{class_main_window_ae74d2e2ab6591d7c3181dd7bfe335e28}} 
+\index{MainWindow@{MainWindow}!updateStdErrorSlot@{updateStdErrorSlot}}
+\index{updateStdErrorSlot@{updateStdErrorSlot}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{updateStdErrorSlot}{updateStdErrorSlot}}
+{\footnotesize\ttfamily void Main\+Window\+::update\+Std\+Error\+Slot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line 181 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{182 \{}
+\DoxyCodeLine{183         \textcolor{keyword}{auto} error = \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>standardError();}
+\DoxyCodeLine{184         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>textBrowserStdError-\/>setText( error );}
+\DoxyCodeLine{185 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_a23ef9a3747df16d9c4411333974ef750}\label{class_main_window_a23ef9a3747df16d9c4411333974ef750}} 
+\index{MainWindow@{MainWindow}!updateStdOutputSlot@{updateStdOutputSlot}}
+\index{updateStdOutputSlot@{updateStdOutputSlot}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{updateStdOutputSlot}{updateStdOutputSlot}}
+{\footnotesize\ttfamily void Main\+Window\+::update\+Std\+Output\+Slot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line 187 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{188 \{}
+\DoxyCodeLine{189         \textcolor{keyword}{auto} output = \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>standardOut();}
+\DoxyCodeLine{190         \mbox{\hyperlink{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}{m\_ui}}-\/>textBrowserStdOut-\/>setText( output );}
+\DoxyCodeLine{191 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_main_window_a34e9793a83ec05b363d538b6bc32d5a0}\label{class_main_window_a34e9793a83ec05b363d538b6bc32d5a0}} 
+\index{MainWindow@{MainWindow}!updateSymbolSlot@{updateSymbolSlot}}
+\index{updateSymbolSlot@{updateSymbolSlot}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{updateSymbolSlot}{updateSymbolSlot}}
+{\footnotesize\ttfamily void Main\+Window\+::update\+Symbol\+Slot (\begin{DoxyParamCaption}\item[{const QString \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line 193 of file findermainwindow.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{194 \{}
+\DoxyCodeLine{195         \mbox{\hyperlink{class_main_window_ad6f77d176139ac87424c6cbbd6390526}{m\_scanner}}-\/>setSymbolName( symbol );}
+\DoxyCodeLine{196         \mbox{\hyperlink{class_main_window_af95c501d09cdc9122775f0b8881a4fdf}{setupWidgets}}();}
+\DoxyCodeLine{197 \}}
+
+\end{DoxyCode}
+
+
+References setup\+Widgets().
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_main_window_a34e9793a83ec05b363d538b6bc32d5a0_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_main_window_a8693e29bc659363a3d632c765ac25e6d}\label{class_main_window_a8693e29bc659363a3d632c765ac25e6d}} 
+\index{MainWindow@{MainWindow}!m\_lineEditDefaultArgs@{m\_lineEditDefaultArgs}}
+\index{m\_lineEditDefaultArgs@{m\_lineEditDefaultArgs}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{m\_lineEditDefaultArgs}{m\_lineEditDefaultArgs}}
+{\footnotesize\ttfamily gsl\+::owner$<$\mbox{\hyperlink{findermainwindow_8hpp_a7e940e7d364998e7ab8d08439989c770}{Args\+Line\+Edit}}$\ast$$>$ Main\+Window\+::m\+\_\+line\+Edit\+Default\+Args\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 58 of file findermainwindow.\+hpp.
+
+\mbox{\Hypertarget{class_main_window_ad6f77d176139ac87424c6cbbd6390526}\label{class_main_window_ad6f77d176139ac87424c6cbbd6390526}} 
+\index{MainWindow@{MainWindow}!m\_scanner@{m\_scanner}}
+\index{m\_scanner@{m\_scanner}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{m\_scanner}{m\_scanner}}
+{\footnotesize\ttfamily gsl\+::owner$<$\mbox{\hyperlink{class_scanner}{Scanner}}$\ast$$>$ Main\+Window\+::m\+\_\+scanner\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 57 of file findermainwindow.\+hpp.
+
+\mbox{\Hypertarget{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}\label{class_main_window_abba4b0a0cc4a15eb30bed1d8259d82a3}} 
+\index{MainWindow@{MainWindow}!m\_ui@{m\_ui}}
+\index{m\_ui@{m\_ui}!MainWindow@{MainWindow}}
+\doxysubsubsection{\texorpdfstring{m\_ui}{m\_ui}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{findermainwindow_8hpp_a5677512f2d34fa111fec7f34306d789e}{Window}}$>$ Main\+Window\+::m\+\_\+ui\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Smart pointer to UI object. 
+
+
+
+Definition at line 56 of file findermainwindow.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\mbox{\hyperlink{findermainwindow_8hpp}{findermainwindow.\+hpp}}\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\mbox{\hyperlink{findermainwindow_8cpp}{findermainwindow.\+cpp}}\end{DoxyCompactItemize}

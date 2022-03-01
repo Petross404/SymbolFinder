@@ -1,12 +1,12 @@
-#include "symbolfinder.h"
 #include <QApplication>
 
-int main(int argc, char *argv[])
+#include "findermainwindow.hpp"
+
+int main( int argc, char *argv[] )
 {
-    QApplication app(argc, argv);
-    SymbolFinder w;
-    w.show();
+	QApplication app( argc, argv );
+	MainWindow   w;
+	w.show();
 
-    return app.exec();
+	return app.exec();
 }
-

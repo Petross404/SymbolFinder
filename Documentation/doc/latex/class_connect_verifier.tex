@@ -1,0 +1,105 @@
+\hypertarget{class_connect_verifier}{}\doxysection{Connect\+Verifier Class Reference}
+\label{class_connect_verifier}\index{ConnectVerifier@{ConnectVerifier}}
+
+
+{\ttfamily \mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}}} is a fancy way to assert if some {\ttfamily QObject\+::connection} silenty failed.  
+
+
+
+
+{\ttfamily \#include $<$connectverifier.\+hpp$>$}
+
+
+
+Collaboration diagram for Connect\+Verifier\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=178pt]{class_connect_verifier__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_connect_verifier_a4ff385d3e146afafc945b33bc4cf728f}{Connect\+Verifier}} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor of {\ttfamily \mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}}} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_connect_verifier_a1b331c69af30b319ad127117cd010b6e}{Connect\+Verifier}} (const bool \&b)
+\begin{DoxyCompactList}\small\item\em Copy constructor of {\ttfamily \mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}}} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}} \& \mbox{\hyperlink{class_connect_verifier_a80738940961a95f5f725a1bdc9d5ec05}{operator=}} (const bool \&b)
+\begin{DoxyCompactList}\small\item\em Copy operator of {\ttfamily \mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+{\ttfamily \mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}}} is a fancy way to assert if some {\ttfamily QObject\+::connection} silenty failed. 
+
+It works only on Debug builds. 
+
+Definition at line 31 of file connectverifier.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_connect_verifier_a4ff385d3e146afafc945b33bc4cf728f}\label{class_connect_verifier_a4ff385d3e146afafc945b33bc4cf728f}} 
+\index{ConnectVerifier@{ConnectVerifier}!ConnectVerifier@{ConnectVerifier}}
+\index{ConnectVerifier@{ConnectVerifier}!ConnectVerifier@{ConnectVerifier}}
+\doxysubsubsection{\texorpdfstring{ConnectVerifier()}{ConnectVerifier()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Connect\+Verifier\+::\+Connect\+Verifier (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}, {\ttfamily [default]}}
+
+
+
+Default constructor of {\ttfamily \mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}}} 
+
+\mbox{\Hypertarget{class_connect_verifier_a1b331c69af30b319ad127117cd010b6e}\label{class_connect_verifier_a1b331c69af30b319ad127117cd010b6e}} 
+\index{ConnectVerifier@{ConnectVerifier}!ConnectVerifier@{ConnectVerifier}}
+\index{ConnectVerifier@{ConnectVerifier}!ConnectVerifier@{ConnectVerifier}}
+\doxysubsubsection{\texorpdfstring{ConnectVerifier()}{ConnectVerifier()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Connect\+Verifier\+::\+Connect\+Verifier (\begin{DoxyParamCaption}\item[{const bool \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Copy constructor of {\ttfamily \mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}}} 
+
+
+
+Definition at line 29 of file connectverifier.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{30 \{}
+\DoxyCodeLine{31         assert( b );}
+\DoxyCodeLine{32         (void)( b );}
+\DoxyCodeLine{33 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_connect_verifier_a80738940961a95f5f725a1bdc9d5ec05}\label{class_connect_verifier_a80738940961a95f5f725a1bdc9d5ec05}} 
+\index{ConnectVerifier@{ConnectVerifier}!operator=@{operator=}}
+\index{operator=@{operator=}!ConnectVerifier@{ConnectVerifier}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}} \& Connect\+Verifier\+::operator= (\begin{DoxyParamCaption}\item[{const bool \&}]{b }\end{DoxyParamCaption})}
+
+
+
+Copy operator of {\ttfamily \mbox{\hyperlink{class_connect_verifier}{Connect\+Verifier}}} 
+
+
+
+Definition at line 35 of file connectverifier.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{36 \{}
+\DoxyCodeLine{37         assert( b );}
+\DoxyCodeLine{38         (void)( b );}
+\DoxyCodeLine{39         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{40 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\+Connect\+Verifier/\mbox{\hyperlink{connectverifier_8hpp}{connectverifier.\+hpp}}\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\+Connect\+Verifier/\mbox{\hyperlink{connectverifier_8cpp}{connectverifier.\+cpp}}\end{DoxyCompactItemize}

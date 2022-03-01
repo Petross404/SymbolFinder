@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+	<qresource>
+		<file>resources/pngegg.png</file>
+		<file>resources/Elf-layout--en.svg.png</file>
+	</qresource>
+</RCC>

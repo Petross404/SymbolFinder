@@ -1,0 +1,6 @@
+handle_docs(${BUILD_DOC})
+
+if(BUILD_DOC)
+	install(DIRECTORY	"${CMAKE_CURRENT_BINARY_DIR}/html"
+		DESTINATION	"${CMAKE_INSTALL_DOCDIR}")
+endif(BUILD_DOC)

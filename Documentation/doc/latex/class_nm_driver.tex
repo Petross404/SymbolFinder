@@ -1,0 +1,533 @@
+\hypertarget{class_nm_driver}{}\doxysection{Nm\+Driver Class Reference}
+\label{class_nm_driver}\index{NmDriver@{NmDriver}}
+
+
+\mbox{\hyperlink{class_nm_driver}{Nm\+Driver}} inherits from \mbox{\hyperlink{class_i_driver}{IDriver}} and acts as a driver for /usr/bin/nm.  
+
+
+
+
+{\ttfamily \#include $<$nmdriver.\+hpp$>$}
+
+
+
+Inheritance diagram for Nm\+Driver\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_nm_driver__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Nm\+Driver\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_nm_driver__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_i_driver_aee315cd9fa4530f2e39a95ad028cf2b4}{started\+Search\+For}} (const QString \&symbol)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_nm_driver_aae8c1ace79e2989e518aacc9fed68732}{Nm\+Driver}} (QObject $\ast$parent=nullptr)
+\item 
+\mbox{\hyperlink{class_nm_driver_a713da54a20c4b5050661cc06d2ba1944}{$\sim$\+Nm\+Driver}} () override
+\item 
+const QString \mbox{\hyperlink{class_nm_driver_ae598a824e3a6a0367ebd1408a2851b93}{driver\+Name}} () const override
+\begin{DoxyCompactList}\small\item\em The driver\textquotesingle{}s name (ie nm) \end{DoxyCompactList}\item 
+const QString\+List \mbox{\hyperlink{class_nm_driver_a671071305545c4e05af2ce315672e560}{default\+Invocation}} () const override
+\begin{DoxyCompactList}\small\item\em Get the arguments that this driver is invoked with most of the times. \end{DoxyCompactList}\item 
+const QString\+List \mbox{\hyperlink{class_nm_driver_ac2cd680674c7fcaef36cf2d2452466ef}{invocation}} () const override
+\begin{DoxyCompactList}\small\item\em Get the active list of arguments that the driver is using. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_nm_driver_a9b9f44c714ff4169a90e13289097720f}{set\+Invocation}} (const QString\+List \&args) override
+\begin{DoxyCompactList}\small\item\em This function doesn\textquotesingle{}t override the list of the default arguments, just the active arguments. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_nm_driver_a8fffe10d5085fa06c48a9ae8a9fc6e6f}{exec}} () override
+\begin{DoxyCompactList}\small\item\em Fire up this driver without any further modification to it\textquotesingle{}s arguments. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_nm_driver_a569ec1037b6461bc8684163e5dcb3b2c}{exec}} (const QString\+List \&arg) override
+\begin{DoxyCompactList}\small\item\em Run the driver with specified arguments. \end{DoxyCompactList}\item 
+const QString \mbox{\hyperlink{class_nm_driver_a43efaccde32bbfcbc0cface4099f3449}{symbol\+Name}} () const override
+\begin{DoxyCompactList}\small\item\em Read the name of the current symbol that is searched. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_nm_driver_ae8c8a4613c096392b28045308e88ed6c}{set\+Symbol\+Name}} (const QString \&s) override
+\begin{DoxyCompactList}\small\item\em Set the name of the symbol that will be searched. \end{DoxyCompactList}\item 
+const bool \mbox{\hyperlink{class_nm_driver_ac626e253e17d1571f0d4b7792849642f}{is\+Symbol\+In\+Args}} () const override
+\item 
+const QString \mbox{\hyperlink{class_nm_driver_af3296043c9c8a260c61cb119b0ed3d4a}{stop\+String}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static QString \mbox{\hyperlink{class_nm_driver_a15a17e4b6a5dbc6f1e8010a2f220d7bd}{st\+Driver\+Name}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_nm_driver_a927860d0425f078c1fd34b0bf4e01188}{setup\+Connections}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const QString \mbox{\hyperlink{class_nm_driver_a9731d8bd3e9062806d452b2792cd2336}{m\+\_\+program}} \{ \char`\"{}nm\char`\"{} \}
+\begin{DoxyCompactList}\small\item\em The name of the executable to call. \end{DoxyCompactList}\item 
+const QString\+List \mbox{\hyperlink{class_nm_driver_af20aa264dde1207855dbf7733547be6e}{m\+\_\+def\+Arg\+List}}
+\item 
+QString\+List \mbox{\hyperlink{class_nm_driver_ac4cfd62a63bef9ef3a7d4e3f397a2484}{m\+\_\+effective\+Arg\+List}} \{ \mbox{\hyperlink{class_nm_driver_af20aa264dde1207855dbf7733547be6e}{m\+\_\+def\+Arg\+List}} \}
+\item 
+QString\+List \mbox{\hyperlink{class_nm_driver_a98131ed774d9b5f799fe25ae5c1d06d6}{m\+\_\+arg\+List}}
+\begin{DoxyCompactList}\small\item\em The list of arguments. \end{DoxyCompactList}\item 
+QString \mbox{\hyperlink{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}{m\+\_\+symbol}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_nm_driver}{Nm\+Driver}} inherits from \mbox{\hyperlink{class_i_driver}{IDriver}} and acts as a driver for /usr/bin/nm. 
+
+Definition at line 13 of file nmdriver.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_nm_driver_aae8c1ace79e2989e518aacc9fed68732}\label{class_nm_driver_aae8c1ace79e2989e518aacc9fed68732}} 
+\index{NmDriver@{NmDriver}!NmDriver@{NmDriver}}
+\index{NmDriver@{NmDriver}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{NmDriver()}{NmDriver()}}
+{\footnotesize\ttfamily Nm\+Driver\+::\+Nm\+Driver (\begin{DoxyParamCaption}\item[{QObject $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+
+
+Definition at line 14 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{15         : \mbox{\hyperlink{class_i_driver}{IDriver}}\{ parent \}}
+\DoxyCodeLine{16 \{}
+\DoxyCodeLine{17         \mbox{\hyperlink{class_nm_driver_a927860d0425f078c1fd34b0bf4e01188}{setupConnections}}();}
+\DoxyCodeLine{18 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_nm_driver_a713da54a20c4b5050661cc06d2ba1944}\label{class_nm_driver_a713da54a20c4b5050661cc06d2ba1944}} 
+\index{NmDriver@{NmDriver}!````~NmDriver@{$\sim$NmDriver}}
+\index{````~NmDriver@{$\sim$NmDriver}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{$\sim$NmDriver()}{~NmDriver()}}
+{\footnotesize\ttfamily Nm\+Driver\+::$\sim$\+Nm\+Driver (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [default]}}
+
+Destructor 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_nm_driver_a671071305545c4e05af2ce315672e560}\label{class_nm_driver_a671071305545c4e05af2ce315672e560}} 
+\index{NmDriver@{NmDriver}!defaultInvocation@{defaultInvocation}}
+\index{defaultInvocation@{defaultInvocation}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{defaultInvocation()}{defaultInvocation()}}
+{\footnotesize\ttfamily const QString\+List Nm\+Driver\+::default\+Invocation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the arguments that this driver is invoked with most of the times. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily QString\+List} that has the \char`\"{}default\char`\"{} arguments for this driver. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_driver_ae74b0586888796156339bcae05ee4d67}{IDriver}}.
+
+
+
+Definition at line 24 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{24 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_nm_driver_af20aa264dde1207855dbf7733547be6e}{m\_defArgList}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_nm_driver_ae598a824e3a6a0367ebd1408a2851b93}\label{class_nm_driver_ae598a824e3a6a0367ebd1408a2851b93}} 
+\index{NmDriver@{NmDriver}!driverName@{driverName}}
+\index{driverName@{driverName}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{driverName()}{driverName()}}
+{\footnotesize\ttfamily const QString Nm\+Driver\+::driver\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+The driver\textquotesingle{}s name (ie nm) 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily QString} that is the driver\textquotesingle{}s name 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_driver_af540d5769cd8e7da77fc4b8bed352dbc}{IDriver}}.
+
+
+
+Definition at line 22 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{22 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_nm_driver_a9731d8bd3e9062806d452b2792cd2336}{m\_program}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_nm_driver_a8fffe10d5085fa06c48a9ae8a9fc6e6f}\label{class_nm_driver_a8fffe10d5085fa06c48a9ae8a9fc6e6f}} 
+\index{NmDriver@{NmDriver}!exec@{exec}}
+\index{exec@{exec}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{exec()}{exec()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Nm\+Driver\+::exec (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Fire up this driver without any further modification to it\textquotesingle{}s arguments. 
+
+Use this when you think the driver setup is complete and all its left is to run it. 
+
+Implements \mbox{\hyperlink{class_i_driver_aa827b99a0b9206f5c34b2288247a4ba0}{IDriver}}.
+
+
+
+Definition at line 44 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{45 \{}
+\DoxyCodeLine{46         QStringList l;}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48         \textcolor{keywordflow}{if} ( \mbox{\hyperlink{class_nm_driver_a98131ed774d9b5f799fe25ae5c1d06d6}{m\_argList}}.isEmpty() || \mbox{\hyperlink{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}{m\_symbol}}.isEmpty() ) \{ l = \mbox{\hyperlink{class_nm_driver_af20aa264dde1207855dbf7733547be6e}{m\_defArgList}}; \}}
+\DoxyCodeLine{49         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ( \mbox{\hyperlink{class_nm_driver_a98131ed774d9b5f799fe25ae5c1d06d6}{m\_argList}}.contains( \mbox{\hyperlink{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}{m\_symbol}} ) )}
+\DoxyCodeLine{50         \{}
+\DoxyCodeLine{51                 l = \mbox{\hyperlink{class_nm_driver_a98131ed774d9b5f799fe25ae5c1d06d6}{m\_argList}};}
+\DoxyCodeLine{52         \}}
+\DoxyCodeLine{53         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{54                 \mbox{\hyperlink{class_nm_driver_a98131ed774d9b5f799fe25ae5c1d06d6}{m\_argList}}.append( \mbox{\hyperlink{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}{m\_symbol}} );}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{56         this-\/>start( \mbox{\hyperlink{class_nm_driver_a9731d8bd3e9062806d452b2792cd2336}{m\_program}}, l );}
+\DoxyCodeLine{57 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_nm_driver_a569ec1037b6461bc8684163e5dcb3b2c}\label{class_nm_driver_a569ec1037b6461bc8684163e5dcb3b2c}} 
+\index{NmDriver@{NmDriver}!exec@{exec}}
+\index{exec@{exec}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{exec()}{exec()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Nm\+Driver\+::exec (\begin{DoxyParamCaption}\item[{const QString\+List \&}]{arg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Run the driver with specified arguments. 
+
+This is an overloaded function. 
+\begin{DoxyParams}{Parameters}
+{\em arg} & is the list of arguments that this driver will be started with. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_i_driver_abcf9e8317f7a4110555e286dfe1a1833}{IDriver}}.
+
+
+
+Definition at line 59 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{60 \{}
+\DoxyCodeLine{61         \textcolor{keywordflow}{if} ( \mbox{\hyperlink{class_nm_driver_ac626e253e17d1571f0d4b7792849642f}{isSymbolInArgs}}() ) \{ this-\/>start( \mbox{\hyperlink{class_nm_driver_a9731d8bd3e9062806d452b2792cd2336}{m\_program}}, arg ); \}}
+\DoxyCodeLine{62         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{63         \{}
+\DoxyCodeLine{64                 \textcolor{keyword}{auto} tmp = arg;}
+\DoxyCodeLine{65                 tmp.append( \mbox{\hyperlink{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}{m\_symbol}} );}
+\DoxyCodeLine{66                 start( \mbox{\hyperlink{class_nm_driver_a9731d8bd3e9062806d452b2792cd2336}{m\_program}}, tmp );}
+\DoxyCodeLine{67                 waitForFinished();}
+\DoxyCodeLine{68         \}}
+\DoxyCodeLine{69 \}}
+
+\end{DoxyCode}
+
+
+References is\+Symbol\+In\+Args().
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=336pt]{class_nm_driver_a569ec1037b6461bc8684163e5dcb3b2c_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_nm_driver_ac2cd680674c7fcaef36cf2d2452466ef}\label{class_nm_driver_ac2cd680674c7fcaef36cf2d2452466ef}} 
+\index{NmDriver@{NmDriver}!invocation@{invocation}}
+\index{invocation@{invocation}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{invocation()}{invocation()}}
+{\footnotesize\ttfamily const QString\+List Nm\+Driver\+::invocation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the active list of arguments that the driver is using. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily QString\+List} that has the driver\textquotesingle{}s active list of arguments. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_driver_ae02181706158bb49e77fed3037afa2d0}{IDriver}}.
+
+
+
+Definition at line 26 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{26 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_nm_driver_ac4cfd62a63bef9ef3a7d4e3f397a2484}{m\_effectiveArgList}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_nm_driver_ac626e253e17d1571f0d4b7792849642f}\label{class_nm_driver_ac626e253e17d1571f0d4b7792849642f}} 
+\index{NmDriver@{NmDriver}!isSymbolInArgs@{isSymbolInArgs}}
+\index{isSymbolInArgs@{isSymbolInArgs}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{isSymbolInArgs()}{isSymbolInArgs()}}
+{\footnotesize\ttfamily const bool Nm\+Driver\+::is\+Symbol\+In\+Args (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_driver_a4d528dd43bb0c7cd4523f5ba2f56662c}{IDriver}}.
+
+
+
+Definition at line 28 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{29 \{}
+\DoxyCodeLine{30         \textcolor{keywordtype}{bool} b;}
+\DoxyCodeLine{31         \textcolor{keywordflow}{if} ( !\mbox{\hyperlink{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}{m\_symbol}}.isEmpty() \&\& \mbox{\hyperlink{class_nm_driver_a98131ed774d9b5f799fe25ae5c1d06d6}{m\_argList}}.contains( \mbox{\hyperlink{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}{m\_symbol}} ) )}
+\DoxyCodeLine{32                 b = \textcolor{keyword}{true};}
+\DoxyCodeLine{33         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{34                 b = \textcolor{keyword}{false};}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36         \textcolor{keywordflow}{return} b;}
+\DoxyCodeLine{37 \}}
+
+\end{DoxyCode}
+
+
+Referenced by exec().
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=336pt]{class_nm_driver_ac626e253e17d1571f0d4b7792849642f_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_nm_driver_a9b9f44c714ff4169a90e13289097720f}\label{class_nm_driver_a9b9f44c714ff4169a90e13289097720f}} 
+\index{NmDriver@{NmDriver}!setInvocation@{setInvocation}}
+\index{setInvocation@{setInvocation}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{setInvocation()}{setInvocation()}}
+{\footnotesize\ttfamily void Nm\+Driver\+::set\+Invocation (\begin{DoxyParamCaption}\item[{const QString\+List \&}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+This function doesn\textquotesingle{}t override the list of the default arguments, just the active arguments. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & is the {\ttfamily QString\+List} that has the driver arguments. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_i_driver_a142005202c3c28fd6e75164d1bb24b96}{IDriver}}.
+
+
+
+Definition at line 39 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{40 \{}
+\DoxyCodeLine{41         \textcolor{keywordflow}{if} ( \mbox{\hyperlink{class_nm_driver_ac4cfd62a63bef9ef3a7d4e3f397a2484}{m\_effectiveArgList}} != args ) \{ \mbox{\hyperlink{class_nm_driver_ac4cfd62a63bef9ef3a7d4e3f397a2484}{m\_effectiveArgList}} = args; \}}
+\DoxyCodeLine{42 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_nm_driver_ae8c8a4613c096392b28045308e88ed6c}\label{class_nm_driver_ae8c8a4613c096392b28045308e88ed6c}} 
+\index{NmDriver@{NmDriver}!setSymbolName@{setSymbolName}}
+\index{setSymbolName@{setSymbolName}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{setSymbolName()}{setSymbolName()}}
+{\footnotesize\ttfamily void Nm\+Driver\+::set\+Symbol\+Name (\begin{DoxyParamCaption}\item[{const QString \&}]{symbol\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the name of the symbol that will be searched. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol\+Name} & is the name of the symbol. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_i_driver_a53d963b55f575894fb8a1bdbffb2c77d}{IDriver}}.
+
+
+
+Definition at line 73 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{73 \{ \mbox{\hyperlink{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}{m\_symbol}} = s; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_nm_driver_a927860d0425f078c1fd34b0bf4e01188}\label{class_nm_driver_a927860d0425f078c1fd34b0bf4e01188}} 
+\index{NmDriver@{NmDriver}!setupConnections@{setupConnections}}
+\index{setupConnections@{setupConnections}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{setupConnections()}{setupConnections()}}
+{\footnotesize\ttfamily void Nm\+Driver\+::setup\+Connections (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 71 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{71 \{ \mbox{\hyperlink{class_connect_verifier}{ConnectVerifier}} v; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_i_driver_aee315cd9fa4530f2e39a95ad028cf2b4}\label{class_i_driver_aee315cd9fa4530f2e39a95ad028cf2b4}} 
+\index{NmDriver@{NmDriver}!startedSearchFor@{startedSearchFor}}
+\index{startedSearchFor@{startedSearchFor}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{startedSearchFor}{startedSearchFor}}
+{\footnotesize\ttfamily void IDriver\+::started\+Search\+For (\begin{DoxyParamCaption}\item[{const QString \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}, {\ttfamily [inherited]}}
+
+\mbox{\Hypertarget{class_nm_driver_a15a17e4b6a5dbc6f1e8010a2f220d7bd}\label{class_nm_driver_a15a17e4b6a5dbc6f1e8010a2f220d7bd}} 
+\index{NmDriver@{NmDriver}!stDriverName@{stDriverName}}
+\index{stDriverName@{stDriverName}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{stDriverName()}{stDriverName()}}
+{\footnotesize\ttfamily QString Nm\+Driver\+::st\+Driver\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 77 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{77 \{ \textcolor{keywordflow}{return} \textcolor{stringliteral}{"{}nm"{}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_nm_driver_af3296043c9c8a260c61cb119b0ed3d4a}\label{class_nm_driver_af3296043c9c8a260c61cb119b0ed3d4a}} 
+\index{NmDriver@{NmDriver}!stopString@{stopString}}
+\index{stopString@{stopString}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{stopString()}{stopString()}}
+{\footnotesize\ttfamily const QString Nm\+Driver\+::stop\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_driver_a9949283926714788adf2bd5169497d66}{IDriver}}.
+
+
+
+Definition at line 79 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{79 \{ \textcolor{keywordflow}{return} \textcolor{stringliteral}{"{}\(\backslash\)b"{}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_nm_driver_a43efaccde32bbfcbc0cface4099f3449}\label{class_nm_driver_a43efaccde32bbfcbc0cface4099f3449}} 
+\index{NmDriver@{NmDriver}!symbolName@{symbolName}}
+\index{symbolName@{symbolName}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{symbolName()}{symbolName()}}
+{\footnotesize\ttfamily const QString Nm\+Driver\+::symbol\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Read the name of the current symbol that is searched. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily QString} that is the symbol\textquotesingle{}s name (ie {\ttfamily printf}). 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_driver_a8c8c71e2fc282842fec371d5c9f2c9cc}{IDriver}}.
+
+
+
+Definition at line 75 of file nmdriver.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{75 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}{m\_symbol}}; \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_nm_driver_a98131ed774d9b5f799fe25ae5c1d06d6}\label{class_nm_driver_a98131ed774d9b5f799fe25ae5c1d06d6}} 
+\index{NmDriver@{NmDriver}!m\_argList@{m\_argList}}
+\index{m\_argList@{m\_argList}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{m\_argList}{m\_argList}}
+{\footnotesize\ttfamily QString\+List Nm\+Driver\+::m\+\_\+arg\+List\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The list of arguments. 
+
+
+
+Definition at line 50 of file nmdriver.\+hpp.
+
+\mbox{\Hypertarget{class_nm_driver_af20aa264dde1207855dbf7733547be6e}\label{class_nm_driver_af20aa264dde1207855dbf7733547be6e}} 
+\index{NmDriver@{NmDriver}!m\_defArgList@{m\_defArgList}}
+\index{m\_defArgList@{m\_defArgList}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{m\_defArgList}{m\_defArgList}}
+{\footnotesize\ttfamily const QString\+List Nm\+Driver\+::m\+\_\+def\+Arg\+List\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{                \textcolor{stringliteral}{"{}-\/Dn -\/o -\/-\/defined-\/only /lib/* /usr/lib64/* 2> /dev/null | grep "{}}}
+\DoxyCodeLine{                \textcolor{stringliteral}{"{}'\(\backslash\)b\(\backslash\)b'"{}} \}}
+
+\end{DoxyCode}
+
+
+Definition at line 46 of file nmdriver.\+hpp.
+
+\mbox{\Hypertarget{class_nm_driver_ac4cfd62a63bef9ef3a7d4e3f397a2484}\label{class_nm_driver_ac4cfd62a63bef9ef3a7d4e3f397a2484}} 
+\index{NmDriver@{NmDriver}!m\_effectiveArgList@{m\_effectiveArgList}}
+\index{m\_effectiveArgList@{m\_effectiveArgList}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{m\_effectiveArgList}{m\_effectiveArgList}}
+{\footnotesize\ttfamily QString\+List Nm\+Driver\+::m\+\_\+effective\+Arg\+List \{ \mbox{\hyperlink{class_nm_driver_af20aa264dde1207855dbf7733547be6e}{m\+\_\+def\+Arg\+List}} \}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 49 of file nmdriver.\+hpp.
+
+\mbox{\Hypertarget{class_nm_driver_a9731d8bd3e9062806d452b2792cd2336}\label{class_nm_driver_a9731d8bd3e9062806d452b2792cd2336}} 
+\index{NmDriver@{NmDriver}!m\_program@{m\_program}}
+\index{m\_program@{m\_program}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{m\_program}{m\_program}}
+{\footnotesize\ttfamily const QString Nm\+Driver\+::m\+\_\+program \{ \char`\"{}nm\char`\"{} \}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The name of the executable to call. 
+
+
+
+Definition at line 45 of file nmdriver.\+hpp.
+
+\mbox{\Hypertarget{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}\label{class_nm_driver_a4ea3431584432721d0ac46bf399af3ba}} 
+\index{NmDriver@{NmDriver}!m\_symbol@{m\_symbol}}
+\index{m\_symbol@{m\_symbol}!NmDriver@{NmDriver}}
+\doxysubsubsection{\texorpdfstring{m\_symbol}{m\_symbol}}
+{\footnotesize\ttfamily QString Nm\+Driver\+::m\+\_\+symbol\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 51 of file nmdriver.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\mbox{\hyperlink{nmdriver_8hpp}{nmdriver.\+hpp}}\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\mbox{\hyperlink{nmdriver_8cpp}{nmdriver.\+cpp}}\end{DoxyCompactItemize}

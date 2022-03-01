@@ -1,0 +1,360 @@
+\hypertarget{class_arguments_line_edit}{}\doxysection{Arguments\+Line\+Edit Class Reference}
+\label{class_arguments_line_edit}\index{ArgumentsLineEdit@{ArgumentsLineEdit}}
+
+
+{\ttfamily \mbox{\hyperlink{class_arguments_line_edit}{Arguments\+Line\+Edit}}} is a customized {\ttfamily QLine\+Edit}.  
+
+
+
+
+{\ttfamily \#include $<$argumentslineedit.\+hpp$>$}
+
+
+
+Inheritance diagram for Arguments\+Line\+Edit\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=200pt]{class_arguments_line_edit__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Arguments\+Line\+Edit\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=200pt]{class_arguments_line_edit__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_arguments_line_edit_ae291ea877f108d586a6e6b057588184c}{symbol\+Manually\+Changed}} ()
+\begin{DoxyCompactList}\small\item\em This signal is emmited when the user tries to edit the symbol\textquotesingle{}s name in this widget. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_arguments_line_edit_a5dcb5ea85a58ccc9fcdd53e097b03ae9}{Arguments\+Line\+Edit}} (const QString \&arguments, const QString \&\mbox{\hyperlink{class_arguments_line_edit_a3db9a35b0668d94d76110b4f945ddac2}{stop\+String}}, QWidget $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Construct an {\ttfamily \mbox{\hyperlink{class_arguments_line_edit}{Arguments\+Line\+Edit}}} object with the following parameters. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_arguments_line_edit_ac0cb731a079693662d7130bbda9fa703}{Arguments\+Line\+Edit}} (QWidget $\ast$parent=0)
+\begin{DoxyCompactList}\small\item\em Construct an {\ttfamily \mbox{\hyperlink{class_arguments_line_edit}{Arguments\+Line\+Edit}}} object just with the parent {\ttfamily QWidget} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_arguments_line_edit_a0ad90e2ce54d9ffe40a9981b7cb3bff8}{$\sim$\+Arguments\+Line\+Edit}} () override
+\item 
+void \mbox{\hyperlink{class_arguments_line_edit_a8b2c17aadd94426b6455e76ce7d79d2e}{set\+Stop\+String}} (const QString \&str)
+\begin{DoxyCompactList}\small\item\em This function sets the stop string. \end{DoxyCompactList}\item 
+QString \mbox{\hyperlink{class_arguments_line_edit_a3db9a35b0668d94d76110b4f945ddac2}{stop\+String}} () const
+\begin{DoxyCompactList}\small\item\em This function returns the selected driver\textquotesingle{}s \char`\"{}stop string\char`\"{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_arguments_line_edit_a1b8a5dffbec27681d9f22dfdd3b0ab54}{mouse\+Press\+Event}} (QMouse\+Event $\ast$event) override
+\begin{DoxyCompactList}\small\item\em Override and re-\/implement {\ttfamily QLine\+Edit\+::mouse\+Press\+Event(\+QMouse\+Event$\ast$)} so we can handle left-\/clicks above the symbol\textquotesingle{}s name. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_arguments_line_edit_a1213cbde7030b27cb3077c9e1837f20b}{key\+Press\+Event}} (QKey\+Event $\ast$event) override
+\begin{DoxyCompactList}\small\item\em Override and re-\/implement {\ttfamily QLine\+Edit\+::key\+Press\+Event(\+QKey\+Event$\ast$)} so we can handle keystrokes above the symbol\textquotesingle{}s name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_arguments_line_edit_a41ac62803054194244b78091db62811a}{init}} ()
+\begin{DoxyCompactList}\small\item\em The constructors share some functionality. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+QString \mbox{\hyperlink{class_arguments_line_edit_a1e936581795a495e6254cacb74c28d2f}{m\+\_\+text}}
+\begin{DoxyCompactList}\small\item\em Text that this widget contains $>$ \end{DoxyCompactList}\item 
+QString \mbox{\hyperlink{class_arguments_line_edit_ad7a9315dc277702cae346c6e9fdfb18f}{m\+\_\+special\+Str}}
+\begin{DoxyCompactList}\small\item\em The string in the argument that immediately after the symbol name exists. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+{\ttfamily \mbox{\hyperlink{class_arguments_line_edit}{Arguments\+Line\+Edit}}} is a customized {\ttfamily QLine\+Edit}. 
+
+It offers over the Qt\textquotesingle{}s widget, is that we can handle some special characters and emit signals that are usefull elsewhere.
+
+Since this widget can both display and edit the driver\textquotesingle{}s arguments, one could by mistake edit the symbol\textquotesingle{}s name here, confusing the program that reads this name from another input widget. Clicking or typing at a certain position in the arguments list, is prohibeted and the user is visually informed about the error. 
+
+Definition at line 21 of file argumentslineedit.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_arguments_line_edit_a5dcb5ea85a58ccc9fcdd53e097b03ae9}\label{class_arguments_line_edit_a5dcb5ea85a58ccc9fcdd53e097b03ae9}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{ArgumentsLineEdit()}{ArgumentsLineEdit()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Arguments\+Line\+Edit\+::\+Arguments\+Line\+Edit (\begin{DoxyParamCaption}\item[{const QString \&}]{arguments,  }\item[{const QString \&}]{stop\+String,  }\item[{QWidget $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Construct an {\ttfamily \mbox{\hyperlink{class_arguments_line_edit}{Arguments\+Line\+Edit}}} object with the following parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arguments} & is the {\ttfamily QString} for the driver arguments \\
+\hline
+{\em stop\+String} & is the {\ttfamily QString} that imediately after we find the symbol\textquotesingle{}s name \\
+\hline
+{\em parent} & is the ptr of the parent {\ttfamily QWidget} for this object \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 14 of file argumentslineedit.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{17         : QLineEdit\{ text, parent \}}
+\DoxyCodeLine{18         , \mbox{\hyperlink{class_arguments_line_edit_a1e936581795a495e6254cacb74c28d2f}{m\_text}}\{ text \}}
+\DoxyCodeLine{19         , \mbox{\hyperlink{class_arguments_line_edit_ad7a9315dc277702cae346c6e9fdfb18f}{m\_specialStr}}\{ \mbox{\hyperlink{class_arguments_line_edit_a3db9a35b0668d94d76110b4f945ddac2}{stopString}} \}}
+\DoxyCodeLine{20 \{}
+\DoxyCodeLine{21         \mbox{\hyperlink{class_arguments_line_edit_a41ac62803054194244b78091db62811a}{init}}();}
+\DoxyCodeLine{22 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_arguments_line_edit_ac0cb731a079693662d7130bbda9fa703}\label{class_arguments_line_edit_ac0cb731a079693662d7130bbda9fa703}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{ArgumentsLineEdit()}{ArgumentsLineEdit()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Arguments\+Line\+Edit\+::\+Arguments\+Line\+Edit (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Construct an {\ttfamily \mbox{\hyperlink{class_arguments_line_edit}{Arguments\+Line\+Edit}}} object just with the parent {\ttfamily QWidget} 
+
+
+
+Definition at line 24 of file argumentslineedit.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{25         : QLineEdit\{ parent \}}
+\DoxyCodeLine{26 \{}
+\DoxyCodeLine{27         \mbox{\hyperlink{class_arguments_line_edit_a41ac62803054194244b78091db62811a}{init}}();}
+\DoxyCodeLine{28 \}}
+
+\end{DoxyCode}
+
+
+References Arguments\+Line\+Edit().
+
+
+
+Referenced by Arguments\+Line\+Edit().
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=185pt]{class_arguments_line_edit_ac0cb731a079693662d7130bbda9fa703_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=185pt]{class_arguments_line_edit_ac0cb731a079693662d7130bbda9fa703_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_arguments_line_edit_a0ad90e2ce54d9ffe40a9981b7cb3bff8}\label{class_arguments_line_edit_a0ad90e2ce54d9ffe40a9981b7cb3bff8}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!````~ArgumentsLineEdit@{$\sim$ArgumentsLineEdit}}
+\index{````~ArgumentsLineEdit@{$\sim$ArgumentsLineEdit}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{$\sim$ArgumentsLineEdit()}{~ArgumentsLineEdit()}}
+{\footnotesize\ttfamily Arguments\+Line\+Edit\+::$\sim$\+Arguments\+Line\+Edit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [default]}}
+
+Default destructor 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_arguments_line_edit_a41ac62803054194244b78091db62811a}\label{class_arguments_line_edit_a41ac62803054194244b78091db62811a}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!init@{init}}
+\index{init@{init}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void Arguments\+Line\+Edit\+::init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The constructors share some functionality. 
+
+
+
+Definition at line 39 of file argumentslineedit.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{39 \{ setMouseTracking( \textcolor{keyword}{true} ); \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_arguments_line_edit_a1213cbde7030b27cb3077c9e1837f20b}\label{class_arguments_line_edit_a1213cbde7030b27cb3077c9e1837f20b}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!keyPressEvent@{keyPressEvent}}
+\index{keyPressEvent@{keyPressEvent}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{keyPressEvent()}{keyPressEvent()}}
+{\footnotesize\ttfamily void Arguments\+Line\+Edit\+::key\+Press\+Event (\begin{DoxyParamCaption}\item[{QKey\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+
+
+Override and re-\/implement {\ttfamily QLine\+Edit\+::key\+Press\+Event(\+QKey\+Event$\ast$)} so we can handle keystrokes above the symbol\textquotesingle{}s name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & is a ptr to {\ttfamily QKey\+Event} that occured. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 57 of file argumentslineedit.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{58 \{}
+\DoxyCodeLine{59         \textcolor{keywordtype}{int} cursorPos = cursorPosition();}
+\DoxyCodeLine{60         \textcolor{keywordtype}{int} index     = text().indexOf( \mbox{\hyperlink{class_arguments_line_edit_a3db9a35b0668d94d76110b4f945ddac2}{stopString}}() );}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62         \textcolor{keywordflow}{if} ( cursorPos >= index ) \{ emit \mbox{\hyperlink{class_arguments_line_edit_ae291ea877f108d586a6e6b057588184c}{symbolManuallyChanged}}(); \}}
+\DoxyCodeLine{63         QLineEdit::keyPressEvent( event );}
+\DoxyCodeLine{64 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_arguments_line_edit_a1b8a5dffbec27681d9f22dfdd3b0ab54}\label{class_arguments_line_edit_a1b8a5dffbec27681d9f22dfdd3b0ab54}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!mousePressEvent@{mousePressEvent}}
+\index{mousePressEvent@{mousePressEvent}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{mousePressEvent()}{mousePressEvent()}}
+{\footnotesize\ttfamily void Arguments\+Line\+Edit\+::mouse\+Press\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}}
+
+
+
+Override and re-\/implement {\ttfamily QLine\+Edit\+::mouse\+Press\+Event(\+QMouse\+Event$\ast$)} so we can handle left-\/clicks above the symbol\textquotesingle{}s name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & is a ptr to {\ttfamily QMouse\+Event} that occured. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 41 of file argumentslineedit.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{42 \{}
+\DoxyCodeLine{43         \textcolor{keywordflow}{if} ( event-\/>button() == Qt::MouseButton::LeftButton )}
+\DoxyCodeLine{44         \{}
+\DoxyCodeLine{45                 QCursor tcursor  = this-\/>cursor();}
+\DoxyCodeLine{46                 QPoint  position = \textcolor{keyword}{event}-\/>pos();}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48                 \textcolor{keywordtype}{int} posAt = cursorPositionAt( position );}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50                 \textcolor{keywordtype}{int} index = text().indexOf( \mbox{\hyperlink{class_arguments_line_edit_a3db9a35b0668d94d76110b4f945ddac2}{stopString}}() );}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52                 \textcolor{keywordflow}{if} ( posAt >= index ) \{ emit \mbox{\hyperlink{class_arguments_line_edit_ae291ea877f108d586a6e6b057588184c}{symbolManuallyChanged}}(); \}}
+\DoxyCodeLine{53         \}}
+\DoxyCodeLine{54         QLineEdit::mousePressEvent( event );}
+\DoxyCodeLine{55 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_arguments_line_edit_a8b2c17aadd94426b6455e76ce7d79d2e}\label{class_arguments_line_edit_a8b2c17aadd94426b6455e76ce7d79d2e}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!setStopString@{setStopString}}
+\index{setStopString@{setStopString}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{setStopString()}{setStopString()}}
+{\footnotesize\ttfamily void Arguments\+Line\+Edit\+::set\+Stop\+String (\begin{DoxyParamCaption}\item[{const QString \&}]{str }\end{DoxyParamCaption})}
+
+
+
+This function sets the stop string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & is the stop string \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+void \mbox{\hyperlink{class_arguments_line_edit_a3db9a35b0668d94d76110b4f945ddac2}{Arguments\+Line\+Edit\+::stop\+String() const}} 
+\end{DoxySeeAlso}
+
+
+Definition at line 32 of file argumentslineedit.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{33 \{}
+\DoxyCodeLine{34         \mbox{\hyperlink{class_arguments_line_edit_ad7a9315dc277702cae346c6e9fdfb18f}{m\_specialStr}} = str;}
+\DoxyCodeLine{35 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_arguments_line_edit_a3db9a35b0668d94d76110b4f945ddac2}\label{class_arguments_line_edit_a3db9a35b0668d94d76110b4f945ddac2}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!stopString@{stopString}}
+\index{stopString@{stopString}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{stopString()}{stopString()}}
+{\footnotesize\ttfamily QString Arguments\+Line\+Edit\+::stop\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+This function returns the selected driver\textquotesingle{}s \char`\"{}stop string\char`\"{}. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily QString} that is the stop string. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+void \mbox{\hyperlink{class_arguments_line_edit_a8b2c17aadd94426b6455e76ce7d79d2e}{Arguments\+Line\+Edit\+::set\+Stop\+String(const QString\& str)}} 
+\end{DoxySeeAlso}
+
+
+Definition at line 37 of file argumentslineedit.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{37 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_arguments_line_edit_ad7a9315dc277702cae346c6e9fdfb18f}{m\_specialStr}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_arguments_line_edit_ae291ea877f108d586a6e6b057588184c}\label{class_arguments_line_edit_ae291ea877f108d586a6e6b057588184c}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!symbolManuallyChanged@{symbolManuallyChanged}}
+\index{symbolManuallyChanged@{symbolManuallyChanged}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{symbolManuallyChanged}{symbolManuallyChanged}}
+{\footnotesize\ttfamily void Arguments\+Line\+Edit\+::symbol\+Manually\+Changed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+
+
+This signal is emmited when the user tries to edit the symbol\textquotesingle{}s name in this widget. 
+
+The signal is used to warn the user and reset this widget.
+
+\begin{DoxySeeAlso}{See also}
+void \mbox{\hyperlink{class_arguments_line_edit_a1b8a5dffbec27681d9f22dfdd3b0ab54}{Arguments\+Line\+Edit\+::mouse\+Press\+Event(\+QMouse\+Event$\ast$ event)}} 
+
+void \mbox{\hyperlink{class_arguments_line_edit_a1213cbde7030b27cb3077c9e1837f20b}{Arguments\+Line\+Edit\+::key\+Press\+Event(\+QKey\+Event$\ast$ event)}} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_arguments_line_edit_ad7a9315dc277702cae346c6e9fdfb18f}\label{class_arguments_line_edit_ad7a9315dc277702cae346c6e9fdfb18f}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!m\_specialStr@{m\_specialStr}}
+\index{m\_specialStr@{m\_specialStr}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{m\_specialStr}{m\_specialStr}}
+{\footnotesize\ttfamily QString Arguments\+Line\+Edit\+::m\+\_\+special\+Str\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The string in the argument that immediately after the symbol name exists. 
+
+$>$ 
+
+Definition at line 89 of file argumentslineedit.\+hpp.
+
+\mbox{\Hypertarget{class_arguments_line_edit_a1e936581795a495e6254cacb74c28d2f}\label{class_arguments_line_edit_a1e936581795a495e6254cacb74c28d2f}} 
+\index{ArgumentsLineEdit@{ArgumentsLineEdit}!m\_text@{m\_text}}
+\index{m\_text@{m\_text}!ArgumentsLineEdit@{ArgumentsLineEdit}}
+\doxysubsubsection{\texorpdfstring{m\_text}{m\_text}}
+{\footnotesize\ttfamily QString Arguments\+Line\+Edit\+::m\+\_\+text\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Text that this widget contains $>$ 
+
+
+
+Definition at line 88 of file argumentslineedit.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\+Driver\+Widgets/\mbox{\hyperlink{argumentslineedit_8hpp}{argumentslineedit.\+hpp}}\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\+Driver\+Widgets/\mbox{\hyperlink{argumentslineedit_8cpp}{argumentslineedit.\+cpp}}\end{DoxyCompactItemize}

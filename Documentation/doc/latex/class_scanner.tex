@@ -1,0 +1,572 @@
+\hypertarget{class_scanner}{}\doxysection{Scanner Class Reference}
+\label{class_scanner}\index{Scanner@{Scanner}}
+
+
+{\ttfamily \mbox{\hyperlink{class_scanner}{Scanner}}} class creates an object that can hold an {\ttfamily IDriver$\ast$} instance  
+
+
+
+
+{\ttfamily \#include $<$scanner.\+hpp$>$}
+
+
+
+Inheritance diagram for Scanner\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{class_scanner__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Scanner\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{class_scanner__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_scanner_ae18d89f810ccb071562462529667153f}{ready\+Read\+Standard\+Error}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_i_driver}{IDriver}} got stderr ready. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scanner_a77e366b03d409fbca6b9c3f165cea913}{ready\+Read\+Standard\+Output}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_i_driver}{IDriver}} got stdout ready. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scanner_ac05af7015857d9460c6aaabe1699a2f9}{arguments\+Updated}} ()
+\begin{DoxyCompactList}\small\item\em The driver\textquotesingle{}s arguments are updated. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_scanner_a3f9ee55fac15d6d5fd56b6d892407b13}{Scanner}} (QObject $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_scanner_a78da597e61c9f25f9f3ed6e317137b7e}{Scanner}} (const QString \&driver\+Name, QObject $\ast$parent=nullptr)
+\begin{DoxyCompactList}\small\item\em Constructor that accepts the name of the driver. \end{DoxyCompactList}\item 
+gsl\+::owner$<$ \mbox{\hyperlink{class_i_driver}{IDriver}} $\ast$ $>$ \mbox{\hyperlink{class_scanner_a35a20b4cb2215553ae1dbcb6ec21694f}{driver}} () const
+\begin{DoxyCompactList}\small\item\em Return the {\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}}} ptr (m\+\_\+d for this class) \end{DoxyCompactList}\item 
+QString\+List \mbox{\hyperlink{class_scanner_a5d8ae707e45fd4d5d10c0f13dc200d66}{default\+Invocation}} () const
+\begin{DoxyCompactList}\small\item\em Return the default arguments that the active driver is called. \end{DoxyCompactList}\item 
+QString\+List \mbox{\hyperlink{class_scanner_a1d688f9e317badbb80c5716f96770587}{invocation}} () const
+\begin{DoxyCompactList}\small\item\em Return the current arguments of the active driver. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scanner_a4c714bbc59606f9be30c07980cbd50d6}{scan\+Symbol}} (const QString \&name)
+\begin{DoxyCompactList}\small\item\em Scan the entered symbol. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scanner_a95c1cea2cccf7a151da09c2ea99d01cf}{set\+Invocation}} (const QString \&args)
+\begin{DoxyCompactList}\small\item\em Set the list of arguments that the driver will be invoked with. \end{DoxyCompactList}\item 
+QByte\+Array \mbox{\hyperlink{class_scanner_a91af05974cb85952a58185c6c8f5945d}{standard\+Error}} () const
+\begin{DoxyCompactList}\small\item\em Read the stderr that the driver produced. \end{DoxyCompactList}\item 
+QByte\+Array \mbox{\hyperlink{class_scanner_af1d83562d1598c44de10e6a8b56ac466}{standard\+Out}} () const
+\begin{DoxyCompactList}\small\item\em Read the stdout that the driver produced. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scanner_a5e0840dce49b53562ab1eb57a8c7a814}{set\+Symbol\+Name}} (const QString \&symbol)
+\begin{DoxyCompactList}\small\item\em Set the name of the symbol to be searched for the driver. \end{DoxyCompactList}\item 
+QString \mbox{\hyperlink{class_scanner_a317743d424208e3d6d4e985a5fa736b8}{symbol\+Name}} () const
+\item 
+\mbox{\hyperlink{class_scanner_ab4f3a1c805bb07d6e4ac63a501fe2530}{$\sim$\+Scanner}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_scanner_a7474735d1859c26da7546979b89d6102}{set\+Standard\+Error\+Slot}} ()
+\begin{DoxyCompactList}\small\item\em Read the stderr of the {\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}}} to set the {\ttfamily m\+\_\+stderr} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_scanner_af1e68d60ff0269a684e9549afdeed6c6}{set\+Standard\+Out\+Slot}} ()
+\begin{DoxyCompactList}\small\item\em Read the stdout of the {\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}}} to set the {\ttfamily m\+\_\+stdout} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_scanner_aa42eb3be975e907c3cd73093d655f518}{setup\+Connections}} ()
+\begin{DoxyCompactList}\small\item\em Private function to setup all the connections that have to be made. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+QString \mbox{\hyperlink{class_scanner_a2fd55133e58bb67bd603e2b15cc4fe16}{m\+\_\+name}}
+\item 
+QByte\+Array \mbox{\hyperlink{class_scanner_a276351b7483c974589bcbb9aad964319}{m\+\_\+stdout}}
+\begin{DoxyCompactList}\small\item\em stdout text from the underlying driver \end{DoxyCompactList}\item 
+QByte\+Array \mbox{\hyperlink{class_scanner_a860af69d0fd3f4d4cb294cd81c3dae0e}{m\+\_\+stderr}}
+\begin{DoxyCompactList}\small\item\em stderr text from the underlying driver \end{DoxyCompactList}\item 
+gsl\+::owner$<$ \mbox{\hyperlink{class_i_driver}{IDriver}} $\ast$ $>$ \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\+\_\+d}}
+\begin{DoxyCompactList}\small\item\em Ptr to the {\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}}} instance. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+{\ttfamily \mbox{\hyperlink{class_scanner}{Scanner}}} class creates an object that can hold an {\ttfamily IDriver$\ast$} instance 
+
+Definition at line 16 of file scanner.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_scanner_a3f9ee55fac15d6d5fd56b6d892407b13}\label{class_scanner_a3f9ee55fac15d6d5fd56b6d892407b13}} 
+\index{Scanner@{Scanner}!Scanner@{Scanner}}
+\index{Scanner@{Scanner}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{Scanner()}{Scanner()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Scanner\+::\+Scanner (\begin{DoxyParamCaption}\item[{QObject $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+
+
+Default constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & is the {\ttfamily QObject$\ast$} that is the parent for {\ttfamily \mbox{\hyperlink{class_scanner}{Scanner}}} class \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 16 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{17         : QObject\{ parent \}}
+\DoxyCodeLine{18         , \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}}\{ \textcolor{keyword}{nullptr} \}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \{\}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_a78da597e61c9f25f9f3ed6e317137b7e}\label{class_scanner_a78da597e61c9f25f9f3ed6e317137b7e}} 
+\index{Scanner@{Scanner}!Scanner@{Scanner}}
+\index{Scanner@{Scanner}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{Scanner()}{Scanner()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Scanner\+::\+Scanner (\begin{DoxyParamCaption}\item[{const QString \&}]{driver\+Name,  }\item[{QObject $\ast$}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+
+
+
+Constructor that accepts the name of the driver. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em driver\+Name} & is the name of the driver \\
+\hline
+{\em parent} & is the {\ttfamily QObject$\ast$} that is the parent for {\ttfamily \mbox{\hyperlink{class_scanner}{Scanner}}} class \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 22 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{23         : QObject\{ parent \}}
+\DoxyCodeLine{24         , \mbox{\hyperlink{class_scanner_a2fd55133e58bb67bd603e2b15cc4fe16}{m\_name}}\{ driverName \}}
+\DoxyCodeLine{25 \{}
+\DoxyCodeLine{26         \textcolor{keywordflow}{if} ( \mbox{\hyperlink{class_scanner_a2fd55133e58bb67bd603e2b15cc4fe16}{m\_name}} == \mbox{\hyperlink{class_nm_driver_a15a17e4b6a5dbc6f1e8010a2f220d7bd}{NmDriver::stDriverName}}() )}
+\DoxyCodeLine{27         \{}
+\DoxyCodeLine{28                 \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}} = \textcolor{keyword}{new} \mbox{\hyperlink{class_nm_driver}{NmDriver}}\{ \textcolor{keyword}{this} \};}
+\DoxyCodeLine{29         \}}
+\DoxyCodeLine{30 \}}
+
+\end{DoxyCode}
+
+
+References Scanner().
+
+
+
+Referenced by Scanner().
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=175pt]{class_scanner_a78da597e61c9f25f9f3ed6e317137b7e_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=175pt]{class_scanner_a78da597e61c9f25f9f3ed6e317137b7e_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_scanner_ab4f3a1c805bb07d6e4ac63a501fe2530}\label{class_scanner_ab4f3a1c805bb07d6e4ac63a501fe2530}} 
+\index{Scanner@{Scanner}!````~Scanner@{$\sim$Scanner}}
+\index{````~Scanner@{$\sim$Scanner}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{$\sim$Scanner()}{~Scanner()}}
+{\footnotesize\ttfamily Scanner\+::$\sim$\+Scanner (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_scanner_ac05af7015857d9460c6aaabe1699a2f9}\label{class_scanner_ac05af7015857d9460c6aaabe1699a2f9}} 
+\index{Scanner@{Scanner}!argumentsUpdated@{argumentsUpdated}}
+\index{argumentsUpdated@{argumentsUpdated}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{argumentsUpdated}{argumentsUpdated}}
+{\footnotesize\ttfamily void Scanner\+::arguments\+Updated (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+
+
+The driver\textquotesingle{}s arguments are updated. 
+
+\mbox{\Hypertarget{class_scanner_a5d8ae707e45fd4d5d10c0f13dc200d66}\label{class_scanner_a5d8ae707e45fd4d5d10c0f13dc200d66}} 
+\index{Scanner@{Scanner}!defaultInvocation@{defaultInvocation}}
+\index{defaultInvocation@{defaultInvocation}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{defaultInvocation()}{defaultInvocation()}}
+{\footnotesize\ttfamily QString\+List Scanner\+::default\+Invocation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Return the default arguments that the active driver is called. 
+
+\begin{DoxyReturn}{Returns}
+A list of default arguments 
+\end{DoxyReturn}
+
+
+Definition at line 34 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{35 \{}
+\DoxyCodeLine{36         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}}-\/>defaultInvocation();}
+\DoxyCodeLine{37 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_a35a20b4cb2215553ae1dbcb6ec21694f}\label{class_scanner_a35a20b4cb2215553ae1dbcb6ec21694f}} 
+\index{Scanner@{Scanner}!driver@{driver}}
+\index{driver@{driver}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{driver()}{driver()}}
+{\footnotesize\ttfamily gsl\+::owner$<$ \mbox{\hyperlink{class_i_driver}{IDriver}} $\ast$ $>$ Scanner\+::driver (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Return the {\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}}} ptr (m\+\_\+d for this class) 
+
+\begin{DoxyReturn}{Returns}
+The driver that is selected. 
+\end{DoxyReturn}
+
+
+Definition at line 41 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{41 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_a1d688f9e317badbb80c5716f96770587}\label{class_scanner_a1d688f9e317badbb80c5716f96770587}} 
+\index{Scanner@{Scanner}!invocation@{invocation}}
+\index{invocation@{invocation}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{invocation()}{invocation()}}
+{\footnotesize\ttfamily QString\+List Scanner\+::invocation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Return the current arguments of the active driver. 
+
+\begin{DoxyReturn}{Returns}
+A list of the current arguments 
+\end{DoxyReturn}
+
+
+Definition at line 39 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{39 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}}-\/>invocation(); \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_ae18d89f810ccb071562462529667153f}\label{class_scanner_ae18d89f810ccb071562462529667153f}} 
+\index{Scanner@{Scanner}!readyReadStandardError@{readyReadStandardError}}
+\index{readyReadStandardError@{readyReadStandardError}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{readyReadStandardError}{readyReadStandardError}}
+{\footnotesize\ttfamily void Scanner\+::ready\+Read\+Standard\+Error (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+
+
+\mbox{\hyperlink{class_i_driver}{IDriver}} got stderr ready. 
+
+\mbox{\Hypertarget{class_scanner_a77e366b03d409fbca6b9c3f165cea913}\label{class_scanner_a77e366b03d409fbca6b9c3f165cea913}} 
+\index{Scanner@{Scanner}!readyReadStandardOutput@{readyReadStandardOutput}}
+\index{readyReadStandardOutput@{readyReadStandardOutput}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{readyReadStandardOutput}{readyReadStandardOutput}}
+{\footnotesize\ttfamily void Scanner\+::ready\+Read\+Standard\+Output (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+
+
+\mbox{\hyperlink{class_i_driver}{IDriver}} got stdout ready. 
+
+\mbox{\Hypertarget{class_scanner_a4c714bbc59606f9be30c07980cbd50d6}\label{class_scanner_a4c714bbc59606f9be30c07980cbd50d6}} 
+\index{Scanner@{Scanner}!scanSymbol@{scanSymbol}}
+\index{scanSymbol@{scanSymbol}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{scanSymbol()}{scanSymbol()}}
+{\footnotesize\ttfamily void Scanner\+::scan\+Symbol (\begin{DoxyParamCaption}\item[{const QString \&}]{name }\end{DoxyParamCaption})}
+
+
+
+Scan the entered symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & is the of the symbol to be searched \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 43 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{43 \{\}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_a95c1cea2cccf7a151da09c2ea99d01cf}\label{class_scanner_a95c1cea2cccf7a151da09c2ea99d01cf}} 
+\index{Scanner@{Scanner}!setInvocation@{setInvocation}}
+\index{setInvocation@{setInvocation}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{setInvocation()}{setInvocation()}}
+{\footnotesize\ttfamily void Scanner\+::set\+Invocation (\begin{DoxyParamCaption}\item[{const QString \&}]{args }\end{DoxyParamCaption})}
+
+
+
+Set the list of arguments that the driver will be invoked with. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & is the {\ttfamily QString} text of the arguments for the driver. It is converted to {\ttfamily QString\+List} inside the function again. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 78 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{79 \{}
+\DoxyCodeLine{80         \textcolor{keyword}{auto} currentArgs = \mbox{\hyperlink{class_scanner_a1d688f9e317badbb80c5716f96770587}{invocation}}();}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82         \textcolor{keywordflow}{if} ( args.split( \textcolor{charliteral}{' '} ) != currentArgs )}
+\DoxyCodeLine{83         \{}
+\DoxyCodeLine{84                 \textcolor{keywordflow}{if} ( args.isEmpty() ) \{ \textcolor{keywordflow}{return}; \}}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86                 \textcolor{keyword}{auto} newArgs = args;}
+\DoxyCodeLine{87                 \textcolor{keywordtype}{int}  index   = newArgs.size() -\/ 3;}
+\DoxyCodeLine{88                 qDebug() << index;}
+\DoxyCodeLine{89                 newArgs.insert( index, \mbox{\hyperlink{class_scanner_a317743d424208e3d6d4e985a5fa736b8}{symbolName}}() );}
+\DoxyCodeLine{90                 \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}}-\/>setInvocation( newArgs.split( \textcolor{charliteral}{' '} ) );}
+\DoxyCodeLine{91                 emit \mbox{\hyperlink{class_scanner_ac05af7015857d9460c6aaabe1699a2f9}{argumentsUpdated}}();}
+\DoxyCodeLine{92         \}}
+\DoxyCodeLine{93 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_a7474735d1859c26da7546979b89d6102}\label{class_scanner_a7474735d1859c26da7546979b89d6102}} 
+\index{Scanner@{Scanner}!setStandardErrorSlot@{setStandardErrorSlot}}
+\index{setStandardErrorSlot@{setStandardErrorSlot}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{setStandardErrorSlot()}{setStandardErrorSlot()}}
+{\footnotesize\ttfamily void Scanner\+::set\+Standard\+Error\+Slot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Read the stderr of the {\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}}} to set the {\ttfamily m\+\_\+stderr} 
+
+
+
+Definition at line 97 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{98 \{}
+\DoxyCodeLine{99         \mbox{\hyperlink{class_scanner_a860af69d0fd3f4d4cb294cd81c3dae0e}{m\_stderr}} = \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}}-\/>readAllStandardOutput();}
+\DoxyCodeLine{100 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_af1e68d60ff0269a684e9549afdeed6c6}\label{class_scanner_af1e68d60ff0269a684e9549afdeed6c6}} 
+\index{Scanner@{Scanner}!setStandardOutSlot@{setStandardOutSlot}}
+\index{setStandardOutSlot@{setStandardOutSlot}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{setStandardOutSlot()}{setStandardOutSlot()}}
+{\footnotesize\ttfamily void Scanner\+::set\+Standard\+Out\+Slot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Read the stdout of the {\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}}} to set the {\ttfamily m\+\_\+stdout} 
+
+
+
+Definition at line 95 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{95 \{ \mbox{\hyperlink{class_scanner_a276351b7483c974589bcbb9aad964319}{m\_stdout}} = \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}}-\/>readAllStandardOutput(); \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_a5e0840dce49b53562ab1eb57a8c7a814}\label{class_scanner_a5e0840dce49b53562ab1eb57a8c7a814}} 
+\index{Scanner@{Scanner}!setSymbolName@{setSymbolName}}
+\index{setSymbolName@{setSymbolName}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{setSymbolName()}{setSymbolName()}}
+{\footnotesize\ttfamily void Scanner\+::set\+Symbol\+Name (\begin{DoxyParamCaption}\item[{const QString \&}]{symbol }\end{DoxyParamCaption})}
+
+
+
+Set the name of the symbol to be searched for the driver. 
+
+If the symbol is correctly set inside the list of the driver arguments, the {\ttfamily void arguments\+Updated(const QString\+List\& args)} signal is emmited. 
+
+Definition at line 62 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{63 \{}
+\DoxyCodeLine{64         \textcolor{keyword}{const} QString previousSymbolName = \mbox{\hyperlink{class_scanner_a317743d424208e3d6d4e985a5fa736b8}{symbolName}}();}
+\DoxyCodeLine{65         QStringList   previousArgs       = \mbox{\hyperlink{class_scanner_a1d688f9e317badbb80c5716f96770587}{invocation}}();}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67         \textcolor{comment}{// If the symbol doesn't exist in the list, update.}}
+\DoxyCodeLine{68         \textcolor{keywordflow}{if} ( previousSymbolName != symbol )}
+\DoxyCodeLine{69         \{}
+\DoxyCodeLine{70                 \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}}-\/>setSymbolName( symbol );}
+\DoxyCodeLine{71                 qDebug() << \mbox{\hyperlink{class_scanner_a317743d424208e3d6d4e985a5fa736b8}{symbolName}}();}
+\DoxyCodeLine{72                 \mbox{\hyperlink{class_scanner_a95c1cea2cccf7a151da09c2ea99d01cf}{setInvocation}}( previousArgs.join( \textcolor{charliteral}{' '} ) );}
+\DoxyCodeLine{73         \}}
+\DoxyCodeLine{74 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_aa42eb3be975e907c3cd73093d655f518}\label{class_scanner_aa42eb3be975e907c3cd73093d655f518}} 
+\index{Scanner@{Scanner}!setupConnections@{setupConnections}}
+\index{setupConnections@{setupConnections}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{setupConnections()}{setupConnections()}}
+{\footnotesize\ttfamily void Scanner\+::setup\+Connections (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Private function to setup all the connections that have to be made. 
+
+
+
+Definition at line 45 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{46 \{}
+\DoxyCodeLine{47         \mbox{\hyperlink{class_connect_verifier}{ConnectVerifier}} v;}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49         v = connect( \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}},}
+\DoxyCodeLine{50                      \&QProcess::readyReadStandardOutput,}
+\DoxyCodeLine{51                      \textcolor{keyword}{this},}
+\DoxyCodeLine{52                      \&\mbox{\hyperlink{class_scanner_af1e68d60ff0269a684e9549afdeed6c6}{Scanner::setStandardOutSlot}},}
+\DoxyCodeLine{53                      Qt::UniqueConnection );}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{55         v = connect( \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}},}
+\DoxyCodeLine{56                      \&QProcess::readyReadStandardError,}
+\DoxyCodeLine{57                      \textcolor{keyword}{this},}
+\DoxyCodeLine{58                      \&\mbox{\hyperlink{class_scanner_a7474735d1859c26da7546979b89d6102}{Scanner::setStandardErrorSlot}},}
+\DoxyCodeLine{59                      Qt::UniqueConnection );}
+\DoxyCodeLine{60 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_a91af05974cb85952a58185c6c8f5945d}\label{class_scanner_a91af05974cb85952a58185c6c8f5945d}} 
+\index{Scanner@{Scanner}!standardError@{standardError}}
+\index{standardError@{standardError}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{standardError()}{standardError()}}
+{\footnotesize\ttfamily QByte\+Array Scanner\+::standard\+Error (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Read the stderr that the driver produced. 
+
+\begin{DoxyReturn}{Returns}
+stderr as a {\ttfamily QByte\+Array} 
+\end{DoxyReturn}
+
+
+Definition at line 104 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{104 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_scanner_a860af69d0fd3f4d4cb294cd81c3dae0e}{m\_stderr}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_af1d83562d1598c44de10e6a8b56ac466}\label{class_scanner_af1d83562d1598c44de10e6a8b56ac466}} 
+\index{Scanner@{Scanner}!standardOut@{standardOut}}
+\index{standardOut@{standardOut}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{standardOut()}{standardOut()}}
+{\footnotesize\ttfamily QByte\+Array Scanner\+::standard\+Out (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Read the stdout that the driver produced. 
+
+\begin{DoxyReturn}{Returns}
+stdout as a {\ttfamily QByte\+Array} 
+\end{DoxyReturn}
+
+
+Definition at line 102 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{102 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_scanner_a276351b7483c974589bcbb9aad964319}{m\_stdout}}; \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{class_scanner_a317743d424208e3d6d4e985a5fa736b8}\label{class_scanner_a317743d424208e3d6d4e985a5fa736b8}} 
+\index{Scanner@{Scanner}!symbolName@{symbolName}}
+\index{symbolName@{symbolName}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{symbolName()}{symbolName()}}
+{\footnotesize\ttfamily QString Scanner\+::symbol\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line 76 of file scanner.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{76 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_scanner_a97e79c506af587bed6d412d5c57aa52d}{m\_d}}-\/>symbolName(); \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_scanner_a97e79c506af587bed6d412d5c57aa52d}\label{class_scanner_a97e79c506af587bed6d412d5c57aa52d}} 
+\index{Scanner@{Scanner}!m\_d@{m\_d}}
+\index{m\_d@{m\_d}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{m\_d}{m\_d}}
+{\footnotesize\ttfamily gsl\+::owner$<$\mbox{\hyperlink{class_i_driver}{IDriver}}$\ast$$>$ Scanner\+::m\+\_\+d\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Ptr to the {\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}}} instance. 
+
+
+
+Definition at line 107 of file scanner.\+hpp.
+
+\mbox{\Hypertarget{class_scanner_a2fd55133e58bb67bd603e2b15cc4fe16}\label{class_scanner_a2fd55133e58bb67bd603e2b15cc4fe16}} 
+\index{Scanner@{Scanner}!m\_name@{m\_name}}
+\index{m\_name@{m\_name}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{m\_name}{m\_name}}
+{\footnotesize\ttfamily QString Scanner\+::m\+\_\+name\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 103 of file scanner.\+hpp.
+
+\mbox{\Hypertarget{class_scanner_a860af69d0fd3f4d4cb294cd81c3dae0e}\label{class_scanner_a860af69d0fd3f4d4cb294cd81c3dae0e}} 
+\index{Scanner@{Scanner}!m\_stderr@{m\_stderr}}
+\index{m\_stderr@{m\_stderr}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{m\_stderr}{m\_stderr}}
+{\footnotesize\ttfamily QByte\+Array Scanner\+::m\+\_\+stderr\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+stderr text from the underlying driver 
+
+
+
+Definition at line 105 of file scanner.\+hpp.
+
+\mbox{\Hypertarget{class_scanner_a276351b7483c974589bcbb9aad964319}\label{class_scanner_a276351b7483c974589bcbb9aad964319}} 
+\index{Scanner@{Scanner}!m\_stdout@{m\_stdout}}
+\index{m\_stdout@{m\_stdout}!Scanner@{Scanner}}
+\doxysubsubsection{\texorpdfstring{m\_stdout}{m\_stdout}}
+{\footnotesize\ttfamily QByte\+Array Scanner\+::m\+\_\+stdout\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+stdout text from the underlying driver 
+
+
+
+Definition at line 104 of file scanner.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\mbox{\hyperlink{scanner_8hpp}{scanner.\+hpp}}\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\mbox{\hyperlink{scanner_8cpp}{scanner.\+cpp}}\end{DoxyCompactItemize}

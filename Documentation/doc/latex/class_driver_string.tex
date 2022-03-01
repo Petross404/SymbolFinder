@@ -1,0 +1,133 @@
+\hypertarget{class_driver_string}{}\doxysection{Driver\+String Class Reference}
+\label{class_driver_string}\index{DriverString@{DriverString}}
+
+
+{\ttfamily \#include $<$driverstring.\+hpp$>$}
+
+
+
+Inherits QString.
+
+
+
+Collaboration diagram for Driver\+String\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{class_driver_string__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_driver_string_a89b9973668a309106a7671d10148840b}{Driver\+String}} (QString s, \mbox{\hyperlink{class_i_driver}{IDriver}} $\ast$d)
+\item 
+\mbox{\hyperlink{class_driver_string_a4dbb266db7cfcfb3427b8ac9cff4b15c}{$\sim$\+Driver\+String}} ()
+\item 
+\mbox{\hyperlink{class_i_driver}{IDriver}} $\ast$ \mbox{\hyperlink{class_driver_string_aa2f6de59c0abc65914228cda2ecce1cf}{type}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_i_driver}{IDriver}} $\ast$ \mbox{\hyperlink{class_driver_string_a0091ae8ab870455281dc6b18d3ee0435}{m\+\_\+driver}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 12 of file driverstring.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_driver_string_a89b9973668a309106a7671d10148840b}\label{class_driver_string_a89b9973668a309106a7671d10148840b}} 
+\index{DriverString@{DriverString}!DriverString@{DriverString}}
+\index{DriverString@{DriverString}!DriverString@{DriverString}}
+\doxysubsubsection{\texorpdfstring{DriverString()}{DriverString()}}
+{\footnotesize\ttfamily Driver\+String\+::\+Driver\+String (\begin{DoxyParamCaption}\item[{QString}]{s,  }\item[{\mbox{\hyperlink{class_i_driver}{IDriver}} $\ast$}]{d }\end{DoxyParamCaption})}
+
+Default constructor 
+
+Definition at line 9 of file driverstring.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{10         : QString\{ s \}}
+\DoxyCodeLine{11         , \mbox{\hyperlink{class_driver_string_a0091ae8ab870455281dc6b18d3ee0435}{m\_driver}}\{ d \}}
+\DoxyCodeLine{12 \{\}}
+
+\end{DoxyCode}
+
+
+References Driver\+String().
+
+
+
+Referenced by Driver\+String().
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{class_driver_string_a89b9973668a309106a7671d10148840b_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=206pt]{class_driver_string_a89b9973668a309106a7671d10148840b_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_driver_string_a4dbb266db7cfcfb3427b8ac9cff4b15c}\label{class_driver_string_a4dbb266db7cfcfb3427b8ac9cff4b15c}} 
+\index{DriverString@{DriverString}!````~DriverString@{$\sim$DriverString}}
+\index{````~DriverString@{$\sim$DriverString}!DriverString@{DriverString}}
+\doxysubsubsection{\texorpdfstring{$\sim$DriverString()}{~DriverString()}}
+{\footnotesize\ttfamily Driver\+String\+::$\sim$\+Driver\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+Destructor 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_driver_string_aa2f6de59c0abc65914228cda2ecce1cf}\label{class_driver_string_aa2f6de59c0abc65914228cda2ecce1cf}} 
+\index{DriverString@{DriverString}!type@{type}}
+\index{type@{type}!DriverString@{DriverString}}
+\doxysubsubsection{\texorpdfstring{type()}{type()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}} $\ast$ Driver\+String\+::type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line 16 of file driverstring.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{16 \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_driver_string_a0091ae8ab870455281dc6b18d3ee0435}{m\_driver}}; \}}
+
+\end{DoxyCode}
+
+
+References m\+\_\+driver.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_driver_string_a0091ae8ab870455281dc6b18d3ee0435}\label{class_driver_string_a0091ae8ab870455281dc6b18d3ee0435}} 
+\index{DriverString@{DriverString}!m\_driver@{m\_driver}}
+\index{m\_driver@{m\_driver}!DriverString@{DriverString}}
+\doxysubsubsection{\texorpdfstring{m\_driver}{m\_driver}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_i_driver}{IDriver}}$\ast$ Driver\+String\+::m\+\_\+driver\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 28 of file driverstring.\+hpp.
+
+
+
+Referenced by type().
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\+String/\mbox{\hyperlink{driverstring_8hpp}{driverstring.\+hpp}}\item 
+/mnt/\+Volume\+\_\+3/\+Gentoo/projects/\+Cplus/\+Symbol\+Finder/src/\+String/\mbox{\hyperlink{driverstring_8cpp}{driverstring.\+cpp}}\end{DoxyCompactItemize}
