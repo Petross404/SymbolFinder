@@ -28,7 +28,6 @@ MainWindow::MainWindow( QWidget* parent )
 {
 	m_ui->setupUi( this );
 
-	initializeScanner();
 	setupWidgets();
 	setupConnections();
 }
