@@ -43,11 +43,6 @@ public:
 	~MainWindow() override;
 
 	/*!
-	 * \todo Maybe this will be removed
-	 */
-	void initializeScanner();
-
-	/*!
 	 * Helper fumction to run inside a `QTimer::singleShot` and
 	 * unblock the `ArgumentsLineEdit` widget.
 	 * \param text is what will be written to the widget once it's unblocked

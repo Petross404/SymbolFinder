@@ -17,10 +17,6 @@
 
 int constexpr milliseconds = 3000;
 
-/**
- * \brief Constuctor for the main window
- * \param parent p_parent: Pointer to the parent widget. Null by default.
- */
 MainWindow::MainWindow( QWidget* parent )
 	: QMainWindow( parent )
 	, m_ui( std::make_unique<Ui::MainWindow>() )
@@ -49,10 +45,6 @@ void MainWindow::setupConnections()
 		     &QApplication::quit,
 		     Qt::UniqueConnection );
 
-	/*
-	 * The slot requires more arguments than the signal provides. So we are
-	 * using std::bind and pass any further arguments like this.
-	 */
 	v = connect( m_lineEditDefaultArgs,
 		     &QLineEdit::textEdited,
 		     this,
@@ -90,10 +82,6 @@ void MainWindow::setupConnections()
 		     this,
 		     &MainWindow::enableAdvancedLineEdit,
 		     Qt::UniqueConnection );
-
-	// 	v = connect( m_ui->checkBox, &QCheckBox::toggled, this, [this]()
-	// { 		auto args = m_lineEditDefaultArgs->text(); setInvocationSlot( args
-	// ); 	} );
 
 	v = connect( m_lineEditDefaultArgs,
 		     &ArgsLineEdit::symbolManuallyChanged,
@@ -178,18 +166,6 @@ void MainWindow::enableAdvancedLineEdit( bool option )
 	if ( option ) { m_lineEditDefaultArgs->setCursorPosition( 0 ); }
 }
 
-void MainWindow::initializeScanner()
-{
-	// 	if ( m_scanner == nullptr )
-	// 	{
-	// 		auto driverName = m_ui->comboBoxDrivers->currentText();
-	// 		if ( driverName.isEmpty() )
-	// 		{
-	// 			driverName = NmDriver::stDriverName();	  // nm as the default driver;
-	// 		}
-	// 		m_scanner = new Scanner{ driverName, this };
-	// 	}
-}
 
 void MainWindow::updateStdErrorSlot()
 {
