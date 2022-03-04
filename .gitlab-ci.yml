@@ -1,0 +1,56 @@
+# This file is a template, and might need editing before it works on your project.
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+
+# This is a sample GitLab CI/CD configuration file that should run without any modifications.
+# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
+# it uses echo commands to simulate the pipeline execution.
+#
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+#
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
+
+stages:
+- build
+
+code-style-check:
+    stage: build
+    image: debian:sid
+    script:
+        - apt-get update -y
+        - apt-get install -y cppcheck clazy
+        - if [ -d build-check ]; then rm -rv build-check; fi
+        - mkdir build-check && cd build-check && cd build-check && cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+        - pwd ; ls -lA ; cppcheck --project=compile_commands.json --enable=all --report-progress -v
+
+linux_compilation:
+    stage: build
+    image: debian:sid
+    script:
+        - apt-get update --yes
+        - apt-get install --yes g++ cmake qtbase5-dev qt5-default qttools5-dev-tools cppcheck extra-cmake-modules
+        - if [ -d build ]; then rm -rv build; fi
+        - mkdir build && cd build
+        - cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && cppcheck --project=compile_commands.json --enable=all --report-progress -v && make 
+    artifacts:
+        paths:
+        - build/
+
+windows-64bit-cross:
+    stage: build
+    image: debian:sid
+    script:
+    - apt-get update -y
+    - apt-get install -y make mingw-w64 g++ cmake qtbase5-dev qt5-default qttools5-dev-tools cppcheck extra-cmake-modules
+    #- PREFIX=x86_64-w64-mingw32 ARCHITECTURE=x86_64 OS=w64_amd64-cross-mingw32 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ AR=x86_64-w64-mingw32-ar RM="rm -f" MAKE="make -f makefile.mingw" make -f makefile.mingw self GRDIR=./
+    - if [ -d windows-build ]; then rm -rv windows-build; fi
+    - mkdir windows-build && cd windows-build
+    - cmake -DGNU_HOST="x86_64-w64-mingw32" -DCMAKE_SYSTEM_NAME="Windows" -DCMAKE_CXX_COMPILER="x86_64-w64-mingw32-g++" .. && make
+    artifacts:
+        expire_in: 1 week
+        paths:
+            - windows-build/
+---
