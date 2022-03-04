@@ -40,7 +40,8 @@ void ArgumentsLineEdit::init() { setMouseTracking( true ); }
 
 void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
 {
-	if ( event->button() == Qt::MouseButton::LeftButton )
+	if ( Qt::MouseButton btn = event->button();
+	     btn == Qt::MouseButton::LeftButton || btn == Qt::MouseButton::RightButton )
 	{
 		QPoint position = event->pos();
 
@@ -55,8 +56,8 @@ void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
 void ArgumentsLineEdit::keyPressEvent( QKeyEvent* event )
 {
 	int cursorPos = cursorPosition();
-	int index     = text().indexOf( stopString() );
+	int strIndex  = text().indexOf( stopString() );
 
-	if ( cursorPos >= index ) { emit symbolManuallyChanged(); }
+	if ( cursorPos >= strIndex ) { emit symbolManuallyChanged(); }
 	QLineEdit::keyPressEvent( event );
 }

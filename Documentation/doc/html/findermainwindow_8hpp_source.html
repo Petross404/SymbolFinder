@@ -86,64 +86,66 @@ $(function() {
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">class </span><a class="code" href="classIDriver.html">IDriver</a>;</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">class </span><a class="code" href="classScanner.html">Scanner</a>;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">class </span><a class="code" href="classArgumentsLineEdit.html">ArgumentsLineEdit</a>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">using</span> <a class="code" href="classUi_1_1MainWindow.html">Window</a>       = <a class="code" href="classUi_1_1MainWindow.html">Ui::MainWindow</a>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">using</span> <a class="code" href="classArgumentsLineEdit.html">ArgsLineEdit</a> = <a class="code" href="classArgumentsLineEdit.html#a5dcb5ea85a58ccc9fcdd53e097b03ae9">ArgumentsLineEdit</a>;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classMainWindow.html">   27</a></span>&#160;<span class="keyword">class </span><a class="code" href="classMainWindow.html">MainWindow</a>: <span class="keyword">public</span> QMainWindow</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    Q_OBJECT</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    Q_DISABLE_COPY_MOVE( <a class="code" href="classMainWindow.html">MainWindow</a> )</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classMainWindow.html#a996c5a2b6f77944776856f08ec30858d">MainWindow</a>( QWidget* parent = <span class="keyword">nullptr</span> );</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classMainWindow.html#a1f7d2c56410fc1bfa135bb907d43313f">   42</a></span>&#160;    <a class="code" href="classMainWindow.html#a1f7d2c56410fc1bfa135bb907d43313f">~MainWindow</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#a7515b71993ba7ec465042516d6b57971">initializeScanner</a>();</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#aaa96135a8025206612e8f7f40196732b">unblockHelper</a>( <span class="keyword">const</span> QString&amp; text );</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">public</span> slots:</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#a926708924d81ad5c066a566ec56b88b4">hideStdErrorTab</a>();</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#a37606276a4f632babe730b4cf3533375">showStdErrorTab</a>();</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#af392d100a3667e176375870c1fcb5124">enableAdvancedLineEdit</a>( <span class="keywordtype">bool</span> option );</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> updateStdOutputSlot();</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> updateStdErrorSlot();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> updateSymbolSlot( <span class="keyword">const</span> QString&amp; symbol );</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> updateAdvancedArgumentsSlot();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> unblockAdvancedArgumentsSlot();</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">void</span> setInvocationSlot( <span class="keyword">const</span> QString&amp; advancedArgs );</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;signals:</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">void</span> advancedArgumentssUnblocked() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    std::unique_ptr&lt;Window&gt;   m_ui; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    gsl::owner&lt;Scanner*&gt;      m_scanner;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    gsl::owner&lt;ArgsLineEdit*&gt; m_lineEditDefaultArgs;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordtype">void</span> setupConnections();</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordtype">void</span> setupWidgets();</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;};</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// SYMBOLFINDER_H</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">class </span><a class="code" href="classSymbolLineEdit.html">SymbolLineEdit</a>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">using</span> <a class="code" href="classUi_1_1MainWindow.html">Window</a>       = <a class="code" href="classUi_1_1MainWindow.html">Ui::MainWindow</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">using</span> <a class="code" href="classArgumentsLineEdit.html">ArgsLineEdit</a> = <a class="code" href="classArgumentsLineEdit.html">ArgumentsLineEdit</a>;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classMainWindow.html">   28</a></span>&#160;<span class="keyword">class </span><a class="code" href="classMainWindow.html">MainWindow</a>: <span class="keyword">public</span> QMainWindow</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    Q_DISABLE_COPY_MOVE( <a class="code" href="classMainWindow.html">MainWindow</a> )</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classMainWindow.html#a996c5a2b6f77944776856f08ec30858d">MainWindow</a>( QWidget* parent = <span class="keyword">nullptr</span> );</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classMainWindow.html#a1f7d2c56410fc1bfa135bb907d43313f">   43</a></span>&#160;    <a class="code" href="classMainWindow.html#a1f7d2c56410fc1bfa135bb907d43313f">~MainWindow</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#a7515b71993ba7ec465042516d6b57971">initializeScanner</a>();</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#aaa96135a8025206612e8f7f40196732b">unblockHelper</a>( <span class="keyword">const</span> QString&amp; text );</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keyword">public</span> slots:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#a926708924d81ad5c066a566ec56b88b4">hideStdErrorTab</a>();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#a37606276a4f632babe730b4cf3533375">showStdErrorTab</a>();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classMainWindow.html#af392d100a3667e176375870c1fcb5124">enableAdvancedLineEdit</a>( <span class="keywordtype">bool</span> option );</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> updateStdOutputSlot();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> updateStdErrorSlot();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> updateSymbolSlot( <span class="keyword">const</span> QString&amp; symbol );</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> updateAdvancedArgumentsSlot();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">void</span> unblockAdvancedArgumentsSlot();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">void</span> setInvocationSlot( <span class="keyword">const</span> QString&amp; advancedArgs );</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;signals:</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">void</span> advancedArgumentssUnblocked() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    std::unique_ptr&lt;Window&gt;     m_ui; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    gsl::owner&lt;Scanner*&gt;        m_scanner;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    gsl::owner&lt;SymbolLineEdit*&gt; m_lineEditSymbol;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    gsl::owner&lt;ArgsLineEdit*&gt;   m_lineEditDefaultArgs;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">void</span> setupConnections();</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">void</span> setupWidgets();</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;};</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// SYMBOLFINDER_H</span></div>
 <div class="ttc" id="aclassArgumentsLineEdit_html"><div class="ttname"><a href="classArgumentsLineEdit.html">ArgumentsLineEdit</a></div><div class="ttdoc">ArgumentsLineEdit is a customized QLineEdit.</div><div class="ttdef"><b>Definition:</b> argumentslineedit.hpp:22</div></div>
-<div class="ttc" id="aclassArgumentsLineEdit_html_a5dcb5ea85a58ccc9fcdd53e097b03ae9"><div class="ttname"><a href="classArgumentsLineEdit.html#a5dcb5ea85a58ccc9fcdd53e097b03ae9">ArgumentsLineEdit::ArgumentsLineEdit</a></div><div class="ttdeci">ArgumentsLineEdit(const QString &amp;arguments, const QString &amp;stopString, QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> argumentslineedit.cpp:14</div></div>
 <div class="ttc" id="aclassIDriver_html"><div class="ttname"><a href="classIDriver.html">IDriver</a></div><div class="ttdoc">IDriver serves as an interface for NmDriver and ScanelfDriver</div><div class="ttdef"><b>Definition:</b> idriver.hpp:19</div></div>
-<div class="ttc" id="aclassMainWindow_html"><div class="ttname"><a href="classMainWindow.html">MainWindow</a></div><div class="ttdef"><b>Definition:</b> findermainwindow.hpp:28</div></div>
+<div class="ttc" id="aclassMainWindow_html"><div class="ttname"><a href="classMainWindow.html">MainWindow</a></div><div class="ttdef"><b>Definition:</b> findermainwindow.hpp:29</div></div>
 <div class="ttc" id="aclassMainWindow_html_a1f7d2c56410fc1bfa135bb907d43313f"><div class="ttname"><a href="classMainWindow.html#a1f7d2c56410fc1bfa135bb907d43313f">MainWindow::~MainWindow</a></div><div class="ttdeci">~MainWindow() override</div></div>
-<div class="ttc" id="aclassMainWindow_html_a37606276a4f632babe730b4cf3533375"><div class="ttname"><a href="classMainWindow.html#a37606276a4f632babe730b4cf3533375">MainWindow::showStdErrorTab</a></div><div class="ttdeci">void showStdErrorTab()</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:161</div></div>
-<div class="ttc" id="aclassMainWindow_html_a7515b71993ba7ec465042516d6b57971"><div class="ttname"><a href="classMainWindow.html#a7515b71993ba7ec465042516d6b57971">MainWindow::initializeScanner</a></div><div class="ttdeci">void initializeScanner()</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:177</div></div>
-<div class="ttc" id="aclassMainWindow_html_a926708924d81ad5c066a566ec56b88b4"><div class="ttname"><a href="classMainWindow.html#a926708924d81ad5c066a566ec56b88b4">MainWindow::hideStdErrorTab</a></div><div class="ttdeci">void hideStdErrorTab()</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:166</div></div>
-<div class="ttc" id="aclassMainWindow_html_a996c5a2b6f77944776856f08ec30858d"><div class="ttname"><a href="classMainWindow.html#a996c5a2b6f77944776856f08ec30858d">MainWindow::MainWindow</a></div><div class="ttdeci">MainWindow(QWidget *parent=nullptr)</div><div class="ttdoc">Constuctor for the main window.</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:23</div></div>
-<div class="ttc" id="aclassMainWindow_html_aaa96135a8025206612e8f7f40196732b"><div class="ttname"><a href="classMainWindow.html#aaa96135a8025206612e8f7f40196732b">MainWindow::unblockHelper</a></div><div class="ttdeci">void unblockHelper(const QString &amp;text)</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:224</div></div>
-<div class="ttc" id="aclassMainWindow_html_af392d100a3667e176375870c1fcb5124"><div class="ttname"><a href="classMainWindow.html#af392d100a3667e176375870c1fcb5124">MainWindow::enableAdvancedLineEdit</a></div><div class="ttdeci">void enableAdvancedLineEdit(bool option)</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:171</div></div>
+<div class="ttc" id="aclassMainWindow_html_a37606276a4f632babe730b4cf3533375"><div class="ttname"><a href="classMainWindow.html#a37606276a4f632babe730b4cf3533375">MainWindow::showStdErrorTab</a></div><div class="ttdeci">void showStdErrorTab()</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:165</div></div>
+<div class="ttc" id="aclassMainWindow_html_a7515b71993ba7ec465042516d6b57971"><div class="ttname"><a href="classMainWindow.html#a7515b71993ba7ec465042516d6b57971">MainWindow::initializeScanner</a></div><div class="ttdeci">void initializeScanner()</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:181</div></div>
+<div class="ttc" id="aclassMainWindow_html_a926708924d81ad5c066a566ec56b88b4"><div class="ttname"><a href="classMainWindow.html#a926708924d81ad5c066a566ec56b88b4">MainWindow::hideStdErrorTab</a></div><div class="ttdeci">void hideStdErrorTab()</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:170</div></div>
+<div class="ttc" id="aclassMainWindow_html_a996c5a2b6f77944776856f08ec30858d"><div class="ttname"><a href="classMainWindow.html#a996c5a2b6f77944776856f08ec30858d">MainWindow::MainWindow</a></div><div class="ttdeci">MainWindow(QWidget *parent=nullptr)</div><div class="ttdoc">Constuctor for the main window.</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:24</div></div>
+<div class="ttc" id="aclassMainWindow_html_aaa96135a8025206612e8f7f40196732b"><div class="ttname"><a href="classMainWindow.html#aaa96135a8025206612e8f7f40196732b">MainWindow::unblockHelper</a></div><div class="ttdeci">void unblockHelper(const QString &amp;text)</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:216</div></div>
+<div class="ttc" id="aclassMainWindow_html_af392d100a3667e176375870c1fcb5124"><div class="ttname"><a href="classMainWindow.html#af392d100a3667e176375870c1fcb5124">MainWindow::enableAdvancedLineEdit</a></div><div class="ttdeci">void enableAdvancedLineEdit(bool option)</div><div class="ttdef"><b>Definition:</b> findermainwindow.cpp:175</div></div>
 <div class="ttc" id="aclassScanner_html"><div class="ttname"><a href="classScanner.html">Scanner</a></div><div class="ttdef"><b>Definition:</b> scanner.hpp:27</div></div>
-<div class="ttc" id="aclassUi_1_1MainWindow_html"><div class="ttname"><a href="classUi_1_1MainWindow.html">Ui::MainWindow</a></div><div class="ttdef"><b>Definition:</b> ui_findermainwindow.h:304</div></div>
+<div class="ttc" id="aclassSymbolLineEdit_html"><div class="ttname"><a href="classSymbolLineEdit.html">SymbolLineEdit</a></div><div class="ttdef"><b>Definition:</b> symbollineedit.hpp:14</div></div>
+<div class="ttc" id="aclassUi_1_1MainWindow_html"><div class="ttname"><a href="classUi_1_1MainWindow.html">Ui::MainWindow</a></div><div class="ttdef"><b>Definition:</b> ui_findermainwindow.h:296</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

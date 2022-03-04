@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['scanner_64',['Scanner',['../classScanner.html',1,'']]]
+  ['scanner_68',['Scanner',['../classScanner.html',1,'']]],
+  ['symbollineedit_69',['SymbolLineEdit',['../classSymbolLineEdit.html',1,'']]]
 ];

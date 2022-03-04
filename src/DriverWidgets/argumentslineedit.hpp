@@ -21,6 +21,7 @@
 class ArgumentsLineEdit: public QLineEdit
 {
 	Q_OBJECT
+	Q_PROPERTY( QString m_specialStr READ stopString WRITE setStopString NOTIFY symbolManuallyChanged )
 	Q_DISABLE_COPY_MOVE( ArgumentsLineEdit )
 
 public:

@@ -14,6 +14,7 @@ class QPushButton;
 class IDriver;
 class Scanner;
 class ArgumentsLineEdit;
+class SymbolLineEdit;
 
 using Window	   = Ui::MainWindow;
 using ArgsLineEdit = ArgumentsLineEdit;
@@ -67,7 +68,7 @@ public slots:
 	void showStdErrorTab();
 
 	/*!
-	 * Dis/eenable the `ArgumentsLineEdit` widget
+	 * Dis|enable the `ArgumentsLineEdit` widget
 	 * \param option is a boolen that enables or not the widget.
 	 */
 	void enableAdvancedLineEdit( bool option );
@@ -84,9 +85,10 @@ signals:
 	void advancedArgumentssUnblocked() const;
 
 private:
-	std::unique_ptr<Window>	  m_ui; /*!< Smart pointer to UI object */
-	gsl::owner<Scanner*>	  m_scanner;
-	gsl::owner<ArgsLineEdit*> m_lineEditDefaultArgs;
+	std::unique_ptr<Window>	    m_ui; /*!< Smart pointer to UI object */
+	gsl::owner<Scanner*>	    m_scanner;
+	gsl::owner<SymbolLineEdit*> m_lineEditSymbol;
+	gsl::owner<ArgsLineEdit*>   m_lineEditDefaultArgs;
 
 	void setupConnections();
 	void setupWidgets();

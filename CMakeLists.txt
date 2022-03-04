@@ -44,6 +44,7 @@ set(symbolfinder_SRC
 	src/ConnectVerifier/connectverifier.cpp
 	src/scanner.cpp
 	src/DriverWidgets/argumentslineedit.cpp
+	src/DriverWidgets/symbollineedit.cpp
 	src/DriverWidgets/messagewidget.cpp
 )
 

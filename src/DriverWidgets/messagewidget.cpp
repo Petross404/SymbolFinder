@@ -181,6 +181,7 @@ void MessageWidget::paintEvent( QPaintEvent* event )
 	const QRect innerRect = rect().marginsRemoved( QMargins() + borderSize / 2 );
 	const QColor	color = palette().color( QPalette::Window );
 	constexpr float alpha = 0.2;
+
 	const QColor	parentWindowColor =
 		( parentWidget() ? parentWidget()->palette() : qApp->palette() )
 			.color( QPalette::Window );
@@ -190,6 +191,7 @@ void MessageWidget::paintEvent( QPaintEvent* event )
 			     + ( parentWindowColor.green() * ( 1 - alpha ) );
 	const int newBlue = ( color.blue() * alpha )
 			    + ( parentWindowColor.blue() * ( 1 - alpha ) );
+
 	painter.setPen( QPen( color, borderSize ) );
 	painter.setBrush( QColor( newRed, newGreen, newBlue ) );
 	painter.setRenderHint( QPainter::Antialiasing );

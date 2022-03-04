@@ -13,6 +13,7 @@ class QGridLayout;
 class QLabel;
 class QToolButton;
 class QAction;
+class QTimeLine;
 
 /**
  * @todo write docs
@@ -24,7 +25,7 @@ class MessageWidget: public QFrame
 
 public:
 	enum Type {
-		Information,
+		Information = 0,
 		Warning,
 		Error,
 	};
@@ -44,16 +45,17 @@ public:
 	void setPallete();
 
 	QString text() const;
-	void	setText( const QString& text );
-	Type	messageType() const;
-	void	setMessageType( Type type );
-	void	updateLayout();
-	void	createLayout();
-	int	bestContentHeight() const;
-	bool	isCloseButtonVisible() const;
-	void	setCloseButtonVisible( bool show );
-	void	addAction( QAction* action );
-	void	removeAction( QAction* action );
+
+	void setText( const QString& text );
+	Type messageType() const;
+	void setMessageType( Type type );
+	void updateLayout();
+	void createLayout();
+	int  bestContentHeight() const;
+	bool isCloseButtonVisible() const;
+	void setCloseButtonVisible( bool show );
+	void addAction( QAction* action );
+	void removeAction( QAction* action );
 
 protected:
 	QSize sizeHint() const override;

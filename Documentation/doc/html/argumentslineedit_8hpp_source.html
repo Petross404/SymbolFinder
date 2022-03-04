@@ -82,44 +82,45 @@ $(function() {
 <div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classArgumentsLineEdit.html">   21</a></span>&#160;<span class="keyword">class </span><a class="code" href="classArgumentsLineEdit.html">ArgumentsLineEdit</a>: <span class="keyword">public</span> QLineEdit</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;{</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    Q_OBJECT</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    Q_DISABLE_COPY_MOVE( <a class="code" href="classArgumentsLineEdit.html">ArgumentsLineEdit</a> )</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classArgumentsLineEdit.html#a5dcb5ea85a58ccc9fcdd53e097b03ae9">ArgumentsLineEdit</a>( <span class="keyword">const</span> QString&amp; arguments,</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                    <span class="keyword">const</span> QString&amp; <a class="code" href="classArgumentsLineEdit.html#a3db9a35b0668d94d76110b4f945ddac2">stopString</a>,</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                    QWidget*       parent = <span class="keyword">nullptr</span> );</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classArgumentsLineEdit.html#a5dcb5ea85a58ccc9fcdd53e097b03ae9">ArgumentsLineEdit</a>( QWidget* parent = 0 );</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classArgumentsLineEdit.html#a0ad90e2ce54d9ffe40a9981b7cb3bff8">   46</a></span>&#160;    <a class="code" href="classArgumentsLineEdit.html#a0ad90e2ce54d9ffe40a9981b7cb3bff8">~ArgumentsLineEdit</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classArgumentsLineEdit.html#a8b2c17aadd94426b6455e76ce7d79d2e">setStopString</a>( <span class="keyword">const</span> QString&amp; str );</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    [[nodiscard]] QString <a class="code" href="classArgumentsLineEdit.html#a3db9a35b0668d94d76110b4f945ddac2">stopString</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;signals:</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classArgumentsLineEdit.html#ae291ea877f108d586a6e6b057588184c">symbolManuallyChanged</a>();</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classArgumentsLineEdit.html#a1b8a5dffbec27681d9f22dfdd3b0ab54">mousePressEvent</a>( QMouseEvent* event ) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classArgumentsLineEdit.html#a1213cbde7030b27cb3077c9e1837f20b">keyPressEvent</a>( QKeyEvent* event ) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    QString m_text; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    QString m_specialStr; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">void</span> init();</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;};</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// ARGUMENTSLINEEDIT_H</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    Q_PROPERTY( QString m_specialStr READ <a class="code" href="classArgumentsLineEdit.html#a3db9a35b0668d94d76110b4f945ddac2">stopString</a> WRITE <a class="code" href="classArgumentsLineEdit.html#a8b2c17aadd94426b6455e76ce7d79d2e">setStopString</a> NOTIFY <a class="code" href="classArgumentsLineEdit.html#ae291ea877f108d586a6e6b057588184c">symbolManuallyChanged</a> )</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    Q_DISABLE_COPY_MOVE( <a class="code" href="classArgumentsLineEdit.html">ArgumentsLineEdit</a> )</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classArgumentsLineEdit.html#a5dcb5ea85a58ccc9fcdd53e097b03ae9">ArgumentsLineEdit</a>( <span class="keyword">const</span> QString&amp; arguments,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                    <span class="keyword">const</span> QString&amp; <a class="code" href="classArgumentsLineEdit.html#a3db9a35b0668d94d76110b4f945ddac2">stopString</a>,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                    QWidget*       parent = <span class="keyword">nullptr</span> );</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classArgumentsLineEdit.html#a5dcb5ea85a58ccc9fcdd53e097b03ae9">ArgumentsLineEdit</a>( QWidget* parent = 0 );</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classArgumentsLineEdit.html#a0ad90e2ce54d9ffe40a9981b7cb3bff8">   47</a></span>&#160;    <a class="code" href="classArgumentsLineEdit.html#a0ad90e2ce54d9ffe40a9981b7cb3bff8">~ArgumentsLineEdit</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classArgumentsLineEdit.html#a8b2c17aadd94426b6455e76ce7d79d2e">setStopString</a>( <span class="keyword">const</span> QString&amp; str );</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    [[nodiscard]] QString <a class="code" href="classArgumentsLineEdit.html#a3db9a35b0668d94d76110b4f945ddac2">stopString</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;signals:</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classArgumentsLineEdit.html#ae291ea877f108d586a6e6b057588184c">symbolManuallyChanged</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classArgumentsLineEdit.html#a1b8a5dffbec27681d9f22dfdd3b0ab54">mousePressEvent</a>( QMouseEvent* event ) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classArgumentsLineEdit.html#a1213cbde7030b27cb3077c9e1837f20b">keyPressEvent</a>( QKeyEvent* event ) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    QString m_text; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    QString m_specialStr; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">void</span> init();</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;};</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// ARGUMENTSLINEEDIT_H</span></div>
 <div class="ttc" id="aclassArgumentsLineEdit_html"><div class="ttname"><a href="classArgumentsLineEdit.html">ArgumentsLineEdit</a></div><div class="ttdoc">ArgumentsLineEdit is a customized QLineEdit.</div><div class="ttdef"><b>Definition:</b> argumentslineedit.hpp:22</div></div>
 <div class="ttc" id="aclassArgumentsLineEdit_html_a0ad90e2ce54d9ffe40a9981b7cb3bff8"><div class="ttname"><a href="classArgumentsLineEdit.html#a0ad90e2ce54d9ffe40a9981b7cb3bff8">ArgumentsLineEdit::~ArgumentsLineEdit</a></div><div class="ttdeci">~ArgumentsLineEdit() override</div></div>
-<div class="ttc" id="aclassArgumentsLineEdit_html_a1213cbde7030b27cb3077c9e1837f20b"><div class="ttname"><a href="classArgumentsLineEdit.html#a1213cbde7030b27cb3077c9e1837f20b">ArgumentsLineEdit::keyPressEvent</a></div><div class="ttdeci">void keyPressEvent(QKeyEvent *event) override</div><div class="ttdef"><b>Definition:</b> argumentslineedit.cpp:55</div></div>
+<div class="ttc" id="aclassArgumentsLineEdit_html_a1213cbde7030b27cb3077c9e1837f20b"><div class="ttname"><a href="classArgumentsLineEdit.html#a1213cbde7030b27cb3077c9e1837f20b">ArgumentsLineEdit::keyPressEvent</a></div><div class="ttdeci">void keyPressEvent(QKeyEvent *event) override</div><div class="ttdef"><b>Definition:</b> argumentslineedit.cpp:56</div></div>
 <div class="ttc" id="aclassArgumentsLineEdit_html_a1b8a5dffbec27681d9f22dfdd3b0ab54"><div class="ttname"><a href="classArgumentsLineEdit.html#a1b8a5dffbec27681d9f22dfdd3b0ab54">ArgumentsLineEdit::mousePressEvent</a></div><div class="ttdeci">void mousePressEvent(QMouseEvent *event) override</div><div class="ttdef"><b>Definition:</b> argumentslineedit.cpp:41</div></div>
 <div class="ttc" id="aclassArgumentsLineEdit_html_a3db9a35b0668d94d76110b4f945ddac2"><div class="ttname"><a href="classArgumentsLineEdit.html#a3db9a35b0668d94d76110b4f945ddac2">ArgumentsLineEdit::stopString</a></div><div class="ttdeci">QString stopString() const</div><div class="ttdef"><b>Definition:</b> argumentslineedit.cpp:37</div></div>
 <div class="ttc" id="aclassArgumentsLineEdit_html_a5dcb5ea85a58ccc9fcdd53e097b03ae9"><div class="ttname"><a href="classArgumentsLineEdit.html#a5dcb5ea85a58ccc9fcdd53e097b03ae9">ArgumentsLineEdit::ArgumentsLineEdit</a></div><div class="ttdeci">ArgumentsLineEdit(const QString &amp;arguments, const QString &amp;stopString, QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> argumentslineedit.cpp:14</div></div>
 <div class="ttc" id="aclassArgumentsLineEdit_html_a8b2c17aadd94426b6455e76ce7d79d2e"><div class="ttname"><a href="classArgumentsLineEdit.html#a8b2c17aadd94426b6455e76ce7d79d2e">ArgumentsLineEdit::setStopString</a></div><div class="ttdeci">void setStopString(const QString &amp;str)</div><div class="ttdef"><b>Definition:</b> argumentslineedit.cpp:32</div></div>
-<div class="ttc" id="aclassArgumentsLineEdit_html_ae291ea877f108d586a6e6b057588184c"><div class="ttname"><a href="classArgumentsLineEdit.html#ae291ea877f108d586a6e6b057588184c">ArgumentsLineEdit::symbolManuallyChanged</a></div><div class="ttdeci">void symbolManuallyChanged()</div><div class="ttdef"><b>Definition:</b> moc_argumentslineedit.cpp:149</div></div>
+<div class="ttc" id="aclassArgumentsLineEdit_html_ae291ea877f108d586a6e6b057588184c"><div class="ttname"><a href="classArgumentsLineEdit.html#ae291ea877f108d586a6e6b057588184c">ArgumentsLineEdit::symbolManuallyChanged</a></div><div class="ttdeci">void symbolManuallyChanged()</div><div class="ttdef"><b>Definition:</b> moc_argumentslineedit.cpp:218</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

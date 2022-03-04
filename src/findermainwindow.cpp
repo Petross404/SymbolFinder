@@ -10,6 +10,7 @@
 #include "ConnectVerifier/connectverifier.hpp"
 #include "DriverWidgets/argumentslineedit.hpp"
 #include "DriverWidgets/messagewidget.hpp"
+#include "DriverWidgets/symbollineedit.hpp"
 #include "nmdriver.hpp"
 #include "scanner.hpp"
 #include "ui_findermainwindow.h"
@@ -24,6 +25,7 @@ MainWindow::MainWindow( QWidget* parent )
 	: QMainWindow( parent )
 	, m_ui( std::make_unique<Ui::MainWindow>() )
 	, m_scanner{ new Scanner{ "nm", this } }
+	, m_lineEditSymbol{ new SymbolLineEdit{ this } }
 	, m_lineEditDefaultArgs{ new ArgsLineEdit{ m_scanner->invocation().join( ' ' ),
 						   m_scanner->driver()->stopString(),
 						   this } }
@@ -40,6 +42,7 @@ MainWindow::~MainWindow() = default;
 void MainWindow::setupConnections()
 {
 	ConnectVerifier v;
+
 	v = connect( m_ui->actionQuit,
 		     &QAction::triggered,
 		     qApp,
@@ -50,12 +53,11 @@ void MainWindow::setupConnections()
 	 * The slot requires more arguments than the signal provides. So we are
 	 * using std::bind and pass any further arguments like this.
 	 */
-	v = connect(
-		m_lineEditDefaultArgs,
-		&QLineEdit::textEdited,
-		this,
-		&MainWindow::setInvocationSlot,
-		Qt::UniqueConnection );
+	v = connect( m_lineEditDefaultArgs,
+		     &QLineEdit::textEdited,
+		     this,
+		     &MainWindow::setInvocationSlot,
+		     Qt::UniqueConnection );
 
 	v = connect( m_scanner,
 		     &Scanner::readyReadStandardError,
@@ -72,10 +74,7 @@ void MainWindow::setupConnections()
 		     this,
 		     &MainWindow::updateStdErrorSlot );
 
-	v = connect( m_ui->lineEditSymbols,
-		     &QLineEdit::textEdited,
-		     this,
-		     &MainWindow::updateSymbolSlot );
+	v = connect( m_lineEditSymbol, &QLineEdit::textEdited, this, &MainWindow::updateSymbolSlot );
 
 	/**
 	 * If the user clicked to edit the arguments, some
@@ -119,12 +118,13 @@ void MainWindow::setupWidgets()
 	bool b = m_ui->checkBox->isChecked();
 	m_lineEditDefaultArgs->setEnabled( b );
 	hideStdErrorTab();
-	m_ui->pbtnSearch->setEnabled( !m_ui->lineEditSymbols->text().isEmpty() );
+	m_ui->pbtnSearch->setEnabled( !m_lineEditSymbol->text().isEmpty() );
 	/**********************************************************/
 
+	m_ui->gridLayout_3->addWidget( m_lineEditSymbol, 2, 2 );
 	m_ui->gridLayout_3->addWidget( m_lineEditDefaultArgs, 3, 1 );
-	auto symbolName	  = m_ui->lineEditSymbols->text();
-	auto advancedArgs = m_scanner->invocation().join( ' ' );
+	QString symbolName   = m_lineEditSymbol->text();
+	QString advancedArgs = m_scanner->invocation().join( ' ' );
 
 	m_lineEditDefaultArgs->setToolTip(
 		tr( "Enter here any additional arguments. Do not edit the "
@@ -134,7 +134,7 @@ void MainWindow::setupWidgets()
 		m_lineEditDefaultArgs->setText( advancedArgs );
 	}
 
-	m_ui->lineEditSymbols->setClearButtonEnabled( true );
+	m_lineEditSymbol->setClearButtonEnabled( true );
 
 	m_ui->tabWidget->setTabText( 0, tr( "Standard Output" ) );
 	m_ui->tabWidget->setTabText( 1, tr( "Standard Error" ) );
@@ -210,18 +210,6 @@ void MainWindow::updateSymbolSlot( const QString& symbol )
 
 void MainWindow::updateAdvancedArgumentsSlot()
 {
-	// 	static int counter = 0;
-	// 	counter++;
-	//
-	// 	auto current = m_lineEditDefaultArgs->text();
-	//
-	// 	qDebug() << current;
-	// 	auto args = m_scanner->invocation();
-	// 	if ( current != args.join( ' ' ) )
-	// 	{
-	// 		qDebug() << m_scanner->invocation() << counter;
-	// 		m_lineEditDefaultArgs->setText( m_scanner->invocation().join( ' ' ) );
-	// 	}
 	m_lineEditDefaultArgs->setText( m_scanner->invocation().join( ' ' ) );
 }
 
@@ -261,6 +249,7 @@ void MainWindow::unblockAdvancedArgumentsSlot()
 		 Qt::UniqueConnection );
 
 	m_ui->gridLayout_3->addWidget( messageWidget, 3, 2, 1, 2, Qt::AlignCenter );
+
 	statusBar()->showMessage( message,
 				  std::chrono::milliseconds( milliseconds ).count() );
 
