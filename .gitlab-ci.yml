@@ -31,7 +31,7 @@ linux_compilation:
     image: debian:sid
     script:
         - apt-get update --yes
-        - apt-get install --yes g++ libmsgsl-dev cmake qtbase5-dev qttools5-dev-tools cppcheck extra-cmake-modules
+        - apt-get install --yes g++ doxygen  pkg-config libmsgsl-dev cmake qtbase5-dev qttools5-dev-tools cppcheck extra-cmake-modules
         - if [ -d build ]; then rm -rv build; fi
         - mkdir build && cd build
         - cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && cppcheck --project=compile_commands.json --enable=all --report-progress -v && make 
@@ -44,7 +44,7 @@ windows-64bit-cross:
     image: debian:sid
     script:
     - apt-get update -y
-    - apt-get install -y make mingw-w64 g++ libmsgsl-dev cmake qtbase5-dev qttools5-dev-tools cppcheck extra-cmake-modules
+    - apt-get install -y make mingw-w64 g++ doxygen pkg-config libmsgsl-dev cmake qtbase5-dev qttools5-dev-tools cppcheck extra-cmake-modules
     #- PREFIX=x86_64-w64-mingw32 ARCHITECTURE=x86_64 OS=w64_amd64-cross-mingw32 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ AR=x86_64-w64-mingw32-ar RM="rm -f" MAKE="make -f makefile.mingw" make -f makefile.mingw self GRDIR=./
     - if [ -d windows-build ]; then rm -rv windows-build; fi
     - mkdir windows-build && cd windows-build
