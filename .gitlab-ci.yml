@@ -34,7 +34,7 @@ linux_compilation:
         - apt-get install --yes g++ doxygen  pkg-config clang-format libgsl-dev libmsgsl-dev cmake qtbase5-dev qttools5-dev-tools cppcheck extra-cmake-modules
         - if [ -d build ]; then rm -rv build; fi
         - mkdir build && cd build
-        - cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && cppcheck --project=compile_commands.json --enable=all --report-progress -v && make 
+        - cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && make 
     artifacts:
         paths:
         - build/
