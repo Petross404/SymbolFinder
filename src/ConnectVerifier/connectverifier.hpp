@@ -23,7 +23,6 @@
 #ifndef CONNECTVERIFIER_HPP
 #define CONNECTVERIFIER_HPP
 
-//! \class ConnectVerifier class
 /*!
  * `ConnectVerifier` is a fancy way to assert if some `QObject::connection`
  * silenty failed. It works only on Debug builds.
@@ -37,6 +36,10 @@ public:
 	explicit ConnectVerifier( const bool& b );
 	//! Copy operator of `ConnectVerifier`
 	ConnectVerifier& operator=( const bool& b );
-};
 
+	ConnectVerifier( bool&& b ) = delete;
+	ConnectVerifier&& operator=( bool& b ) = delete;
+
+	~ConnectVerifier() = default;
+};
 #endif	  // CONNECTVERIFIER_HPP

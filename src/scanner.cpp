@@ -10,7 +10,6 @@
 
 #include "ConnectVerifier/connectverifier.hpp"
 #include "findermainwindow.hpp"
-#include "idriver.hpp"
 #include "nmdriver.hpp"
 
 Scanner::Scanner( QObject* parent )
@@ -36,6 +35,8 @@ QStringList Scanner::defaultInvocation() const
 	return m_d->defaultInvocation();
 }
 
+void Scanner::performScan() { m_d->exec(); }
+
 QStringList Scanner::invocation() const { return m_d->invocation(); }
 
 IDriver* Scanner::driver() const { return m_d; }
@@ -57,47 +58,71 @@ void Scanner::setupConnections()
 		     this,
 		     &Scanner::setStandardErrorSlot,
 		     Qt::UniqueConnection );
+
+	v = connect( m_d, &QProcess::started, this, &Scanner::scanStarted, Qt::UniqueConnection );
+
+	v = connect( m_d,
+		     qOverload<int, QProcess::ExitStatus>( &QProcess::finished ),
+		     this,
+		     &Scanner::scanFinished,
+		     Qt::UniqueConnection );
 }
 
 void Scanner::setSymbolName( const QString& symbol )
 {
 	const QString previousSymbolName = symbolName();
 
-	// If the symbol doesn't exist in the list, update.
+	// If the symbols don't match, update.
 	if ( previousSymbolName != symbol )
 	{
 		m_d->setSymbolName( symbol );
-		QString arguments = invocation().join( ' ' );
-		setInvocation( arguments, true );
+		setInvocation( invocation().join( ' ' ), m_secretArgument );
 	}
 }
 
-void Scanner::setInvocation( const QString& args, bool changedSymbol )
+void Scanner::setInvocation( const QString& args, const QString& secret )
 {
+	/*
+	 * There are two ways for this function to be called:
+	 *
+	 * A) secret == m_secretArgument which means that this function was
+	 * called from Scanner::setSymbolName(..) and the currentArguments
+	 * should be initialized from the driver with Scanner::invocation().
+	 *
+	 * B) secret != m_secretArgument which means that this function was
+	 * called from somewhere else (ie by a slot connected to a signal)
+	 * and that the passed parameter `args` should be used. m_secretArgument
+	 * is private and constant and no other user of this class can know
+	 * it and confuse Scanner::setInvocation(...), since the latter uses
+	 * default argument for the second parameter.
+	 */
 	QStringList currentArguments =
-		changedSymbol ? args.split( ' ' ) : invocation();
+		secret == m_secretArgument ? invocation() : args.split( ' ' );
 
-	if ( args.split( ' ' ) != currentArguments )
+	QString stopStr = stopString();
+	QString argsStr = currentArguments.join( ' ' );
+
+	// +1 because we need to insert to the next position.
+	int indexOfStop = argsStr.indexOf( stopStr ) + 1;
+	int symbolSize	= symbolName().size();
+
+	/*
+	 * Replace (in the widget) `symbolSize` characters at position
+	 * `stopIndex`, with the new name that is returned from
+	 * symbolName(). Then, call the driver to actually change
+	 * the arguments for the driver to run.
+	 */
+	if ( secret == m_secretArgument )
 	{
-		if ( args.isEmpty() ) { return; }
-
-		QString newArgs = args;
-		QString stopStr = m_d->stopString();
-
-		// +1 because we need to insert to the next position.
-		int index = newArgs.indexOf( stopStr ) + 1;
-
-		/*
-		 * Insert the symbolName where it belongs and call the driver
-		 * function to set it's arguments.
-		 */
-		newArgs.insert( index, symbolName() );
-		m_d->setInvocation( newArgs.split( ' ' ) );
-
-		// All set, now emit the signal.
-		emit argumentsUpdated();
+		argsStr.replace( indexOfStop, symbolSize, symbolName() );
 	}
+	m_d->setInvocation( currentArguments );
+
+	// All set, now emit the signal.
+	emit argumentsUpdated();
 }
+
+QString Scanner::stopString() const { return m_d->stopString(); }
 
 QString Scanner::symbolName() const { return m_d->symbolName(); }
 

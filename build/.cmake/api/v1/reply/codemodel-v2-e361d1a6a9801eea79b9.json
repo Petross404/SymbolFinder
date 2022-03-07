@@ -1,0 +1,78 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "SymbolFinder",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "clang_format::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-clang_format-Debug-f12144200f8bc6bd69ec.json",
+					"name" : "clang_format",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "symbolfinder::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-symbolfinder-Debug-f876fe04430c14c3af1a.json",
+					"name" : "symbolfinder",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "symbolfinder_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-symbolfinder_autogen-Debug-0d375b1208a7e2389e8e.json",
+					"name" : "symbolfinder_autogen",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/petros/projects/symbolfinder/build",
+		"source" : "/home/petros/projects/symbolfinder"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 1
+	}
+}

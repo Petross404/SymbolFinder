@@ -43,17 +43,9 @@ void NmDriver::setInvocation( const QStringList& args )
 
 void NmDriver::exec()
 {
-	QStringList l;
-
-	if ( m_argList.isEmpty() || m_symbol.isEmpty() ) { l = m_defArgList; }
-	else if ( m_argList.contains( m_symbol ) )
-	{
-		l = m_argList;
-	}
-	else
-		m_argList.append( m_symbol );
-
-	this->start( m_program, l );
+	qDebug() << m_program << ".." << m_effectiveArgList.join( ' ' );
+	start( m_program, m_effectiveArgList );
+	waitForStarted();
 }
 
 void NmDriver::exec( const QStringList& arg )
@@ -64,7 +56,7 @@ void NmDriver::exec( const QStringList& arg )
 		auto tmp = arg;
 		tmp.append( m_symbol );
 		start( m_program, tmp );
-		waitForFinished();
+		waitForStarted();
 	}
 }
 

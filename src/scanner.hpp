@@ -9,7 +9,8 @@
 
 #include <gsl/pointers>
 
-class IDriver;
+#include "idriver.hpp"
+
 class MainWindow;
 
 /*!
@@ -69,8 +70,14 @@ public:
 	 * Set the list of arguments that the driver will be invoked with
 	 * \param args is the `QString` text of the arguments for the driver.
 	 * It is converted to `QStringList` inside the function again.
+	 * \param secret is a true if the function was called from
+	 * `setSymbolName()` and the symbol is changed. Do NOT set this
+	 * parameter your self when calling this function!
+	 * \sa `void setSymbolName(const QString& symbol)`
 	 */
-	void setInvocation( const QString& args, bool changedSymbol = false );
+	void setInvocation( const QString& args, const QString& secret = "" );
+
+	[[nodiscard]] QString stopString() const;
 
 	/*!
 	 * Read the stderr that the driver produced
@@ -96,6 +103,9 @@ public:
 
 	~Scanner() override;
 
+public slots:
+	void performScan();
+
 signals:
 	//! IDriver got stderr ready
 	void readyReadStandardError();
@@ -103,6 +113,10 @@ signals:
 	void readyReadStandardOutput();
 	//! The driver's arguments are updated.
 	void argumentsUpdated();
+
+	void scanStarted();
+	void scanFinished( int exitCode, QProcess::ExitStatus exitStatus );
+	void scanErrorOccured( QProcess::ProcessError error );
 
 protected:
 	/*! Read the stderr of the `IDriver` to set the `m_stderr` */
@@ -114,6 +128,8 @@ private:
 	QString	   m_name;
 	QByteArray m_stdout; /*!< stdout text from the underlying driver*/
 	QByteArray m_stderr; /*!< stderr text from the underlying driver*/
+
+	const QString m_secretArgument{ "#$%*" };
 
 	gsl::owner<IDriver*> m_d; /*!< Ptr to the `IDriver` instance */
 

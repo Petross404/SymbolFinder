@@ -36,28 +36,51 @@ void ArgumentsLineEdit::setStopString( const QString& str )
 
 QString ArgumentsLineEdit::stopString() const { return m_specialStr; }
 
-void ArgumentsLineEdit::init() { setMouseTracking( true ); }
-
-void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
+void ArgumentsLineEdit::init()
 {
-	if ( Qt::MouseButton btn = event->button();
-	     btn == Qt::MouseButton::LeftButton || btn == Qt::MouseButton::RightButton )
-	{
-		QPoint position = event->pos();
+	setStyleSheet( "QLineEdit{ "
+		       "padding: 0 8px;"
+		       "selection-background-color: darkgray;"
+		       "font-family: Lucida Console, Courier New, monospace;"
+		       "font-size: 13px;}" );
 
-		int posAt = cursorPositionAt( position );
+	setMouseTracking( true );
+
+	connect( this, &QLineEdit::cursorPositionChanged, this, [this]( int oldPos, int newPos ) {
 		int index = text().indexOf( stopString() );
 
-		if ( posAt >= index ) { emit symbolManuallyChanged(); }
-	}
-	QLineEdit::mousePressEvent( event );
+		if ( newPos >= index )
+		{
+			emit symbolManuallyChanged();
+			// setCursorPosition(oldPos);
+		}
+	} );
 }
 
-void ArgumentsLineEdit::keyPressEvent( QKeyEvent* event )
-{
-	int cursorPos = cursorPosition();
-	int strIndex  = text().indexOf( stopString() );
+// void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
+// {
+// // 	if ( Qt::MouseButton btn = event->button();
+// // 	     btn == Qt::MouseButton::LeftButton || btn == Qt::MouseButton::RightButton )
+// // 	{
+// // 		QPoint position = event->pos();
+// //
+// // 		int posAt = cursorPositionAt( position );
+// // 		int index = text().indexOf( stopString() );
+// //
+// // 		if ( posAt >= index ) { emit symbolManuallyChanged(); }
+// // 	}
+//  	QLineEdit::mousePressEvent( event );
+// }
 
-	if ( cursorPos >= strIndex ) { emit symbolManuallyChanged(); }
-	QLineEdit::keyPressEvent( event );
-}
+// void ArgumentsLineEdit::keyPressEvent( QKeyEvent* event )
+// {
+// // 	int cursorPos = cursorPosition();
+// // 	int strIndex  = text().indexOf( stopString() );
+// //
+// // 	qDebug() << text();
+// //
+// // 	setCursorPosition(cursorPos);
+// //
+// // 	if ( cursorPos >= strIndex ) { emit symbolManuallyChanged(); }
+// 	QLineEdit::keyPressEvent( event );
+// }

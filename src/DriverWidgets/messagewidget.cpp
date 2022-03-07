@@ -182,7 +182,7 @@ void MessageWidget::paintEvent( QPaintEvent* event )
 	const QColor	color = palette().color( QPalette::Window );
 	constexpr float alpha = 0.2;
 
-	const QColor	parentWindowColor =
+	const QColor parentWindowColor =
 		( parentWidget() ? parentWidget()->palette() : qApp->palette() )
 			.color( QPalette::Window );
 	const int newRed = ( color.red() * alpha )

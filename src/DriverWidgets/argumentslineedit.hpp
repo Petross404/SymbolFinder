@@ -76,14 +76,14 @@ protected:
 	 * handle left-clicks above the symbol's name.
 	 * \param event is a ptr to `QMouseEvent` that occured.
 	 */
-	void mousePressEvent( QMouseEvent* event ) override;
+	// void mousePressEvent( QMouseEvent* event ) override;
 
 	/*!
 	 * Override and re-implement `QLineEdit::keyPressEvent(QKeyEvent*)` so we can
 	 * handle keystrokes above the symbol's name.
 	 * \param event is a ptr to `QKeyEvent` that occured.
 	 */
-	void keyPressEvent( QKeyEvent* event ) override;
+	// void keyPressEvent( QKeyEvent* event ) override;
 
 private:
 	QString m_text; /*!< Text that this widget contains>*/

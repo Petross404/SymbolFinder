@@ -4,30 +4,81 @@
 
 #include "symbollineedit.hpp"
 
+#include <qdebug.h>
 #include <qevent.h>
+#include <qregularexpression.h>
+#include <qthread.h>
+#include <qtooltip.h>
+int constexpr milliseconds = 6000;
 
 SymbolLineEdit::SymbolLineEdit( QWidget* parent )
 	: QLineEdit{ parent }
-{}
+{
+	init();
+}
 
 SymbolLineEdit::SymbolLineEdit( const QString& text, QWidget* parent )
 	: QLineEdit{ parent }
+	, msg{ text }
 {
-	setText( text );
+	init();
 }
 
 SymbolLineEdit::~SymbolLineEdit() = default;
 
-void SymbolLineEdit::paintEvent( QPaintEvent* event)
-{
-}
-
 void SymbolLineEdit::focusInEvent( QFocusEvent* event )
 {
-	QLineEdit::blockSignals( true );
+	if ( text().contains( msg ) )
+	{
+		blockSignals( true );
+		clear();
+		blockSignals( false );
+	}
 
-	setTextMargins( QMargins{ 20, 20, 20, 20 } );
-	setText( "Enter a symbol (ie printf):" );
+	QLineEdit::focusInEvent( event );
+}
 
-	QLineEdit::blockSignals( false );
+void SymbolLineEdit::leaveEvent( QEvent* event )
+{
+	// Don't print any text if the cursor is active
+	if ( !hasFocus() )
+	{
+		blockSignals( true );
+		setText( msg );
+		blockSignals( false );
+	}
+
+	QLineEdit::leaveEvent( event );
+}
+
+void SymbolLineEdit::init()
+{
+	setMaximumHeight( 30 );
+
+	setToolTip( msg );
+	setStyleSheet( "QLineEdit{ "
+		       "padding: 0 8px;"
+		       "selection-background-color: black;"
+		       "selection-background-color: blue;"
+		       "font-family: Lucida Console, Courier New, monospace;"
+		       "font-size: 13px;}" );
+
+	connect( this,
+		 &QLineEdit::textChanged,
+		 this,
+		 std::bind( &SymbolLineEdit::textChangedSlot, this, std::placeholders::_1 ),
+		 Qt::UniqueConnection );
+}
+
+void SymbolLineEdit::textChangedSlot( const QString& txt )
+{
+	qDebug() << txt;
+	emit symbolChanged( txt );
+
+	bool enableSearch = !( text().contains( msg ) && text().isEmpty() );
+	if ( enableSearch != m_enableSearch )
+	{
+		m_enableSearch = enableSearch;
+		emit enableSymbolSearch( enableSearch );
+	}
 }

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project("SymbolFinder"
 	VERSION		0.0.1
-	DESCRIPTION	""
+	DESCRIPTION	"Find which library defines or uses a symbol"
 	HOMEPAGE_URL	"")
 
 include(GNUInstallDirs)
@@ -38,6 +38,7 @@ handle_dependency_clang_format()
 
 set(symbolfinder_SRC
 	src/main.cpp
+	src/UI/interface.cpp
 	src/findermainwindow.cpp
 	src/idriver.cpp
 	src/nmdriver.cpp

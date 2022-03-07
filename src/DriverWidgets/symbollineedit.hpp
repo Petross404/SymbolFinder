@@ -7,8 +7,8 @@
 
 #include <qlineedit.h>
 
-/**
- * @todo write docs
+/*!
+ * `SymbolLineEdit` extends Qt's `QTextEdit` and adds more functi
  */
 class SymbolLineEdit: public QLineEdit
 {
@@ -16,21 +16,30 @@ class SymbolLineEdit: public QLineEdit
 	Q_DISABLE_COPY_MOVE( SymbolLineEdit )
 
 public:
-	/**
-	 * Default constructor
+	/*!
+	 * Constructs a `SymbolTextEdit` from the following:
+	 * \param parent is the ptr to the parent widget
 	 */
 	explicit SymbolLineEdit( QWidget* parent = nullptr );
+	/*!
+	 * Constructs a `SymbolTextEdit` from the following:
+	 * \param text is the default text
+	 * \param parent is the ptr to the parent widget
+	 */
 	explicit SymbolLineEdit( const QString& text = QString::fromLocal8Bit( "printf" ),
 				 QWidget* parent = nullptr );
 
-	/**
-	 * Destructor
+	/*!
+	 * Virtual, default destructor
 	 */
 	~SymbolLineEdit() override;
 
+public slots:
+	void textChangedSlot( const QString& txt );
+
 signals:
-	void blockSignals();
-	void unblockSignals();
+	void symbolChanged( const QString& txt ) const;
+	void enableSymbolSearch( bool enable ) const;
 
 protected:
 	/*!
@@ -39,9 +48,16 @@ protected:
 	 * /param  TODO
 	 * /return TODO
 	 */
-	void paintEvent( QPaintEvent* ) override;
-
 	void focusInEvent( QFocusEvent* event ) override;
+
+	void leaveEvent( QEvent* event ) override;
+
+private:
+	bool m_enableSearch{ false };
+
+	const QString msg{ tr( "Enter a symbol (ie printf)" ) };
+
+	void init();
 };
 
 #endif	  // SYMBOLLINEEDIT_H
