@@ -18,21 +18,23 @@
 
 #include "interface.hpp"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qgridlayout.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qmenubar.h>
-#include <qpushbutton.h>
-#include <qtabwidget.h>
-#include <qtextbrowser.h>
+#include <qaction.h>	     // for QAction
+#include <qbytearray.h>	     // for QByteArray
+#include <qcheckbox.h>	     // for QCheckBox
+#include <qcombobox.h>	     // for QComboBox
+#include <qgridlayout.h>     // for QGridLayout
+#include <qgroupbox.h>	     // for QGroupBox
+#include <qicon.h>	     // for QIcon
+#include <qpushbutton.h>     // for QPushButton
+#include <qstringlist.h>     // for QStringList
+#include <qtabwidget.h>	     // for QTabWidget
+#include <qtextbrowser.h>    // for QTextBrowser
 
-#include "../DriverWidgets/argumentslineedit.hpp"
-#include "../DriverWidgets/symbollineedit.hpp"
-#include "../scanner.hpp"
+#include "../DriverWidgets/argumentslineedit.hpp"    // for ArgumentsLineEdit
+#include "../DriverWidgets/symbollineedit.hpp"	     // for SymbolLineEdit
+#include "../scanner.hpp"			     // for Scanner
 
-Interface::Interface( Scanner* scanner, QWidget* parent )
+Ui::Interface::Interface( Scanner* scanner, QWidget* parent )
 	: QWidget{ parent }
 	, gridLayout{ new QGridLayout{ this } }
 	, buttonsGrid{ new QGridLayout{ this } }
@@ -88,4 +90,4 @@ Interface::Interface( Scanner* scanner, QWidget* parent )
 			    .data() ) );
 }
 
-Interface::~Interface() = default;
+Ui::Interface::~Interface() = default;

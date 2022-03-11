@@ -70,6 +70,8 @@ handle_sanitizers(symbolfinder
 			${ENABLE_LSAN}
 			${ENABLE_MSAN})
 
+handle_include_use(symbolfinder ON)
+
 # Use the Widgets module from Qt 5.
 target_link_libraries(symbolfinder Qt5::Widgets Qt5::Widgets Qt5::Gui)
 

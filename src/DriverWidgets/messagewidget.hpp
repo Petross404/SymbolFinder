@@ -5,15 +5,22 @@
 #ifndef MESSAGEWIDGET_H
 #define MESSAGEWIDGET_H
 
-#include <qframe.h>
+#include <qframe.h>	    // for QFrame, QFrame::Raised, QFrame::StyledPanel
+#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qobjectdefs.h>    // for Q_ENUM, Q_OBJECT, signals
+#include <qsize.h>	    // for QSize
+#include <qstring.h>	    // for QString
 
-#include <gsl/pointers>
-
-class QGridLayout;
-class QLabel;
-class QToolButton;
-class QAction;
-class QTimeLine;
+#include <gsl/pointers>	   // for owner
+class QAction;		   // lines 15-15
+class QCloseEvent;
+class QEvent;
+class QGridLayout;    // lines 12-12
+class QLabel;	      // lines 13-13
+class QObject;
+class QPaintEvent;
+class QToolButton;    // lines 14-14
+class QWidget;
 
 /**
  * @todo write docs
@@ -57,6 +64,9 @@ public:
 	void addAction( QAction* action );
 	void removeAction( QAction* action );
 
+signals:
+	void messageWidgetClosed() const;
+
 protected:
 	QSize sizeHint() const override;
 	QSize minimumSizeHint() const override;
@@ -66,6 +76,8 @@ protected:
 	 * \param event is the event to be processed
 	 */
 	void paintEvent( QPaintEvent* event ) override;
+
+	void closeEvent( QCloseEvent* event ) override;
 
 	/*!
 	 * Re-implement this function to change the active QPalette etc.

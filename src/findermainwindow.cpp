@@ -1,27 +1,43 @@
 #include "findermainwindow.hpp"
 
-#include <qdebug.h>
-#include <qmessagebox.h>
-#include <qtimer.h>
+#include <qaction.h>		 // for QAction
+#include <qapplication.h>	 // for QApplication, qApp
+#include <qbytearray.h>		 // for QByteArray
+#include <qcheckbox.h>		 // for QCheckBox
+#include <qcombobox.h>		 // for QComboBox
+#include <qcoreapplication.h>	 // for qAppName
+#include <qgridlayout.h>	 // for QGridLayout
+#include <qgroupbox.h>		 // for QGroupBox
+#include <qicon.h>		 // for QIcon
+#include <qlineedit.h>		 // for QLineEdit
+#include <qmenu.h>		 // for QMenu
+#include <qmenubar.h>		 // for QMenuBar
+#include <qnamespace.h>		 // for UniqueConnection
+#include <qpushbutton.h>	 // for QPushButton
+#include <qsize.h>		 // for QSize
+#include <qstatusbar.h>		 // for QStatusBar
+#include <qstringlist.h>	 // for QStringList
+#include <qtabwidget.h>		 // for QTabWidget
+#include <qtextbrowser.h>	 // for QTextBrowser
+#include <qtimer.h>		 // for QTimer
 
-#include <chrono>
-#include <functional>
+#include <type_traits>	  // for enable_if<>::type
+#include <utility>	  // for move
 
-#include "ConnectVerifier/connectverifier.hpp"
-#include "DriverWidgets/argumentslineedit.hpp"
-#include "DriverWidgets/messagewidget.hpp"
-#include "DriverWidgets/symbollineedit.hpp"
-#include "UI/interface.hpp"
-#include "nmdriver.hpp"
-#include "scanner.hpp"
-#include "ui_findermainwindow.h"
+#include "ConnectVerifier/connectverifier.hpp"	  // for ConnectVerifier
+#include "DriverWidgets/argumentslineedit.hpp"	  // for ArgumentsLineEdit
+#include "DriverWidgets/messagewidget.hpp"     // for MessageWidget, Messag...
+#include "DriverWidgets/symbollineedit.hpp"    // for SymbolLineEdit
+#include "UI/interface.hpp"		       // for Interface
+#include "scanner.hpp"			       // for Scanner
+class QWidget;
 
 int constexpr milliseconds = 3000;
 
 MainWindow::MainWindow( QWidget* parent )
 	: QMainWindow{ parent }
 	, m_scanner{ new Scanner{ "nm", this } }
-	, m_ui{ new Interface{ m_scanner, this } }
+	, m_ui{ new Ui::Interface{ m_scanner, this } }
 {
 	setCentralWidget( m_ui );
 
@@ -215,13 +231,13 @@ void MainWindow::enableAdvancedLineEdit( bool option )
 
 void MainWindow::updateStdErrorSlot()
 {
-	auto error = m_scanner->standardError();
+	QByteArray error = m_scanner->standardError();
 	m_ui->textBrowserStdErr->setText( error );
 }
 
 void MainWindow::updateStdOutputSlot()
 {
-	auto output = m_scanner->standardOut();
+	QByteArray output = m_scanner->standardOut();
 	m_ui->textBrowserStdOut->setText( output );
 }
 
@@ -233,18 +249,6 @@ void MainWindow::updateSymbolSlot( const QString& symbol )
 void MainWindow::updateAdvancedArgumentsSlot()
 {
 	m_ui->argumentsEdit->setText( m_scanner->invocation().join( ' ' ) );
-}
-
-void MainWindow::unblockHelper( const QString& text )
-{
-	m_ui->advancedCheckBox->setEnabled( true );
-	m_ui->advancedCheckBox->toggle();
-	m_ui->argumentsEdit->setText( text );
-	m_ui->argumentsEdit->setFocus();
-	m_ui->argumentsEdit->setCursorPosition( 0 );
-
-	// Signal any listener that the widget is unblocked.
-	emit advancedArgumentssUnblocked();
 }
 
 void MainWindow::resetAdvancedArgumentsSlot()
@@ -263,18 +267,11 @@ void MainWindow::resetAdvancedArgumentsSlot()
 	gsl::owner<MessageWidget*> messageWidget{
 		new MessageWidget{ message, MessageWidget::Type::Error, this } };
 
-	// Close the MessageWidget as soon as the lineedit is enabled again.
-	ConnectVerifier v;
-	v = connect( this,
-		     &MainWindow::advancedArgumentssUnblocked,
-		     messageWidget,
-		     &MessageWidget::close );
-
 	/*
-	 * While the MessageWidget is active, let's disable the checkbox
+	 * While the MessageWidget is active, let's replace the checkbox
 	 * and the custom lineedit. This way the user can't interact with
 	 * these elements and focus on the warning. Also, show the warning
-	 * on the statusBar too.
+	 * on the statusBar as well.
 	 */
 	m_ui->advancedCheckBox->setEnabled( false );
 	m_ui->buttonsGrid->replaceWidget( m_ui->argumentsEdit, messageWidget );
@@ -287,8 +284,12 @@ void MainWindow::resetAdvancedArgumentsSlot()
 	m_ui->advancedCheckBox->toggle();
 
 	// Fire up a timer to countdown until the widget is "unblocked" again.
-	QTimer::singleShot( milliseconds,
-			    std::bind( &MainWindow::unblockHelper, this, oldText ) );
+	QTimer::singleShot( milliseconds, [this, oldText, messageWidget]() {
+		m_ui->advancedCheckBox->setEnabled( true );
+		m_ui->advancedCheckBox->toggle();
+		m_ui->argumentsEdit->setText( oldText );
+		messageWidget->close();
+	} );
 }
 
 void MainWindow::setInvocationSlot( const QString& advancedArgs )

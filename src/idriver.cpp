@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "idriver.hpp"
+class QObject;
 
 IDriver::IDriver( QObject* parent )
 	: QProcess{ parent }

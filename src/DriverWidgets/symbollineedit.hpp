@@ -5,7 +5,14 @@
 #ifndef SYMBOLLINEEDIT_H
 #define SYMBOLLINEEDIT_H
 
-#include <qlineedit.h>
+#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qlineedit.h>	    // for QLineEdit
+#include <qobjectdefs.h>    // for Q_OBJECT, signals, slots
+#include <qstring.h>	    // for QString
+class QEvent;
+class QFocusEvent;
+class QObject;
+class QWidget;
 
 /*!
  * `SymbolLineEdit` extends Qt's `QTextEdit` and adds more functi

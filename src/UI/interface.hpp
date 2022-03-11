@@ -19,25 +19,26 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include <qwidget.h>
+#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qobjectdefs.h>    // for Q_OBJECT
+#include <qstring.h>	    // for QString
+#include <qwidget.h>	    // for QWidget
 
-#include <gsl/pointers>
+#include <gsl/pointers>	    // for owner
+class ArgumentsLineEdit;    // lines 38-38
+class QAction;		    // lines 27-27
+class QCheckBox;	    // lines 33-33
+class QComboBox;	    // lines 31-31
+class QGridLayout;	    // lines 28-28
+class QGroupBox;	    // lines 35-35
+class QObject;
+class QPushButton;	 // lines 30-30
+class QTabWidget;	 // lines 32-32
+class QTextBrowser;	 // lines 36-36
+class Scanner;		 // lines 26-26
+class SymbolLineEdit;	 // lines 39-39
 
-class Scanner;
-class QAction;
-class QGridLayout;
-class QLabel;
-class QPushButton;
-class QComboBox;
-class QTabWidget;
-class QCheckBox;
-class QMenuBar;
-class QGroupBox;
-class QTextBrowser;
-
-class ArgumentsLineEdit;
-class SymbolLineEdit;
-
+namespace Ui {
 /*!
  * `Interface` is the User Interface of the .ui file, ported to
  * a hand-made widget for better control.
@@ -81,5 +82,5 @@ public:
 	gsl::owner<QAction*>	  actionQuit;
 	gsl::owner<QAction*>	  actionAboutQt;
 };
-
+}    // end namespace Ui
 #endif	  // INTERFACE_H

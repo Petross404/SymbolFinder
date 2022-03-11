@@ -1,6 +1,6 @@
-#include <QApplication>
+#include <qapplication.h>    // for QApplication
 
-#include "findermainwindow.hpp"
+#include "findermainwindow.hpp"	   // for MainWindow
 
 int main( int argc, char *argv[] )
 {

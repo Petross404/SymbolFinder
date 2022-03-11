@@ -4,11 +4,16 @@
 
 #include "symbollineedit.hpp"
 
-#include <qdebug.h>
-#include <qevent.h>
-#include <qregularexpression.h>
-#include <qthread.h>
-#include <qtooltip.h>
+#include <QtCore/qglobal.h>    // for qDebug
+#include <qdebug.h>	       // for QDebug
+#include <qnamespace.h>	       // for UniqueConnection
+
+#include <functional>	 // for _Bind_helper<>::type, bind, _Placeholder
+#include <utility>	 // for move
+class QEvent;
+class QFocusEvent;
+class QWidget;
+
 int constexpr milliseconds = 6000;
 
 SymbolLineEdit::SymbolLineEdit( QWidget* parent )

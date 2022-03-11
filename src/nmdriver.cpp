@@ -4,12 +4,13 @@
 
 #include "nmdriver.hpp"
 
-#include <QDebug>
+#include <QtCore/qglobal.h>    // for qDebug
+#include <qdebug.h>	       // for QDebug
+#include <qlist.h>	       // for QList
 
-#include "ConnectVerifier/connectverifier.hpp"
-#include "findermainwindow.hpp"
-#include "qlineedit.h"
-#include "qpushbutton.h"
+#include "ConnectVerifier/connectverifier.hpp"	  // for ConnectVerifier
+#include "src/idriver.hpp"			  // for IDriver
+class QObject;
 
 NmDriver::NmDriver( QObject* parent )
 	: IDriver{ parent }

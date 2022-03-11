@@ -4,13 +4,11 @@
 
 #include "scanner.hpp"
 
-#include <qdebug.h>
-#include <qlineedit.h>
-#include <qtextbrowser.h>
+#include <qnamespace.h>	   // for UniqueConnection
 
-#include "ConnectVerifier/connectverifier.hpp"
-#include "findermainwindow.hpp"
-#include "nmdriver.hpp"
+#include "ConnectVerifier/connectverifier.hpp"	  // for ConnectVerifier
+#include "nmdriver.hpp"				  // for NmDriver
+#include "src/idriver.hpp"			  // for IDriver
 
 Scanner::Scanner( QObject* parent )
 	: QObject{ parent }
@@ -56,7 +54,7 @@ void Scanner::setupConnections()
 	v = connect( m_d,
 		     &QProcess::readyReadStandardError,
 		     this,
-		     &Scanner::setStandardErrorSlot,
+		     &Scanner::setStandardErrSlot,
 		     Qt::UniqueConnection );
 
 	v = connect( m_d, &QProcess::started, this, &Scanner::scanStarted, Qt::UniqueConnection );
@@ -119,7 +117,7 @@ void Scanner::setInvocation( const QString& args, const QString& secret )
 	m_d->setInvocation( currentArguments );
 
 	// All set, now emit the signal.
-	emit argumentsUpdated();
+	if ( secret == m_secretArgument ) { emit argumentsUpdated(); }
 }
 
 QString Scanner::stopString() const { return m_d->stopString(); }
@@ -128,10 +126,7 @@ QString Scanner::symbolName() const { return m_d->symbolName(); }
 
 void Scanner::setStandardOutSlot() { m_stdout = m_d->readAllStandardOutput(); }
 
-void Scanner::setStandardErrorSlot()
-{
-	m_stderr = m_d->readAllStandardOutput();
-}
+void Scanner::setStandardErrSlot() { m_stderr = m_d->readAllStandardError(); }
 
 QByteArray Scanner::standardOut() const { return m_stdout; }
 

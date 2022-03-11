@@ -4,12 +4,12 @@
 
 #include "argumentslineedit.hpp"
 
-#include <qdebug.h>
-#include <qevent.h>
-#include <qtimer.h>
-#include <qtooltip.h>
-
-#include "../ConnectVerifier/connectverifier.hpp"
+#include <QtCore/qglobal.h>    // for qDebug
+#include <qdebug.h>	       // for QDebug
+#include <qevent.h>	       // for QMouseEvent, QKeyEvent (ptr only)
+#include <qnamespace.h>	       // for MouseButton, LeftButton, RightButton
+#include <qpoint.h>	       // for QPoint
+class QWidget;
 
 ArgumentsLineEdit::ArgumentsLineEdit( const QString& text,
 				      const QString& stopString,
@@ -45,42 +45,32 @@ void ArgumentsLineEdit::init()
 		       "font-size: 13px;}" );
 
 	setMouseTracking( true );
-
-	connect( this, &QLineEdit::cursorPositionChanged, this, [this]( int oldPos, int newPos ) {
-		int index = text().indexOf( stopString() );
-
-		if ( newPos >= index )
-		{
-			emit symbolManuallyChanged();
-			// setCursorPosition(oldPos);
-		}
-	} );
 }
 
-// void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
-// {
-// // 	if ( Qt::MouseButton btn = event->button();
-// // 	     btn == Qt::MouseButton::LeftButton || btn == Qt::MouseButton::RightButton )
-// // 	{
-// // 		QPoint position = event->pos();
-// //
-// // 		int posAt = cursorPositionAt( position );
-// // 		int index = text().indexOf( stopString() );
-// //
-// // 		if ( posAt >= index ) { emit symbolManuallyChanged(); }
-// // 	}
-//  	QLineEdit::mousePressEvent( event );
-// }
+void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
+{
+	if ( Qt::MouseButton btn = event->button();
+	     btn == Qt::MouseButton::LeftButton || btn == Qt::MouseButton::RightButton )
+	{
+		QPoint position = event->pos();
 
-// void ArgumentsLineEdit::keyPressEvent( QKeyEvent* event )
-// {
-// // 	int cursorPos = cursorPosition();
-// // 	int strIndex  = text().indexOf( stopString() );
-// //
-// // 	qDebug() << text();
-// //
-// // 	setCursorPosition(cursorPos);
-// //
-// // 	if ( cursorPos >= strIndex ) { emit symbolManuallyChanged(); }
-// 	QLineEdit::keyPressEvent( event );
-// }
+		int posAt = cursorPositionAt( position );
+		int index = text().indexOf( stopString() );
+
+		if ( posAt >= index ) { emit symbolManuallyChanged(); }
+	}
+	QLineEdit::mousePressEvent( event );
+}
+
+void ArgumentsLineEdit::keyPressEvent( QKeyEvent* event )
+{
+	int cursorPos = cursorPosition();
+	int strIndex  = text().indexOf( stopString() );
+
+	qDebug() << text();
+
+	setCursorPosition( cursorPos );
+
+	if ( cursorPos >= strIndex ) { emit symbolManuallyChanged(); }
+	QLineEdit::keyPressEvent( event );
+}

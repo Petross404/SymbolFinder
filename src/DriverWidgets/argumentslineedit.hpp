@@ -5,12 +5,19 @@
 #ifndef ARGUMENTSLINEEDIT_H
 #define ARGUMENTSLINEEDIT_H
 
-#include <qlineedit.h>
+#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qlineedit.h>	    // for QLineEdit
+#include <qobjectdefs.h>    // for Q_OBJECT, Q_PROPERTY, signals
+#include <qstring.h>	    // for QString
+class QKeyEvent;
+class QMouseEvent;
+class QObject;
+class QWidget;
 
 /*!
  * \brief `ArgumentsLineEdit` is a customized `QLineEdit`.
  *
- * It offers over the Qt's widget, is that we can handle some special characters and
+ * What it offers over the Qt's widget, is that we can handle some special characters and
  * emit signals that are usefull elsewhere.
  *
  * Since this widget can both display and edit the driver's arguments, one could by
@@ -41,7 +48,7 @@ public:
 	 */
 	explicit ArgumentsLineEdit( QWidget* parent = 0 );
 
-	/**
+	/*!
 	 * Default destructor
 	 */
 	~ArgumentsLineEdit() override;
@@ -76,14 +83,14 @@ protected:
 	 * handle left-clicks above the symbol's name.
 	 * \param event is a ptr to `QMouseEvent` that occured.
 	 */
-	// void mousePressEvent( QMouseEvent* event ) override;
+	void mousePressEvent( QMouseEvent* event ) override;
 
 	/*!
 	 * Override and re-implement `QLineEdit::keyPressEvent(QKeyEvent*)` so we can
 	 * handle keystrokes above the symbol's name.
 	 * \param event is a ptr to `QKeyEvent` that occured.
 	 */
-	// void keyPressEvent( QKeyEvent* event ) override;
+	void keyPressEvent( QKeyEvent* event ) override;
 
 private:
 	QString m_text; /*!< Text that this widget contains>*/

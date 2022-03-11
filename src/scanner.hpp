@@ -5,13 +5,16 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
-#include <qobject.h>
+#include <qbytearray.h>	    // for QByteArray
+#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qobject.h>	    // for QObject
+#include <qobjectdefs.h>    // for Q_OBJECT, signals, slots
+#include <qprocess.h>	 // for QProcess, QProcess::ExitStatus, QProcess::P...
+#include <qstring.h>	 // for QString
+#include <qstringlist.h>    // for QStringList
 
-#include <gsl/pointers>
-
-#include "idriver.hpp"
-
-class MainWindow;
+#include <gsl/pointers>	   // for owner
+class IDriver;
 
 /*!
  * `Scanner` class creates an object that can hold an `IDriver*` instance.
@@ -120,7 +123,7 @@ signals:
 
 protected:
 	/*! Read the stderr of the `IDriver` to set the `m_stderr` */
-	void setStandardErrorSlot();
+	void setStandardErrSlot();
 	/*! Read the stdout of the `IDriver` to set the `m_stdout` */
 	void setStandardOutSlot();
 

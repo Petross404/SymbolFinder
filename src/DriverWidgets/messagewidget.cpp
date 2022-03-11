@@ -4,13 +4,26 @@
 
 #include "messagewidget.hpp"
 
-#include <qaction.h>
-#include <qapplication.h>
-#include <qgridlayout.h>
-#include <qlabel.h>
-#include <qpainter.h>
-#include <qstyleoption.h>
-#include <qtoolbutton.h>
+#include <qaction.h>	     // for QAction
+#include <qapplication.h>    // for QApplication, qApp
+#include <qcolor.h>	     // for QColor
+#include <qcoreevent.h>	     // for QEvent, QEvent::ParentChange, QEvent::Polish
+#include <qgridlayout.h>     // for QGridLayout
+#include <qlabel.h>	     // for QLabel
+#include <qlayout.h>	     // for QLayout
+#include <qmargins.h>	     // for operator+, QMargins
+#include <qnamespace.h>	     // for UniqueConnection, TextBrowserInteraction
+#include <qpainter.h>	     // for QPainter, QPainter::Antialiasing
+#include <qpalette.h>	    // for QPalette, QPalette::Window, QPalette::Wind...
+#include <qpen.h>	    // for QPen
+#include <qrect.h>	    // for QRect
+#include <qsizepolicy.h>    // for QSizePolicy, QSizePolicy::Fixed, QSizePoli...
+#include <qstyle.h>	    // for QStyle, QStyle::SP_DialogCloseButton
+#include <qstyleoption.h>    // for QStyleOptionFrame
+#include <qtoolbutton.h>     // for QToolButton
+#include <qwidget.h>	     // for QWidget
+class QCloseEvent;
+class QPaintEvent;
 
 constexpr int borderSize = 2;
 
@@ -196,6 +209,12 @@ void MessageWidget::paintEvent( QPaintEvent* event )
 	painter.setBrush( QColor( newRed, newGreen, newBlue ) );
 	painter.setRenderHint( QPainter::Antialiasing );
 	painter.drawRoundedRect( innerRect, radius, radius );
+}
+
+void MessageWidget::closeEvent( QCloseEvent* event )
+{
+	emit messageWidgetClosed();
+	QFrame::closeEvent( event );
 }
 
 bool MessageWidget::event( QEvent* event )

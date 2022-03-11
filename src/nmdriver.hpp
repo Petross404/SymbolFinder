@@ -5,7 +5,13 @@
 #ifndef NMDRIVER_H
 #define NMDRIVER_H
 
-#include "idriver.hpp"
+#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qobjectdefs.h>    // for Q_OBJECT
+#include <qstring.h>	    // for QString
+#include <qstringlist.h>    // for QStringList
+
+#include "idriver.hpp"	  // for IDriver
+class QObject;
 
 /**
  * \brief NmDriver inherits from IDriver and acts as a driver for /usr/bin/nm

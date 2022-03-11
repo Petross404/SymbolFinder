@@ -5,9 +5,12 @@
 #ifndef IDRIVER_H
 #define IDRIVER_H
 
-#include <QProcess>
-
-class MainWindow;
+#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qobjectdefs.h>    // for Q_OBJECT, signals
+#include <qprocess.h>	    // for QProcess
+#include <qstring.h>	    // for QString
+#include <qstringlist.h>    // for QStringList
+class QObject;
 
 /*!
  * \brief `IDriver` serves as an interface for `NmDriver` and `ScanelfDriver`
@@ -65,7 +68,7 @@ public:
 	virtual void exec() = 0;
 
 	/*!
-	 * Run the driver with specified arguments. This is an overloaded function.
+	 * Run the driver with these specific arguments. This is an overloaded function.
 	 * \param arg is the list of arguments that this driver will be started with.
 	 */
 	virtual void exec( const QStringList& arg ) = 0;

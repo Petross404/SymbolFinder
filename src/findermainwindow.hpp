@@ -1,22 +1,19 @@
 #ifndef SYMBOLFINDER_H
 #define SYMBOLFINDER_H
 
-#include <QMainWindow>
-#include <gsl/pointers>
-#include <memory>
+#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qmainwindow.h>    // for QMainWindow
+#include <qobjectdefs.h>    // for Q_OBJECT, signals, slots
+#include <qstring.h>	    // for QString
 
+#include <gsl/pointers>	    // for owner
+class ArgumentsLineEdit;    // lines 16-16
+class QObject;
+class QWidget;
+class Scanner;	  // lines 15-15
 namespace Ui {
-class MainWindow;
-}
-class QLineEdit;
-class QTextBrowser;
-class QPushButton;
-class IDriver;
-class Scanner;
-class ArgumentsLineEdit;
-class SymbolTextEdit;
-
 class Interface;
+}    // namespace Ui
 
 using ArgsLineEdit = ArgumentsLineEdit;
 
@@ -42,14 +39,6 @@ public:
 	 * Default destructor
 	 */
 	~MainWindow() override;
-
-	/*!
-	 * Helper fumction to run inside a `QTimer::singleShot` and
-	 * unblock the `ArgumentsLineEdit` widget.
-	 * \param text is what will be written to the widget once it's unblocked
-	 * \sa void MainWindow::resetAdvancedArgumentsSlot()
-	 */
-	void unblockHelper( const QString& text );
 
 public slots:
 	/*!
@@ -128,8 +117,8 @@ signals:
 	void advancedArgumentssUnblocked() const;
 
 private:
-	gsl::owner<Scanner*>   m_scanner; /*!< Ptr to the scanner instance */
-	gsl::owner<Interface*> m_ui; /*!< Ptr to the hand-made user interface */
+	gsl::owner<Scanner*> m_scanner; /*!< Ptr to the scanner instance */
+	gsl::owner<Ui::Interface*> m_ui; /*!< Ptr to the hand-made user interface */
 
 	void setupConnections();
 	void setupWidgets();
