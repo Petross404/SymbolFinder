@@ -23,7 +23,7 @@ class QToolButton;    // lines 14-14
 class QWidget;
 
 /**
- * @todo write docs
+ * \todo write docs
  */
 class MessageWidget: public QFrame
 {

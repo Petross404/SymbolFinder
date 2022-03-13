@@ -35,13 +35,15 @@ public:
 
 	const QStringList defaultInvocation() const override;
 	const QStringList invocation() const override;
-	void		  setInvocation( const QStringList& args ) override;
+
+	bool setInvocation( const QStringList& args ) override;
 
 	void exec() override;
 	void exec( const QStringList& arg ) override;
 
 	const QString symbolName() const override;
-	void	      setSymbolName( const QString& s ) override;
+
+	void setSymbolName( const QString& s ) override;
 
 	const bool isSymbolInArgs() const override;
 

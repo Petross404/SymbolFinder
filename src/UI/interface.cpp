@@ -45,6 +45,8 @@ Ui::Interface::Interface( Scanner* scanner, QWidget* parent )
 		  QIcon::fromTheme( "application-exit" ), tr( "&Close" ), this } }
 	, searchBtn{ new QPushButton{
 		  QIcon::fromTheme( "edit-find" ), tr( "&Search" ), this } }
+	, resetArgsBtn{ new QPushButton{
+		  QIcon::fromTheme( "view-refresh" ), tr( "&Reset" ), this } }
 	, scannersBox{ new QComboBox{ this } }
 	, advancedCheckBox{ new QCheckBox{ tr( "Advanced" ), this } }
 	, symbolEdit{ new SymbolLineEdit{ this } }
@@ -72,7 +74,8 @@ Ui::Interface::Interface( Scanner* scanner, QWidget* parent )
 	buttonsGrid->addWidget( searchBtn, 0, 2 );
 	buttonsGrid->addWidget( closeBtn, 0, 3 );
 	buttonsGrid->addWidget( advancedCheckBox, 1, 0 );
-	buttonsGrid->addWidget( argumentsEdit, 1, 1, 1, 3 );
+	buttonsGrid->addWidget( argumentsEdit, 1, 1, 1, 2 );
+	buttonsGrid->addWidget( resetArgsBtn, 1, 3 );
 
 	tabsGrid->addWidget( tabWidget, 0, 0 );
 	QWidget* tabStdOut{ new QWidget{ this } };

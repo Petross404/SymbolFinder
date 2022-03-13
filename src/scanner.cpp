@@ -4,6 +4,7 @@
 
 #include "scanner.hpp"
 
+#include <qdebug.h>
 #include <qnamespace.h>	   // for UniqueConnection
 
 #include "ConnectVerifier/connectverifier.hpp"	  // for ConnectVerifier
@@ -37,9 +38,13 @@ void Scanner::performScan() { m_d->exec(); }
 
 QStringList Scanner::invocation() const { return m_d->invocation(); }
 
-IDriver* Scanner::driver() const { return m_d; }
+void Scanner::resetInvocation()
+{
+	const QString defaultArgs{ defaultInvocation().join( ' ' ) };
+	setInvocation( defaultArgs, m_secretSetDefaultArgument );
+}
 
-void Scanner::scanSymbol( const QString& name ) {}
+IDriver* Scanner::driver() const { return m_d; }
 
 void Scanner::setupConnections()
 {
@@ -71,17 +76,18 @@ void Scanner::setSymbolName( const QString& symbol )
 	const QString previousSymbolName = symbolName();
 
 	// If the symbols don't match, update.
-	if ( previousSymbolName != symbol )
+	if ( Q_LIKELY( previousSymbolName != symbol ) )
 	{
 		m_d->setSymbolName( symbol );
-		setInvocation( invocation().join( ' ' ), m_secretArgument );
+		// Call Scanner::setInvocation with m_secretArgument
+		setInvocation( invocation().join( ' ' ), m_secretSetSymbolArgument );
 	}
 }
 
 void Scanner::setInvocation( const QString& args, const QString& secret )
 {
 	/*
-	 * There are two ways for this function to be called:
+	 * There are two ways for this function to be invoked:
 	 *
 	 * A) secret == m_secretArgument which means that this function was
 	 * called from Scanner::setSymbolName(..) and the currentArguments
@@ -94,8 +100,9 @@ void Scanner::setInvocation( const QString& args, const QString& secret )
 	 * it and confuse Scanner::setInvocation(...), since the latter uses
 	 * default argument for the second parameter.
 	 */
-	QStringList currentArguments =
-		secret == m_secretArgument ? invocation() : args.split( ' ' );
+	QStringList currentArguments{ secret == m_secretSetSymbolArgument
+					      ? invocation()
+					      : args.split( ' ' ) };
 
 	QString stopStr = stopString();
 	QString argsStr = currentArguments.join( ' ' );
@@ -108,16 +115,19 @@ void Scanner::setInvocation( const QString& args, const QString& secret )
 	 * Replace (in the widget) `symbolSize` characters at position
 	 * `stopIndex`, with the new name that is returned from
 	 * symbolName(). Then, call the driver to actually change
-	 * the arguments for the driver to run.
+	 * the arguments for the driver to run but emit that the arguments
+	 * changed, only if this function was called for setSymbolName()
 	 */
-	if ( secret == m_secretArgument )
-	{
-		argsStr.replace( indexOfStop, symbolSize, symbolName() );
-	}
-	m_d->setInvocation( currentArguments );
+	qDebug() << "scanner" << symbolName();
+	argsStr.replace( indexOfStop, symbolSize + 10, symbolName() );
+	currentArguments = argsStr.split( ' ' );
 
-	// All set, now emit the signal.
-	if ( secret == m_secretArgument ) { emit argumentsUpdated(); }
+	if ( m_d->setInvocation( currentArguments )
+	     && ( secret == m_secretSetSymbolArgument
+		  || secret == m_secretSetDefaultArgument ) )
+	{
+		emit argumentsUpdated();
+	}
 }
 
 QString Scanner::stopString() const { return m_d->stopString(); }

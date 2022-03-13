@@ -71,19 +71,44 @@ void SymbolLineEdit::init()
 	connect( this,
 		 &QLineEdit::textChanged,
 		 this,
-		 std::bind( &SymbolLineEdit::textChangedSlot, this, std::placeholders::_1 ),
+		 &SymbolLineEdit::textChangedSlot,
 		 Qt::UniqueConnection );
 }
 
 void SymbolLineEdit::textChangedSlot( const QString& txt )
 {
-	qDebug() << txt;
-	emit symbolChanged( txt );
-
-	bool enableSearch = !( text().contains( msg ) && text().isEmpty() );
-	if ( enableSearch != m_enableSearch )
+	if ( Q_LIKELY( txt != msg ) )
 	{
-		m_enableSearch = enableSearch;
-		emit enableSymbolSearch( enableSearch );
+		/*
+		 *
+		 */
+		int index = 0;
+		for ( size_t i = 0; i < txt.size(); i++ )
+		{
+			if ( QChar c = txt.at( i ); c.isSpace() ) { index++; }
+			else
+			{
+				break;
+			}
+		}
+
+		// Keep the text without the first blanc characters.
+		QString rightmostText = txt.right( txt.size() - index );
+		qDebug() << "rightmostText" << rightmostText;
+
+		bool enableSearch = !( rightmostText.contains( " " ) );
+
+		emit symbolChanged( rightmostText );
+
+		if ( enableSearch != m_enableSearch )
+		{
+			m_enableSearch = enableSearch;
+			emit enableSymbolSearch( enableSearch );
+
+			if ( enableSearch == false )
+			{
+				emit enableSymbolLineWarning();
+			}
+		}
 	}
 }

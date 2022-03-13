@@ -1,0 +1,23 @@
+{
+	"BUILD_DIR" : "/home/petros/projects/symbolfinder/build/symbolfinder_autogen",
+	"CMAKE_BINARY_DIR" : "/home/petros/projects/symbolfinder/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/petros/projects/symbolfinder/build",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/petros/projects/symbolfinder",
+	"CMAKE_SOURCE_DIR" : "/home/petros/projects/symbolfinder",
+	"INCLUDE_DIR" : "/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/petros/projects/symbolfinder/src/resources/Elf-layout--en.svg.png",
+		"/home/petros/projects/symbolfinder/src/resources/pngegg.png"
+	],
+	"LOCK_FILE" : "/home/petros/projects/symbolfinder/build/CMakeFiles/symbolfinder_autogen.dir/AutoRcc_resources_UVLADIE3JM_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "resources", "--compress", "9" ],
+	"OUTPUT_CHECKSUM" : "UVLADIE3JM",
+	"OUTPUT_NAME" : "qrc_resources.cpp",
+	"RCC_EXECUTABLE" : "/usr/lib/qt5/bin/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/petros/projects/symbolfinder/build/CMakeFiles/symbolfinder_autogen.dir/AutoRcc_resources_UVLADIE3JM_Used.txt",
+	"SOURCE" : "/home/petros/projects/symbolfinder/src/resources.qrc",
+	"VERBOSITY" : 0
+}

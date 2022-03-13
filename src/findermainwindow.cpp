@@ -6,20 +6,21 @@
 #include <qcheckbox.h>		 // for QCheckBox
 #include <qcombobox.h>		 // for QComboBox
 #include <qcoreapplication.h>	 // for qAppName
-#include <qgridlayout.h>	 // for QGridLayout
-#include <qgroupbox.h>		 // for QGroupBox
-#include <qicon.h>		 // for QIcon
-#include <qlineedit.h>		 // for QLineEdit
-#include <qmenu.h>		 // for QMenu
-#include <qmenubar.h>		 // for QMenuBar
-#include <qnamespace.h>		 // for UniqueConnection
-#include <qpushbutton.h>	 // for QPushButton
-#include <qsize.h>		 // for QSize
-#include <qstatusbar.h>		 // for QStatusBar
-#include <qstringlist.h>	 // for QStringList
-#include <qtabwidget.h>		 // for QTabWidget
-#include <qtextbrowser.h>	 // for QTextBrowser
-#include <qtimer.h>		 // for QTimer
+#include <qdebug.h>
+#include <qgridlayout.h>     // for QGridLayout
+#include <qgroupbox.h>	     // for QGroupBox
+#include <qicon.h>	     // for QIcon
+#include <qlineedit.h>	     // for QLineEdit
+#include <qmenu.h>	     // for QMenu
+#include <qmenubar.h>	     // for QMenuBar
+#include <qnamespace.h>	     // for UniqueConnection
+#include <qpushbutton.h>     // for QPushButton
+#include <qsize.h>	     // for QSize
+#include <qstatusbar.h>	     // for QStatusBar
+#include <qstringlist.h>     // for QStringList
+#include <qtabwidget.h>	     // for QTabWidget
+#include <qtextbrowser.h>    // for QTextBrowser
+#include <qtimer.h>	     // for QTimer
 
 #include <type_traits>	  // for enable_if<>::type
 #include <utility>	  // for move
@@ -88,6 +89,12 @@ void MainWindow::setupConnections()
 		     &MainWindow::setInvocationSlot,
 		     Qt::UniqueConnection );
 
+	v = connect( m_ui->resetArgsBtn,
+		     &QPushButton::clicked,
+		     this,
+		     &MainWindow::resetAdvancedArgumentsSlot,
+		     Qt::UniqueConnection );
+
 	v = connect( m_scanner,
 		     &Scanner::readyReadStandardError,
 		     this,
@@ -110,7 +117,6 @@ void MainWindow::setupConnections()
 		     &MainWindow::enableSymbolSearchSlot,
 		     Qt::UniqueConnection );
 
-	// TODO We call updateSymbolSlot AND setInvocationSlot with the new symbol. Why?
 	v = connect( m_ui->symbolEdit,
 		     &SymbolLineEdit::symbolChanged,
 		     this,
@@ -131,10 +137,16 @@ void MainWindow::setupConnections()
 		     &MainWindow::enableAdvancedLineEdit,
 		     Qt::UniqueConnection );
 
+	v = connect( m_ui->symbolEdit,
+		     &SymbolLineEdit::enableSymbolLineWarning,
+		     this,
+		     &MainWindow::resetSymbolLineWarningSlot,
+		     Qt::UniqueConnection );
+
 	v = connect( m_ui->argumentsEdit,
 		     &ArgsLineEdit::symbolManuallyChanged,
 		     this,
-		     &MainWindow::resetAdvancedArgumentsSlot,
+		     &MainWindow::resetAdvancedLineEditSlot,
 		     Qt::UniqueConnection );
 
 	v = connect( m_scanner,
@@ -243,6 +255,7 @@ void MainWindow::updateStdOutputSlot()
 
 void MainWindow::updateSymbolSlot( const QString& symbol )
 {
+	qDebug() << "findermainwindow" << symbol;
 	m_scanner->setSymbolName( symbol );
 }
 
@@ -251,7 +264,7 @@ void MainWindow::updateAdvancedArgumentsSlot()
 	m_ui->argumentsEdit->setText( m_scanner->invocation().join( ' ' ) );
 }
 
-void MainWindow::resetAdvancedArgumentsSlot()
+void MainWindow::resetAdvancedLineEditSlot()
 {
 	QString oldText = m_ui->argumentsEdit->text();
 
@@ -274,6 +287,7 @@ void MainWindow::resetAdvancedArgumentsSlot()
 	 * on the statusBar as well.
 	 */
 	m_ui->advancedCheckBox->setEnabled( false );
+	m_ui->resetArgsBtn->setEnabled(false);
 	m_ui->buttonsGrid->replaceWidget( m_ui->argumentsEdit, messageWidget );
 	statusBar()->showMessage( message, milliseconds );
 
@@ -286,8 +300,33 @@ void MainWindow::resetAdvancedArgumentsSlot()
 	// Fire up a timer to countdown until the widget is "unblocked" again.
 	QTimer::singleShot( milliseconds, [this, oldText, messageWidget]() {
 		m_ui->advancedCheckBox->setEnabled( true );
+		m_ui->resetArgsBtn->setEnabled(true);
 		m_ui->advancedCheckBox->toggle();
 		m_ui->argumentsEdit->setText( oldText );
+		m_ui->buttonsGrid->replaceWidget( messageWidget, m_ui->argumentsEdit );
+		messageWidget->close();
+	} );
+}
+
+void MainWindow::resetAdvancedArgumentsSlot() { m_scanner->resetInvocation(); }
+
+void MainWindow::resetSymbolLineWarningSlot()
+{
+	const QString msg{
+		tr( "A symbol name can't contain a blank character" ) };
+
+	gsl::owner<MessageWidget*> messageWidget{
+		new MessageWidget{ msg, MessageWidget::Type::Error, this } };
+
+	m_ui->symbolEdit->hide();
+	m_ui->searchBtn->setEnabled( false );
+	m_ui->buttonsGrid->replaceWidget( m_ui->symbolEdit, messageWidget );
+
+	QTimer::singleShot( milliseconds, [this, messageWidget]() {
+		m_ui->searchBtn->setEnabled( true );
+		m_ui->symbolEdit->show();
+		m_ui->buttonsGrid->replaceWidget( messageWidget, m_ui->symbolEdit );
+		m_ui->symbolEdit->clear();
 		messageWidget->close();
 	} );
 }

@@ -3,14 +3,15 @@
 
 #include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
 #include <qmainwindow.h>    // for QMainWindow
-#include <qobjectdefs.h>    // for Q_OBJECT, signals, slots
+#include <qobjectdefs.h>    // for Q_OBJECT, signals
 #include <qstring.h>	    // for QString
 
-#include <gsl/pointers>	    // for owner
-class ArgumentsLineEdit;    // lines 16-16
-class QObject;
-class QWidget;
-class Scanner;	  // lines 15-15
+#include <gsl/pointers>	   // for owner
+
+#include "src/DriverWidgets/argumentslineedit.hpp"    // for ArgumentsLineEdit
+class QObject;					      // lines 11-11
+class QWidget;					      // lines 12-12
+class Scanner;					      // lines 13-13
 namespace Ui {
 class Interface;
 }    // namespace Ui
@@ -46,6 +47,7 @@ public slots:
 	 * \sa void MainWindow::showStdErrorTab()
 	 */
 	void hideStdErrorTab();
+
 	/*!
 	 * Slot to activate the sterr `QTabWidget` when the output is ready.
 	 * \sa void MainWindow::hideStdErrorTab()
@@ -57,6 +59,7 @@ public slots:
 	 * \param option is a boolen that enables or not the widget.
 	 */
 	void enableAdvancedLineEdit( bool option );
+
 	/*!
 	 * Slot to dis|enable scan-related actions and widgets based on
 	 * some conditions (symbol name in the widget, valid scanner etc).
@@ -69,25 +72,41 @@ public slots:
 	 * \sa void MainWindow::updateStdErrorSlot()
 	 */
 	void updateStdOutputSlot();
+
 	/*!
 	 * Slot to update the text that the scanning produced.
 	 * \sa void MainWindow::updateStdOutputSlot()
 	 */
 	void updateStdErrorSlot();
+
 	/*!
 	 * Slot to set the symbol name with the `Scanner` instance.
 	 */
 	void updateSymbolSlot( const QString& symbol );
+
 	/*!
 	 * Slot to update the arguments, when the symbol name is altered.
 	 */
 	void updateAdvancedArgumentsSlot();
+
 	/*!
 	 * Slot to reset the blocked advanced arguments widgets. This
 	 * happens when the user tries to edit the symbol name directly
 	 * in this widget.
+	 * \sa void MainWindow::resetSymbolLineWarningSlot()
+	 */
+	void resetAdvancedLineEditSlot();
+
+	/*!
+	 * Slot to reset the arguments of the active driver.
 	 */
 	void resetAdvancedArgumentsSlot();
+
+	/*!
+	 * Slot to handle any improper symbol name in the `SymbolLineEditor`.
+	 * \sa void MainWindow::resetAdvancedLineEditSlot()
+	 */
+	void resetSymbolLineWarningSlot();
 
 	/*!
 	 * Slot to block the UI when the QProcess is running, so the user
@@ -95,6 +114,7 @@ public slots:
 	 * \sa void MainWindow::unblockUISlot()
 	 */
 	void blockUISlot();
+
 	/*!
 	 * Slot to unblock the UI when the QProcess finished, so it's ready
 	 * to interact again.

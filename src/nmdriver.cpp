@@ -37,15 +37,20 @@ const bool NmDriver::isSymbolInArgs() const
 	return b;
 }
 
-void NmDriver::setInvocation( const QStringList& args )
+bool NmDriver::setInvocation( const QStringList& args )
 {
-	if ( m_effectiveArgList != args ) { m_effectiveArgList = args; }
+	if ( m_effectiveArgList != args )
+	{
+		m_effectiveArgList = args;
+		return true;
+	}
+	return false;
 }
 
 void NmDriver::exec()
 {
-	qDebug() << m_program << ".." << m_effectiveArgList.join( ' ' );
-	start( m_program, m_effectiveArgList );
+	//qDebug() << m_program << ".." << m_effectiveArgList.join( ' ' );
+	QProcess::execute( symbolName(), invocation() );
 	waitForStarted();
 }
 

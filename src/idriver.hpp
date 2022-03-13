@@ -52,7 +52,7 @@ public:
 	 * just the active arguments.
 	 * \param args is the `QStringList` that has the driver arguments.
 	 */
-	virtual void setInvocation( const QStringList& args ) = 0;
+	[[nodiscard]] virtual bool setInvocation( const QStringList& args ) = 0;
 
 	/*!
 	 * Get the active list of arguments that the driver is using.

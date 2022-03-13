@@ -69,6 +69,7 @@ public:
 	gsl::owner<QGroupBox*>	 tabsGroup;
 	gsl::owner<QPushButton*> closeBtn;
 	gsl::owner<QPushButton*> searchBtn;
+	gsl::owner<QPushButton*> resetArgsBtn;
 	gsl::owner<QComboBox*>	 scannersBox;
 	gsl::owner<QCheckBox*>	 advancedCheckBox;
 

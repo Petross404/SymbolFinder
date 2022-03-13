@@ -64,16 +64,15 @@ public:
 	[[nodiscard]] QStringList invocation() const;
 
 	/*!
-	 * Scan the entered symbol
-	 * \param name is the of the symbol to be searched
+	 * Reset the driver's arguments to a default.
 	 */
-	void scanSymbol( const QString& name );
+	void resetInvocation();
 
 	/*!
 	 * Set the list of arguments that the driver will be invoked with
 	 * \param args is the `QString` text of the arguments for the driver.
 	 * It is converted to `QStringList` inside the function again.
-	 * \param secret is a true if the function was called from
+	 * \param secret is set if the function was called from
 	 * `setSymbolName()` and the symbol is changed. Do NOT set this
 	 * parameter your self when calling this function!
 	 * \sa `void setSymbolName(const QString& symbol)`
@@ -104,6 +103,9 @@ public:
 
 	[[nodiscard]] QString symbolName() const;
 
+	/*!
+	 * Destructor
+	 */
 	~Scanner() override;
 
 public slots:
@@ -132,7 +134,8 @@ private:
 	QByteArray m_stdout; /*!< stdout text from the underlying driver*/
 	QByteArray m_stderr; /*!< stderr text from the underlying driver*/
 
-	const QString m_secretArgument{ "#$%*" };
+	const QString m_secretSetSymbolArgument{ "#symbol#" };
+	const QString m_secretSetDefaultArgument{ "#default#" };
 
 	gsl::owner<IDriver*> m_d; /*!< Ptr to the `IDriver` instance */
 

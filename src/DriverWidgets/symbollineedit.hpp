@@ -42,21 +42,39 @@ public:
 	~SymbolLineEdit() override;
 
 public slots:
+	/*!
+	 * Handle here what needs to be handled when the text
+	 * is changed in the widget.
+	 * \param txt is the new text in the widget
+	 * \sa void SymbolLineEdit::symbolChanged(const QString& txt)
+	 * \sa void SymbolLineEdit::enableSymbolSearch(bool enable)
+	 */
 	void textChangedSlot( const QString& txt );
 
 signals:
-	void symbolChanged( const QString& txt ) const;
-	void enableSymbolSearch( bool enable ) const;
+	/*!
+	 * Emit the new text
+	 * \param txt is the new text in the widget
+	 */
+	void symbolChanged( const QString& txt );
+
+	/*!
+	 * Emit when the enabled or disabled status of some widgets
+	 * should change. Some pushbuttons and other controls, should
+	 * be conditionally enabled, based on whether there is text
+	 * on this widget.
+	 * \param enable is a boolean value that describes the situation
+	 */
+	void enableSymbolSearch( bool enable );
+
+	/*!
+	 * Emit this signal when the user enters an improper symbol name
+	 * like one with spaces or other characters.
+	 */
+	void enableSymbolLineWarning();
 
 protected:
-	/*!
-	 * /todo write docs
-	 *
-	 * /param  TODO
-	 * /return TODO
-	 */
 	void focusInEvent( QFocusEvent* event ) override;
-
 	void leaveEvent( QEvent* event ) override;
 
 private:
