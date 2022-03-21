@@ -6,12 +6,12 @@
 
 #include <QtCore/qglobal.h>    // for qDebug
 #include <qdebug.h>	       // for QDebug
-#include <qnamespace.h>	       // for UniqueConnection
+#include <qevent.h>
+#include <qnamespace.h>	   // for UniqueConnection
 
 #include <functional>	 // for _Bind_helper<>::type, bind, _Placeholder
 #include <utility>	 // for move
-class QEvent;
-class QFocusEvent;
+
 class QWidget;
 
 int constexpr milliseconds = 6000;
@@ -56,9 +56,21 @@ void SymbolLineEdit::leaveEvent( QEvent* event )
 	QLineEdit::leaveEvent( event );
 }
 
+void SymbolLineEdit::keyPressEvent( QKeyEvent* event )
+{
+	if ( const int key = event->key();
+	     key == Qt::Key::Key_Enter || key == Qt::Key::Key_Return )
+	{
+		emit keyEnterPressed();
+	}
+
+	QLineEdit::keyPressEvent( event );
+}
+
 void SymbolLineEdit::init()
 {
 	setMaximumHeight( 30 );
+	setClearButtonEnabled( true );
 
 	setToolTip( msg );
 	setStyleSheet( "QLineEdit{ "
@@ -66,7 +78,13 @@ void SymbolLineEdit::init()
 		       "selection-background-color: black;"
 		       "selection-background-color: blue;"
 		       "font-family: Lucida Console, Courier New, monospace;"
-		       "font-size: 13px;}" );
+		       "font-size: 12px;}" );
+
+	connect( this,
+		 &SymbolLineEdit::keyEnterPressed,
+		 this,
+		 std::bind( &QLineEdit::textChanged, this, text() ),
+		 Qt::UniqueConnection );
 
 	connect( this,
 		 &QLineEdit::textChanged,

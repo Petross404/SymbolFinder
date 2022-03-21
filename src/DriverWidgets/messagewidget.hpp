@@ -22,8 +22,8 @@ class QPaintEvent;
 class QToolButton;    // lines 14-14
 class QWidget;
 
-/**
- * \todo write docs
+/*!
+ * \todo Write documentation
  */
 class MessageWidget: public QFrame
 {
@@ -32,34 +32,41 @@ class MessageWidget: public QFrame
 
 public:
 	enum Type {
-		Information = 0,
+		Information = 0x001,
 		Warning,
 		Error,
 	};
 	Q_ENUM( Type )
 
-	/**
+	/*!
 	 * Default constructor
 	 */
-	explicit MessageWidget( const QString& text,
-				Type	       type   = Type::Information,
-				QWidget*       parent = nullptr,
-				QFrame::Shape  shape  = QFrame::StyledPanel,
-				QFrame::Shadow shadow = QFrame::Raised );
+	explicit MessageWidget( const QString&	    text,
+				MessageWidget::Type type   = Type::Information,
+				QWidget*	    parent = nullptr,
+				QFrame::Shape	    shape = QFrame::StyledPanel,
+				QFrame::Shadow	    shadow = QFrame::Raised );
 
+	/*!
+	 * Virtual destructor
+	 */
 	~MessageWidget() override;
 
 	void setPallete();
 
-	QString text() const;
+	[[nodiscard]] QString text() const;
 
 	void setText( const QString& text );
-	Type messageType() const;
+
+	[[nodiscard]] Type messageType() const;
+
 	void setMessageType( Type type );
 	void updateLayout();
 	void createLayout();
-	int  bestContentHeight() const;
-	bool isCloseButtonVisible() const;
+
+	[[nodiscard]] int  bestContentHeight() const;
+	[[nodiscard]] bool isCloseButtonVisible() const;
+
 	void setCloseButtonVisible( bool show );
 	void addAction( QAction* action );
 	void removeAction( QAction* action );
@@ -68,8 +75,8 @@ signals:
 	void messageWidgetClosed() const;
 
 protected:
-	QSize sizeHint() const override;
-	QSize minimumSizeHint() const override;
+	[[nodiscard]] QSize sizeHint() const override;
+	[[nodiscard]] QSize minimumSizeHint() const override;
 
 	/*!
 	 * Re-implement this function to paint this widget.

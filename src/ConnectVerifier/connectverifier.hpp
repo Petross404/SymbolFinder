@@ -23,6 +23,8 @@
 #ifndef CONNECTVERIFIER_HPP
 #define CONNECTVERIFIER_HPP
 
+#include <qobject.h>
+
 /*!
  * `ConnectVerifier` is a fancy way to assert if some `QObject::connection`
  * silenty failed. It works only on Debug builds.

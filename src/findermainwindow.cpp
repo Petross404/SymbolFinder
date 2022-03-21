@@ -29,15 +29,18 @@
 #include "DriverWidgets/argumentslineedit.hpp"	  // for ArgumentsLineEdit
 #include "DriverWidgets/messagewidget.hpp"     // for MessageWidget, Messag...
 #include "DriverWidgets/symbollineedit.hpp"    // for SymbolLineEdit
-#include "UI/interface.hpp"		       // for Interface
-#include "scanner.hpp"			       // for Scanner
+#include "Scanner/Drivers/nmdriver.hpp"
+#include "Scanner/Drivers/scanelfdriver.hpp"
+#include "Scanner/scanner.hpp"	  // for Scanner
+#include "UI/ui.hpp"		  // for Interface
 class QWidget;
 
 int constexpr milliseconds = 3000;
+constexpr QChar spaceChar{ ' ' };
 
 MainWindow::MainWindow( QWidget* parent )
 	: QMainWindow{ parent }
-	, m_scanner{ new Scanner{ "nm", this } }
+	, m_scanner{ new Scanner{ NmDriver::name(), this } }
 	, m_ui{ new Ui::Interface{ m_scanner, this } }
 {
 	setCentralWidget( m_ui );
@@ -53,43 +56,43 @@ void MainWindow::setupConnections()
 {
 	ConnectVerifier v;
 
-	v = connect( m_ui->closeBtn,
+	v = connect( m_ui->closeBtn(),
 		     &QPushButton::clicked,
-		     m_ui->actionQuit,
+		     m_ui->actionQuit(),
 		     &QAction::trigger,
 		     Qt::UniqueConnection );
 
-	v = connect( m_ui->searchBtn,
+	v = connect( m_ui->searchBtn(),
 		     &QPushButton::clicked,
-		     m_ui->actionScan,
+		     m_ui->actionScan(),
 		     &QAction::trigger,
 		     Qt::UniqueConnection );
 
-	v = connect( m_ui->actionScan,
+	v = connect( m_ui->actionScan(),
 		     &QAction::triggered,
 		     m_scanner,
 		     &Scanner::performScan,
 		     Qt::UniqueConnection );
 
-	v = connect( m_ui->actionQuit,
+	v = connect( m_ui->actionQuit(),
 		     &QAction::triggered,
 		     qApp,
 		     &QApplication::quit,
 		     Qt::UniqueConnection );
 
-	v = connect( m_ui->actionAboutQt,
+	v = connect( m_ui->actionAboutQt(),
 		     &QAction::triggered,
 		     qApp,
 		     &QApplication::aboutQt,
 		     Qt::UniqueConnection );
 
-	v = connect( m_ui->argumentsEdit,
+	v = connect( m_ui->argumentsEdit(),
 		     &QLineEdit::textEdited,
 		     this,
 		     &MainWindow::setInvocationSlot,
 		     Qt::UniqueConnection );
 
-	v = connect( m_ui->resetArgsBtn,
+	v = connect( m_ui->resetArgsBtn(),
 		     &QPushButton::clicked,
 		     this,
 		     &MainWindow::resetAdvancedArgumentsSlot,
@@ -110,14 +113,21 @@ void MainWindow::setupConnections()
 		     this,
 		     &MainWindow::updateStdErrorSlot );
 
+	// When the symbol size changes, update the index that will block the cursor in ArgumentsLineEdit
+	v = connect( m_scanner,
+		     &Scanner::symbolSizeChanged,
+		     m_ui->argumentsEdit(),
+		     &ArgumentsLineEdit::symbolSizeChanged,
+		     Qt::UniqueConnection );
+
 	// Search button is enabled conditionally
-	v = connect( m_ui->symbolEdit,
+	v = connect( m_ui->symbolEdit(),
 		     &SymbolLineEdit::enableSymbolSearch,
 		     this,
 		     &MainWindow::enableSymbolSearchSlot,
 		     Qt::UniqueConnection );
 
-	v = connect( m_ui->symbolEdit,
+	v = connect( m_ui->symbolEdit(),
 		     &SymbolLineEdit::symbolChanged,
 		     this,
 		     &MainWindow::updateSymbolSlot );
@@ -131,19 +141,19 @@ void MainWindow::setupConnections()
 	 * be passed to it's nm/scanelf driver.
 	 */
 
-	v = connect( m_ui->advancedCheckBox,
+	v = connect( m_ui->advancedCheckBox(),
 		     &QCheckBox::toggled,
 		     this,
 		     &MainWindow::enableAdvancedLineEdit,
 		     Qt::UniqueConnection );
 
-	v = connect( m_ui->symbolEdit,
+	v = connect( m_ui->symbolEdit(),
 		     &SymbolLineEdit::enableSymbolLineWarning,
 		     this,
 		     &MainWindow::resetSymbolLineWarningSlot,
 		     Qt::UniqueConnection );
 
-	v = connect( m_ui->argumentsEdit,
+	v = connect( m_ui->argumentsEdit(),
 		     &ArgsLineEdit::symbolManuallyChanged,
 		     this,
 		     &MainWindow::resetAdvancedLineEditSlot,
@@ -159,114 +169,128 @@ void MainWindow::setupConnections()
 	 * When a scan is active, block some widgets.
 	 * Likewise, unblock when it's over.
 	 */
-	connect( m_scanner, &Scanner::scanStarted, this, &MainWindow::blockUISlot, Qt::UniqueConnection );
+	v = connect( m_scanner,
+		     &Scanner::scanStarted,
+		     this,
+		     &MainWindow::scanStartedSlot,
+		     Qt::UniqueConnection );
 
-	connect( m_scanner,
-		 &Scanner::scanFinished,
-		 this,
-		 &MainWindow::unblockUISlot,
-		 Qt::UniqueConnection );
+	v = connect( m_scanner,
+		     &Scanner::scanFinished,
+		     this,
+		     &MainWindow::scanFinishedSlot,
+		     Qt::UniqueConnection );
+
+	v = connect( m_scanner, &Scanner::driverInitialized, this, [this]( const QString& name ) {
+		setWindowTitle( qAppName() + " " + name );
+		std::exit( -1 );
+	} );
+
+	v = connect( m_ui->scannersBox(),
+		     &QComboBox::textActivated,
+		     this,
+		     &MainWindow::resetScannerInstanceSlot );
 }
 
 void MainWindow::setupActions()
 {
 	QMenu* fileMenu{ new QMenu{ tr( "&File" ), this } };
-	fileMenu->addAction( m_ui->actionScan );
+	fileMenu->addAction( m_ui->actionScan() );
 
 	// Start with the action grayed out.
-	m_ui->actionScan->setEnabled( false );
+	m_ui->actionScan()->setEnabled( false );
 	fileMenu->addSeparator();
 
-	fileMenu->addAction( m_ui->actionQuit );
+	fileMenu->addAction( m_ui->actionQuit() );
 	menuBar()->addMenu( fileMenu );
 
 	QMenu* helpMenu{ new QMenu{ tr( "Help" ), this } };
-	helpMenu->addAction( m_ui->actionAboutQt );
+	helpMenu->addAction( m_ui->actionAboutQt() );
 	menuBar()->addMenu( helpMenu );
 }
 
 void MainWindow::setupWidgets()
 {
-	int argumentsSize = m_ui->argumentsEdit->text().size();
+	int argumentsSize = m_ui->argumentsEdit()->text().size();
 	setMinimumSize( QSize{ argumentsSize + 620, 450 } );
 
 	/****** No need to be enabled until they are needed ******/
-	bool b = m_ui->advancedCheckBox->isChecked();
-	m_ui->argumentsEdit->setEnabled( b );
+	bool b = m_ui->advancedCheckBox()->isChecked();
+	m_ui->argumentsEdit()->setEnabled( b );
 	hideStdErrorTab();
-	m_ui->searchBtn->setEnabled( !m_ui->symbolEdit->text().isEmpty() );
+	m_ui->searchBtn()->setEnabled( !m_ui->symbolEdit()->text().isEmpty() );
 	/**********************************************************/
 
-	QString symbolName   = m_ui->symbolEdit->text();
-	QString advancedArgs = m_scanner->invocation().join( ' ' );
+	QString symbolName   = m_ui->symbolEdit()->text();
+	QString advancedArgs = m_scanner->invocation().join( spaceChar );
 
-	m_ui->argumentsEdit->setToolTip(
+	m_ui->argumentsEdit()->setToolTip(
 		tr( "Enter here any additional arguments. Do not edit the "
 		    "symbol name here!" ) );
-	if ( m_ui->argumentsEdit->text() != advancedArgs )
+	if ( m_ui->argumentsEdit()->text() != advancedArgs )
 	{
-		m_ui->argumentsEdit->setText( advancedArgs );
+		m_ui->argumentsEdit()->setText( advancedArgs );
 	}
 
-	m_ui->argumentsEdit->setClearButtonEnabled( true );
+	m_ui->argumentsEdit()->setClearButtonEnabled( true );
 
 	setWindowIcon( QIcon{ ":resources/pngegg.png" } );
 
-	if ( !m_ui->scannersBox->count() )
+	if ( m_ui->scannersBox()->count() == 0 )
 	{
-		m_ui->scannersBox->addItem( "nm" );
-		m_ui->scannersBox->addItem( "scanelf" );
+		m_ui->scannersBox()->addItem( NmDriver::name() );
+		m_ui->scannersBox()->addItem( ScanelfDriver::name() );
 	}
 }
 
 void MainWindow::showStdErrorTab()
 {
-	m_ui->tabWidget->setTabEnabled( 1, true );
+	m_ui->tabWidget()->setTabEnabled( 1, true );
 }
 
 void MainWindow::hideStdErrorTab()
 {
-	m_ui->tabWidget->setTabEnabled( 1, false );
+	m_ui->tabWidget()->setTabEnabled( 1, false );
 }
 
 void MainWindow::enableSymbolSearchSlot( bool option )
 {
-	m_ui->actionScan->setEnabled( option );
-	m_ui->searchBtn->setEnabled( option );
+	m_ui->actionScan()->setEnabled( option );
+	m_ui->searchBtn()->setEnabled( option );
 }
 
 void MainWindow::enableAdvancedLineEdit( bool option )
 {
-	m_ui->argumentsEdit->setEnabled( option );
-	if ( option ) { m_ui->argumentsEdit->setCursorPosition( 0 ); }
+	m_ui->argumentsEdit()->setEnabled( option );
+	if ( option ) { m_ui->argumentsEdit()->setCursorPosition( 0 ); }
 }
 
 void MainWindow::updateStdErrorSlot()
 {
 	QByteArray error = m_scanner->standardError();
-	m_ui->textBrowserStdErr->setText( error );
+	m_ui->textBrowserStdErr()->setText( error );
 }
 
 void MainWindow::updateStdOutputSlot()
 {
 	QByteArray output = m_scanner->standardOut();
-	m_ui->textBrowserStdOut->setText( output );
+	m_ui->textBrowserStdOut()->setText( output );
 }
 
 void MainWindow::updateSymbolSlot( const QString& symbol )
 {
-	qDebug() << "findermainwindow" << symbol;
 	m_scanner->setSymbolName( symbol );
 }
 
 void MainWindow::updateAdvancedArgumentsSlot()
 {
-	m_ui->argumentsEdit->setText( m_scanner->invocation().join( ' ' ) );
+	m_ui->argumentsEdit()->setText( m_scanner->invocation().join( spaceChar ) );
+	// m_ui->argumentsEdit()->setStopIndex(m_scanner->driver()->stopIndex());
 }
 
 void MainWindow::resetAdvancedLineEditSlot()
 {
-	QString oldText = m_ui->argumentsEdit->text();
+	QString oldText = m_ui->argumentsEdit()->text();
 
 	/*
 	 * The name of the symbol should be altered only in the relevant widget.
@@ -286,24 +310,25 @@ void MainWindow::resetAdvancedLineEditSlot()
 	 * these elements and focus on the warning. Also, show the warning
 	 * on the statusBar as well.
 	 */
-	m_ui->advancedCheckBox->setEnabled( false );
-	m_ui->resetArgsBtn->setEnabled(false);
-	m_ui->buttonsGrid->replaceWidget( m_ui->argumentsEdit, messageWidget );
+	m_ui->advancedCheckBox()->setEnabled( false );
+	m_ui->resetArgsBtn()->setEnabled( false );
+	m_ui->buttonsGrid()->replaceWidget( m_ui->argumentsEdit(), messageWidget );
 	statusBar()->showMessage( message, milliseconds );
 
 	/*
 	 * Toggle the "Advanced Arguments" checkbox so a chain reaction of the
 	 * connections can take place.
 	 */
-	m_ui->advancedCheckBox->toggle();
+	m_ui->advancedCheckBox()->toggle();
 
 	// Fire up a timer to countdown until the widget is "unblocked" again.
 	QTimer::singleShot( milliseconds, [this, oldText, messageWidget]() {
-		m_ui->advancedCheckBox->setEnabled( true );
-		m_ui->resetArgsBtn->setEnabled(true);
-		m_ui->advancedCheckBox->toggle();
-		m_ui->argumentsEdit->setText( oldText );
-		m_ui->buttonsGrid->replaceWidget( messageWidget, m_ui->argumentsEdit );
+		m_ui->advancedCheckBox()->setEnabled( true );
+		m_ui->resetArgsBtn()->setEnabled( true );
+		m_ui->advancedCheckBox()->toggle();
+		m_ui->argumentsEdit()->setText( oldText );
+		m_ui->buttonsGrid()->replaceWidget( messageWidget,
+						    m_ui->argumentsEdit() );
 		messageWidget->close();
 	} );
 }
@@ -312,21 +337,21 @@ void MainWindow::resetAdvancedArgumentsSlot() { m_scanner->resetInvocation(); }
 
 void MainWindow::resetSymbolLineWarningSlot()
 {
-	const QString msg{
+	QString message{
 		tr( "A symbol name can't contain a blank character" ) };
 
 	gsl::owner<MessageWidget*> messageWidget{
-		new MessageWidget{ msg, MessageWidget::Type::Error, this } };
+		new MessageWidget{ message, MessageWidget::Type::Error, this } };
 
-	m_ui->symbolEdit->hide();
-	m_ui->searchBtn->setEnabled( false );
-	m_ui->buttonsGrid->replaceWidget( m_ui->symbolEdit, messageWidget );
+	m_ui->symbolEdit()->hide();
+	m_ui->searchBtn()->setEnabled( false );
+	m_ui->buttonsGrid()->replaceWidget( m_ui->symbolEdit(), messageWidget );
 
 	QTimer::singleShot( milliseconds, [this, messageWidget]() {
-		m_ui->searchBtn->setEnabled( true );
-		m_ui->symbolEdit->show();
-		m_ui->buttonsGrid->replaceWidget( messageWidget, m_ui->symbolEdit );
-		m_ui->symbolEdit->clear();
+		m_ui->searchBtn()->setEnabled( true );
+		m_ui->symbolEdit()->show();
+		m_ui->buttonsGrid()->replaceWidget( messageWidget, m_ui->symbolEdit() );
+		m_ui->symbolEdit()->clear();
 		messageWidget->close();
 	} );
 }
@@ -336,14 +361,25 @@ void MainWindow::setInvocationSlot( const QString& advancedArgs )
 	m_scanner->setInvocation( advancedArgs );
 }
 
-void MainWindow::blockUISlot()
+void MainWindow::resetScannerInstanceSlot( const QString& scannerName )
 {
-	m_ui->buttonsGroup->setEnabled( false );
+	m_scanner->reset( scannerName );
+
+	const QString& arguments{ m_scanner->invocation().join( spaceChar ) };
+	// m_ui->argumentsEdit()->setText( arguments );
+}
+
+void MainWindow::scanStartedSlot()
+{
+	m_ui->buttonsGroup()->setEnabled( false );
 	setWindowTitle( tr( "Searching" ) );
 }
 
-void MainWindow::unblockUISlot()
+void MainWindow::scanFinishedSlot()
 {
-	m_ui->buttonsGroup->setEnabled( true );
+	m_ui->buttonsGroup()->setEnabled( true );
 	setWindowTitle( qAppName() );
+
+	updateStdOutputSlot();
+	updateStdErrorSlot();
 }

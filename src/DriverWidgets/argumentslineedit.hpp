@@ -9,6 +9,10 @@
 #include <qlineedit.h>	    // for QLineEdit
 #include <qobjectdefs.h>    // for Q_OBJECT, Q_PROPERTY, signals
 #include <qstring.h>	    // for QString
+#include <stdint.h>
+
+#include "../Scanner/Drivers/idriver.hpp"
+
 class QKeyEvent;
 class QMouseEvent;
 class QObject;
@@ -28,7 +32,6 @@ class QWidget;
 class ArgumentsLineEdit: public QLineEdit
 {
 	Q_OBJECT
-	Q_PROPERTY( QString m_specialStr READ stopString WRITE setStopString NOTIFY symbolManuallyChanged )
 	Q_DISABLE_COPY_MOVE( ArgumentsLineEdit )
 
 public:
@@ -40,13 +43,13 @@ public:
 	 * \param parent is the ptr of the parent `QWidget` for this object
 	 */
 	explicit ArgumentsLineEdit( const QString& arguments,
-				    const QString& stopString,
+				    StopIndex	   stopIndex,
 				    QWidget*	   parent = nullptr );
 
 	/*!
 	 * Construct an `ArgumentsLineEdit` object just with the parent `QWidget`
 	 */
-	explicit ArgumentsLineEdit( QWidget* parent = 0 );
+	explicit ArgumentsLineEdit( QWidget* parent = nullptr );
 
 	/*!
 	 * Default destructor
@@ -58,24 +61,34 @@ public:
 	 * \param str is the stop string
 	 * \sa void ArgumentsLineEdit::stopString() const
 	 */
-	void setStopString( const QString& str );
+	void setStopIndex( const StopIndex& stopIndex );
 
 	/*!
 	 * This function returns the selected driver's "stop string".
 	 * \return `QString` that is the stop string.
 	 * \sa void ArgumentsLineEdit::setStopString(const QString& str)
 	 */
-	[[nodiscard]] QString stopString() const;
+	[[nodiscard]] StopIndex stopIndex() const;
+
+public slots:
+	void setSymbolSizeSlot( uint16_t size );
 
 signals:
 	/*!
-	 * This signal is emmited when the user tries to edit the symbol's name
-	 * in this widget. The signal is used to warn the user and reset this widget.
-	 *
-	 * \sa void ArgumentsLineEdit::mousePressEvent(QMouseEvent* event)
-	 * \sa void ArgumentsLineEdit::keyPressEvent(QKeyEvent* event)
+	 * This signal is emmited when the user tries to edit the symbol's name in this
+	 * widget. The signal is used to warn the user and reset this widget.
+	 * \sa void ArgumentsLineEdit::mousePressEvent(QMouseEvent*
+	 * event) \sa void ArgumentsLineEdit::keyPressEvent(QKeyEvent* event)
 	 */
 	void symbolManuallyChanged();
+
+	/*!
+	 * This signal is emmited when the symbol changes. It informs any listener about
+	 * the symbol's size so the interested widgets can find the boundaries of the
+	 * symbol's string in the arguments list.
+	 * \param size is the new symbol's string size.
+	 */
+	void symbolSizeChanged( uint16_t size );
 
 protected:
 	/*!
@@ -93,16 +106,20 @@ protected:
 	void keyPressEvent( QKeyEvent* event ) override;
 
 private:
-	QString m_text; /*!< Text that this widget contains>*/
+	uint16_t m_synbolSz = 0;
+	QString	 m_text; /*!< Text that this widget contains>*/
 
 	QString m_specialStr; /*! The string in the argument that immediately after the symbol name exists.
 			       *\sa void ArgumentsLineEdit::stopString() const
 			       */
 
+	StopIndex m_stopIndex;
 	/*!
 	 * The constructors share some functionality.
 	 */
 	void init();
+
+	void checkStopString();
 };
 
 #endif	  // ARGUMENTSLINEEDIT_H

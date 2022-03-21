@@ -1,9 +1,0 @@
-/home/petros/projects/symbolfinder/build/CMakeFiles/install/strip.dir
-/home/petros/projects/symbolfinder/build/CMakeFiles/install/local.dir
-/home/petros/projects/symbolfinder/build/CMakeFiles/install.dir
-/home/petros/projects/symbolfinder/build/CMakeFiles/list_install_components.dir
-/home/petros/projects/symbolfinder/build/CMakeFiles/rebuild_cache.dir
-/home/petros/projects/symbolfinder/build/CMakeFiles/edit_cache.dir
-/home/petros/projects/symbolfinder/build/CMakeFiles/symbolfinder.dir
-/home/petros/projects/symbolfinder/build/CMakeFiles/clang_format.dir
-/home/petros/projects/symbolfinder/build/CMakeFiles/symbolfinder_autogen.dir

@@ -9,14 +9,14 @@
 #include <qevent.h>	       // for QMouseEvent, QKeyEvent (ptr only)
 #include <qnamespace.h>	       // for MouseButton, LeftButton, RightButton
 #include <qpoint.h>	       // for QPoint
+
+#include "src/ConnectVerifier/connectverifier.hpp"
 class QWidget;
 
-ArgumentsLineEdit::ArgumentsLineEdit( const QString& text,
-				      const QString& stopString,
-				      QWidget*	     parent )
+ArgumentsLineEdit::ArgumentsLineEdit( const QString& text, StopIndex stopIndex, QWidget* parent )
 	: QLineEdit{ text, parent }
 	, m_text{ text }
-	, m_specialStr{ stopString }
+	, m_stopIndex{ stopIndex }
 {
 	init();
 }
@@ -29,12 +29,12 @@ ArgumentsLineEdit::ArgumentsLineEdit( QWidget* parent )
 
 ArgumentsLineEdit::~ArgumentsLineEdit() = default;
 
-void ArgumentsLineEdit::setStopString( const QString& str )
+void ArgumentsLineEdit::setStopIndex( const StopIndex& stopIndex )
 {
-	m_specialStr = str;
+	m_stopIndex = stopIndex;
 }
 
-QString ArgumentsLineEdit::stopString() const { return m_specialStr; }
+StopIndex ArgumentsLineEdit::stopIndex() const { return m_stopIndex; }
 
 void ArgumentsLineEdit::init()
 {
@@ -45,6 +45,32 @@ void ArgumentsLineEdit::init()
 		       "font-size: 13px;}" );
 
 	setMouseTracking( true );
+
+	ConnectVerifier v;
+
+	// Make sure that the stop string can't be selected or deleted
+	v = connect( this,
+		     &ArgumentsLineEdit::selectionChanged,
+		     this,
+		     &ArgumentsLineEdit::checkStopString,
+		     Qt::UniqueConnection );
+
+	v = connect( this,
+		     &ArgumentsLineEdit::symbolSizeChanged,
+		     this,
+		     &ArgumentsLineEdit::setSymbolSizeSlot,
+		     Qt::UniqueConnection );
+}
+
+void ArgumentsLineEdit::checkStopString()
+{
+	const QString stop{ stopIndex().stopStr };
+	if ( selectedText().contains( stop ) ) { emit symbolManuallyChanged(); }
+}
+
+void ArgumentsLineEdit::setSymbolSizeSlot( uint16_t size )
+{
+	m_synbolSz = size + 2;
 }
 
 void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
@@ -55,22 +81,26 @@ void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
 		QPoint position = event->pos();
 
 		int posAt = cursorPositionAt( position );
-		int index = text().indexOf( stopString() );
+		int index = stopIndex().indexOfStop;
 
-		if ( posAt >= index ) { emit symbolManuallyChanged(); }
+		if ( posAt >= index && posAt < ( index + m_synbolSz ) )
+		{
+			emit symbolManuallyChanged();
+		}
 	}
 	QLineEdit::mousePressEvent( event );
 }
 
 void ArgumentsLineEdit::keyPressEvent( QKeyEvent* event )
 {
-	int cursorPos = cursorPosition();
-	int strIndex  = text().indexOf( stopString() );
+	const QString txt = text();
 
-	qDebug() << text();
+	int posAt = cursorPosition();
+	int index = stopIndex().indexOfStop;
 
-	setCursorPosition( cursorPos );
-
-	if ( cursorPos >= strIndex ) { emit symbolManuallyChanged(); }
+	if ( posAt >= index && posAt < ( index + m_synbolSz ) )
+	{
+		emit symbolManuallyChanged();
+	}
 	QLineEdit::keyPressEvent( event );
 }

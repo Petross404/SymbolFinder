@@ -11,11 +11,12 @@
 #include <qstring.h>	    // for QString
 class QEvent;
 class QFocusEvent;
+class QKeyEvent;
 class QObject;
 class QWidget;
 
 /*!
- * `SymbolLineEdit` extends Qt's `QTextEdit` and adds more functi
+ * `SymbolLineEdit` extends Qt's `QLineEdit` and adds more functionality
  */
 class SymbolLineEdit: public QLineEdit
 {
@@ -24,17 +25,17 @@ class SymbolLineEdit: public QLineEdit
 
 public:
 	/*!
-	 * Constructs a `SymbolTextEdit` from the following:
+	 * Constructs a `SymbolLineEdit` from the following:
 	 * \param parent is the ptr to the parent widget
 	 */
 	explicit SymbolLineEdit( QWidget* parent = nullptr );
 	/*!
-	 * Constructs a `SymbolTextEdit` from the following:
+	 * Constructs a `SymbolLineEdit` from the following:
 	 * \param text is the default text
 	 * \param parent is the ptr to the parent widget
 	 */
-	explicit SymbolLineEdit( const QString& text = QString::fromLocal8Bit( "printf" ),
-				 QWidget* parent = nullptr );
+	explicit SymbolLineEdit( const QString& text   = "printf",
+				 QWidget*	parent = nullptr );
 
 	/*!
 	 * Virtual, default destructor
@@ -43,8 +44,8 @@ public:
 
 public slots:
 	/*!
-	 * Handle here what needs to be handled when the text
-	 * is changed in the widget.
+	 * Handle here what needs to be handled when the text is changed
+	 * in the widget.
 	 * \param txt is the new text in the widget
 	 * \sa void SymbolLineEdit::symbolChanged(const QString& txt)
 	 * \sa void SymbolLineEdit::enableSymbolSearch(bool enable)
@@ -59,23 +60,28 @@ signals:
 	void symbolChanged( const QString& txt );
 
 	/*!
-	 * Emit when the enabled or disabled status of some widgets
-	 * should change. Some pushbuttons and other controls, should
-	 * be conditionally enabled, based on whether there is text
-	 * on this widget.
+	 * Emit when the enabled or disabled status of some widgets should
+	 * change. Some pushbuttons and other controls, should be conditionally
+	 * enabled, based on whether there is text on this widget.
 	 * \param enable is a boolean value that describes the situation
 	 */
 	void enableSymbolSearch( bool enable );
 
 	/*!
-	 * Emit this signal when the user enters an improper symbol name
-	 * like one with spaces or other characters.
+	 * Emit this signal when the user enters an improper symbol name like
+	 * one with spaces or other characters.
 	 */
 	void enableSymbolLineWarning();
+
+	/*!
+	 * Emitted when the "Enter" key is pressed.
+	 */
+	void keyEnterPressed();
 
 protected:
 	void focusInEvent( QFocusEvent* event ) override;
 	void leaveEvent( QEvent* event ) override;
+	void keyPressEvent( QKeyEvent* event ) override;
 
 private:
 	bool m_enableSearch{ false };

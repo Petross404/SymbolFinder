@@ -195,10 +195,11 @@ void MessageWidget::paintEvent( QPaintEvent* event )
 	const QColor	color = palette().color( QPalette::Window );
 	constexpr float alpha = 0.2;
 
-	const QColor parentWindowColor =
-		( parentWidget() ? parentWidget()->palette() : qApp->palette() )
-			.color( QPalette::Window );
-	const int newRed = ( color.red() * alpha )
+	const QColor parentWindowColor{ ( parentWidget() != nullptr
+						  ? parentWidget()->palette()
+						  : qApp->palette() )
+						.color( QPalette::Window ) };
+	const int    newRed = ( color.red() * alpha )
 			   + ( parentWindowColor.red() * ( 1 - alpha ) );
 	const int newGreen = ( color.green() * alpha )
 			     + ( parentWindowColor.green() * ( 1 - alpha ) );
@@ -219,7 +220,10 @@ void MessageWidget::closeEvent( QCloseEvent* event )
 
 bool MessageWidget::event( QEvent* event )
 {
-	if ( event->type() == QEvent::Polish && !layout() ) { createLayout(); }
+	if ( event->type() == QEvent::Polish && layout() == nullptr )
+	{
+		createLayout();
+	}
 	else if ( event->type() == QEvent::Show )
 	{
 		setFixedHeight( bestContentHeight() );

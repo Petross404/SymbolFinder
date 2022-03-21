@@ -8,10 +8,11 @@
 
 #include <gsl/pointers>	   // for owner
 
-#include "src/DriverWidgets/argumentslineedit.hpp"    // for ArgumentsLineEdit
-class QObject;					      // lines 11-11
-class QWidget;					      // lines 12-12
-class Scanner;					      // lines 13-13
+#include "DriverWidgets/argumentslineedit.hpp"	  // for ArgumentsLineEdit
+
+class QObject;	  // lines 11-11
+class QWidget;	  // lines 12-12
+class Scanner;	  // lines 13-13
 namespace Ui {
 class Interface;
 }    // namespace Ui
@@ -45,6 +46,7 @@ public slots:
 	/*!
 	 * Slot to de-activate the stderr `QTabWidget` when no output exists.
 	 * \sa void MainWindow::showStdErrorTab()
+	 * \callgraph
 	 */
 	void hideStdErrorTab();
 
@@ -111,15 +113,16 @@ public slots:
 	/*!
 	 * Slot to block the UI when the QProcess is running, so the user
 	 * doesn't interact with it.
-	 * \sa void MainWindow::unblockUISlot()
+	 * \sa void MainWindow::scanFinishedSlot()
 	 */
-	void blockUISlot();
+	void scanStartedSlot();
 
 	/*!
 	 * Slot to unblock the UI when the QProcess finished, so it's ready
 	 * to interact again.
+	 * \sa void MainWindow::scanStartedSlot()
 	 */
-	void unblockUISlot();
+	void scanFinishedSlot();
 
 	/*!
 	 * Slot to set the scanner's arguments. The arguments are taken
@@ -127,6 +130,12 @@ public slots:
 	 * \param advancedArgs is the text in the widget (ie the arguments).
 	 */
 	void setInvocationSlot( const QString& advancedArgs );
+
+	/*!
+	 * Every time a different driver will be selected in the combobox,
+	 * a new scanner
+	 */
+	void resetScannerInstanceSlot( const QString& scannerName );
 
 signals:
 	/*!

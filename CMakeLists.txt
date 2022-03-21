@@ -38,15 +38,17 @@ handle_dependency_clang_format()
 
 set(symbolfinder_SRC
 	src/main.cpp
-	src/UI/interface.cpp
 	src/findermainwindow.cpp
-	src/idriver.cpp
-	src/nmdriver.cpp
-	src/ConnectVerifier/connectverifier.cpp
-	src/scanner.cpp
+	src/UI/ui.cpp
+	src/Scanner/Drivers/idriver.cpp
+	src/Scanner/Drivers/driver.cpp
+	src/Scanner/Drivers/nmdriver.cpp
+	src/Scanner/Drivers/scanelfdriver.cpp
+	src/Scanner/scanner.cpp
 	src/DriverWidgets/argumentslineedit.cpp
 	src/DriverWidgets/symbollineedit.cpp
 	src/DriverWidgets/messagewidget.cpp
+	src/ConnectVerifier/connectverifier.cpp
 )
 
 set_property(SOURCE src/resources.qrc PROPERTY AUTORCC_OPTIONS "--compress;9")
