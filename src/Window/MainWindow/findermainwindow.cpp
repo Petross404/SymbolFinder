@@ -1,39 +1,58 @@
+/*
+ * <one line to give the library's name and an idea of what it does.>
+ * Copyright (C) 2022  <copyright holder> <email>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "findermainwindow.hpp"
 
 #include <qaction.h>		 // for QAction
 #include <qapplication.h>	 // for QApplication, qApp
 #include <qbytearray.h>		 // for QByteArray
+#include <qchar.h>		 // for QChar
 #include <qcheckbox.h>		 // for QCheckBox
 #include <qcombobox.h>		 // for QComboBox
 #include <qcoreapplication.h>	 // for qAppName
-#include <qdebug.h>
-#include <qgridlayout.h>     // for QGridLayout
-#include <qgroupbox.h>	     // for QGroupBox
-#include <qicon.h>	     // for QIcon
-#include <qlineedit.h>	     // for QLineEdit
-#include <qmenu.h>	     // for QMenu
-#include <qmenubar.h>	     // for QMenuBar
-#include <qnamespace.h>	     // for UniqueConnection
-#include <qpushbutton.h>     // for QPushButton
-#include <qsize.h>	     // for QSize
-#include <qstatusbar.h>	     // for QStatusBar
-#include <qstringlist.h>     // for QStringList
-#include <qtabwidget.h>	     // for QTabWidget
-#include <qtextbrowser.h>    // for QTextBrowser
-#include <qtimer.h>	     // for QTimer
+#include <qgridlayout.h>	 // for QGridLayout
+#include <qgroupbox.h>		 // for QGroupBox
+#include <qicon.h>		 // for QIcon
+#include <qlineedit.h>		 // for QLineEdit
+#include <qmenu.h>		 // for QMenu
+#include <qmenubar.h>		 // for QMenuBar
+#include <qnamespace.h>		 // for UniqueConnection
+#include <qpushbutton.h>	 // for QPushButton
+#include <qsize.h>		 // for QSize
+#include <qstatusbar.h>		 // for QStatusBar
+#include <qstringlist.h>	 // for QStringList
+#include <qtabwidget.h>		 // for QTabWidget
+#include <qtextbrowser.h>	 // for QTextBrowser
+#include <qtimer.h>		 // for QTimer
 
+#include <cstdlib>	  // for exit
 #include <type_traits>	  // for enable_if<>::type
 #include <utility>	  // for move
 
-#include "ConnectVerifier/connectverifier.hpp"	  // for ConnectVerifier
-#include "DriverWidgets/argumentslineedit.hpp"	  // for ArgumentsLineEdit
-#include "DriverWidgets/messagewidget.hpp"     // for MessageWidget, Messag...
-#include "DriverWidgets/symbollineedit.hpp"    // for SymbolLineEdit
-#include "Scanner/Drivers/nmdriver.hpp"
-#include "Scanner/Drivers/scanelfdriver.hpp"
-#include "Scanner/scanner.hpp"	  // for Scanner
-#include "UI/ui.hpp"		  // for Interface
-class QWidget;
+#include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
+#include "../../DriverWidgets/argumentslineedit.hpp"	// for ArgumentsLineEdit
+#include "../../DriverWidgets/messagewidget.hpp"	// for MessageWidget
+#include "../../DriverWidgets/symbollineedit.hpp"	// for SymbolLineEdit
+#include "../../Scanner/Drivers/nmdriver.hpp"		// for NmDriver
+#include "../../Scanner/Drivers/scanelfdriver.hpp"	// for ScanelfDriver
+#include "../../Scanner/scanner.hpp"			// for Scanner
+#include "UI/ui.hpp"					// for Interface
+class QWidget;						// lines 36-36
 
 int constexpr milliseconds = 3000;
 constexpr QChar spaceChar{ ' ' };
@@ -71,7 +90,7 @@ void MainWindow::setupConnections()
 	v = connect( m_ui->actionScan(),
 		     &QAction::triggered,
 		     m_scanner,
-		     &Scanner::performScan,
+		     &Scanner::performScanSlot,
 		     Qt::UniqueConnection );
 
 	v = connect( m_ui->actionQuit(),

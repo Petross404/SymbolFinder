@@ -4,14 +4,13 @@
 
 #include "argumentslineedit.hpp"
 
-#include <QtCore/qglobal.h>    // for qDebug
-#include <qdebug.h>	       // for QDebug
-#include <qevent.h>	       // for QMouseEvent, QKeyEvent (ptr only)
-#include <qnamespace.h>	       // for MouseButton, LeftButton, RightButton
-#include <qpoint.h>	       // for QPoint
+#include <qevent.h>	   // for QMouseEvent, QKey...
+#include <qnamespace.h>	   // for MouseButton, Uniq...
+#include <qpoint.h>	   // for QPoint
 
-#include "src/ConnectVerifier/connectverifier.hpp"
-class QWidget;
+#include "src/ConnectVerifier/connectverifier.hpp"    // for ConnectVerifier
+#include "src/Scanner/Drivers/idriver.hpp"	      // for StopIndex
+class QWidget;					      // lines 14-14
 
 ArgumentsLineEdit::ArgumentsLineEdit( const QString& text, StopIndex stopIndex, QWidget* parent )
 	: QLineEdit{ text, parent }

@@ -1,16 +1,32 @@
-// <one line to give the program's name and a brief idea of what it does.>
-// SPDX-FileCopyrightText: 2022 Πέτρος Σιλιγκούνας <petross404@gmail.com>
-// SPDX-License-Identifier: GPL-3.0-or-later
+/*
+ * <one line to give the library's name and an idea of what it does.>
+ * Copyright (C) 2022  <copyright holder> <email>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "scanner.hpp"
 
+#include <qchar.h>    // for QChar
 #include <qdebug.h>
-#include <qglobal.h>
+#include <qglobal.h>	   // for QNonConstOverload
 #include <qnamespace.h>	   // for UniqueConnection
 
 #include "../ConnectVerifier/connectverifier.hpp"    // for ConnectVerifier
+#include "Drivers/idriver.hpp"			     // for IDriver, StopIndex
 #include "Drivers/nmdriver.hpp"			     // for NmDriver
-#include "Drivers/scanelfdriver.hpp"
+#include "Drivers/scanelfdriver.hpp"		     // for ScanelfDriver
 
 constexpr QChar spaceChar{ ' ' };
 
@@ -94,7 +110,7 @@ void Scanner::setupConnections() const
 		     &Scanner::driverInitialized );
 }
 
-void Scanner::performScan() { m_d->exec(); }
+void Scanner::performScanSlot() { m_d->exec(); }
 
 void Scanner::reset( const QString& driverName )
 {
@@ -149,15 +165,22 @@ void Scanner::setInvocation( const QString& args, const QString& secret )
 
 	QString argsStr{ currentArguments.join( spaceChar ) };
 
-	const QString symbol{ symbolName() };
+	/*
+	 * We need the previous symbol name as well, to remove it from the string and
+	 * we need it to keep it's value between function invocations.
+	 */
+	const QString  symbol{ symbolName() };
+	static QString oldSymbol;
+
+	if ( oldSymbol.isNull() ) { oldSymbol = symbol; }
 
 	// +1 because we need to insert to the next position.
 	int indexOfStop = stopIndexOfDriver().indexOfStop + 1;
-	int symbolSize	= symbol.size();
 
 	/*
-	 * Replace (in the widget) `symbolSize` characters at position
-	 * `stopIndex`, with the new name that is returned from symbolName().
+	 * Cut the string in half, with the stopStr being the last character of
+	 * the first half. Then prepend the symbol to the second part and
+	 * re-unite the two parts again.
 	 *
 	 * Then, call the driver to actually change the arguments for the driver
 	 * to run but emit that the arguments changed, only if this function was
@@ -165,10 +188,19 @@ void Scanner::setInvocation( const QString& args, const QString& secret )
 	 *
 	 * This is to avoid recursively emmiting after editing the text.
 	 */
-	int size = argsStr.size();
-	argsStr = argsStr.leftJustified( ( size + symbolSize ), spaceChar, true );
-	argsStr.replace( indexOfStop, symbolSize, symbol );
-	currentArguments = argsStr.split( spaceChar );
+	QString untilStopString{ argsStr.left( indexOfStop ) };
+	QString afterStopString{ argsStr.right( argsStr.size() - indexOfStop ) };
+
+	if ( afterStopString.contains( oldSymbol ) )
+	{
+		afterStopString.remove( oldSymbol );
+	}
+
+	// Now, the symbol is old. A new one will replace it next time.
+	oldSymbol = symbol;
+
+	currentArguments =
+		QString{ untilStopString + symbol + afterStopString }.split( spaceChar );
 
 	if ( m_d->setInvocation( currentArguments )
 	     && ( secret == m_secretSetSymbolArgument || secret == m_secretSetResetArgument ) )

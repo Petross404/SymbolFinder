@@ -1,15 +1,31 @@
-// <one line to give the program's name and a brief idea of what it does.>
-// SPDX-FileCopyrightText: 2022 Πέτρος Σιλιγκούνας <petross404@gmail.com>
-// SPDX-License-Identifier: GPL-3.0-or-later
+/*
+ * <one line to give the library's name and an idea of what it does.>
+ * Copyright (C) 2022  <copyright holder> <email>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "nmdriver.hpp"
 
-#include <qlist.h>	 // for QList
-#include <qprocess.h>	 // for QProcess
+#include <qdebug.h>
+#include <qnamespace.h>	   // for UniqueConnection
+#include <stdint.h>	   // for uint16_t
 
 #include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
-#include "idriver.hpp"					// for IDriver
-class QObject;						// lines 13-13
+#include "driver.hpp"					// for Driver
+#include "idriver.hpp"					// for StopIndex
+class QObject;						// lines 12-12
 
 const QString	  NmDriver::m_program{ "nm" };
 const QStringList NmDriver::m_defArgList{
@@ -40,5 +56,15 @@ QStringList NmDriver::defaultInvocation() const { return m_defArgList; }
 void NmDriver::updateStopIndexSlot()
 {
 	const QString s{ "\b" };
-	setStopIndexSlot( StopIndex{ (uint16_t)m_effectiveArgList.indexOf( s ), s } );
+	auto	      i = m_effectiveArgList.join( ' ' ).indexOf( s );
+	qDebug() << i;
+
+	if ( i > 0 )
+	{
+		setStopIndexSlot( StopIndex{ static_cast<uint32_t>( i ), s } );
+	}
+	else
+	{
+		emit stopIndexUpdatingFailed();
+	}
 }

@@ -30,10 +30,10 @@
 #include <qtabwidget.h>	     // for QTabWidget
 #include <qtextbrowser.h>    // for QTextBrowser
 
-#include "../DriverWidgets/argumentslineedit.hpp"    // for ArgumentsLineEdit
-#include "../DriverWidgets/symbollineedit.hpp"	     // for SymbolLineEdit
-#include "../Scanner/Drivers/idriver.hpp"
-#include "../Scanner/scanner.hpp"    // for Scanner
+#include "../../../DriverWidgets/argumentslineedit.hpp"	   // for ArgumentsLineEdit
+#include "../../../DriverWidgets/symbollineedit.hpp"	   // for SymbolLineEdit
+#include "../../../Scanner/Drivers/idriver.hpp"
+#include "../../../Scanner/scanner.hpp"	   // for Scanner
 
 constexpr int btnMinWidth = 150;
 

@@ -1,11 +1,31 @@
-// <one line to give the program's name and a brief idea of what it does.>
-// SPDX-FileCopyrightText: 2022 Πέτρος Σιλιγκούνας <petross404\gmail.com>
-// SPDX-License-Identifier: GPL-3.0-or-later
+/*
+ * <one line to give the library's name and an idea of what it does.>
+ * Copyright (C) 2022  <copyright holder> <email>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef DRIVER_H
 #define DRIVER_H
 
-#include "idriver.hpp"
+//#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qobjectdefs.h>    // for Q_OBJECT, signals, slots
+#include <qstring.h>	    // for QString
+#include <qstringlist.h>    // for QStringList
+
+#include "idriver.hpp"	  // for StopIndex, IDriver
+class QObject;
 
 /*!
  * `Driver` is a concrete class for the `IDriver`. It defines some generic
@@ -14,7 +34,7 @@
 class Driver: public Process::IDriver
 {
 	Q_OBJECT
-	Q_DISABLE_COPY_MOVE( Driver )
+	// Q_DISABLE_COPY_MOVE( Driver )
 
 public:
 	/*!

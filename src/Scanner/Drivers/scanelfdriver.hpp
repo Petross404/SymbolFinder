@@ -1,6 +1,20 @@
-// <one line to give the program's name and a brief idea of what it does.>
-// SPDX-FileCopyrightText: 2022 Πέτρος Σιλιγκούνας <petross404\gmail.com>
-// SPDX-License-Identifier: GPL-3.0-or-later
+/*
+ * <one line to give the library's name and an idea of what it does.>
+ * Copyright (C) 2022  <copyright holder> <email>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef SCANELFDRIVER_H
 #define SCANELFDRIVER_H
@@ -14,8 +28,9 @@
 class QObject;
 
 /*!
- * \brief `ScanelfDriver` inherits from `IDriver` and acts as a driver for
- * `scanelf` `ScanelfDriver` defines some scanelf-specific functions.
+ * \brief `ScanelfDriver` acts as a driver for `scanelf`.
+ * `ScanelfDriver`  inherits from `IDriver` and defines some scanelf-specific
+ * functions.
  */
 class ScanelfDriver: public Driver
 {
@@ -29,9 +44,7 @@ public:
 	 */
 	ScanelfDriver( QObject* parent = nullptr );
 
-	/*!
-	 * Default destructor
-	 */
+	/*! Default destructor */
 	~ScanelfDriver() override;
 
 	[[nodiscard]] QStringList defaultInvocation() const override;

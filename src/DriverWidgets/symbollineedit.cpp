@@ -4,15 +4,16 @@
 
 #include "symbollineedit.hpp"
 
-#include <QtCore/qglobal.h>    // for qDebug
+#include <QtCore/qglobal.h>    // for Q_LIKELY, qDebug
+#include <qchar.h>	       // for QChar
 #include <qdebug.h>	       // for QDebug
-#include <qevent.h>
-#include <qnamespace.h>	   // for UniqueConnection
+#include <qevent.h>	       // for QFocusEvent (ptr only), QKeyEvent
+#include <qnamespace.h>	   // for Key, UniqueConnection, Key_Enter, Key_Re...
+#include <stddef.h>	   // for size_t
 
-#include <functional>	 // for _Bind_helper<>::type, bind, _Placeholder
+#include <functional>	 // for _Bind_helper<>::type, bind
 #include <utility>	 // for move
-
-class QWidget;
+class QWidget;		 // lines 15-15
 
 int constexpr milliseconds = 6000;
 

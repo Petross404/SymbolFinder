@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 project("SymbolFinder"
 	VERSION		0.0.1
 	DESCRIPTION	"Find which library defines or uses a symbol"
-	HOMEPAGE_URL	"")
+	HOMEPAGE_URL	"https://gitlab.com/Petross404/symbolfinder")
 
 include(GNUInstallDirs)
 include(FindDoxygen)
@@ -12,6 +12,7 @@ include(CMakeParseArguments)
 
 # Include custom cmake scripts as well
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
+include(GNUInstallDirs)
 include("${CMAKE_MODULE_PATH}/Sanitizers.cmake")
 include("${CMAKE_MODULE_PATH}/ClangFormat.cmake")
 include("${CMAKE_MODULE_PATH}/ClangTidy.cmake")
@@ -34,27 +35,31 @@ find_package(Qt5 COMPONENTS Core Widgets Gui CONFIG REQUIRED)
 
 find_package(GSL REQUIRED)
 
+#Create a clang_format target.
 handle_dependency_clang_format()
 
-set(symbolfinder_SRC
-	src/main.cpp
-	src/findermainwindow.cpp
-	src/UI/ui.cpp
-	src/Scanner/Drivers/idriver.cpp
-	src/Scanner/Drivers/driver.cpp
-	src/Scanner/Drivers/nmdriver.cpp
-	src/Scanner/Drivers/scanelfdriver.cpp
-	src/Scanner/scanner.cpp
+#Add libscanner here.
+add_subdirectory(src/Scanner)
+
+#Set source code variables.
+set(DriverWidgets_SRC
 	src/DriverWidgets/argumentslineedit.cpp
 	src/DriverWidgets/symbollineedit.cpp
 	src/DriverWidgets/messagewidget.cpp
+)
+
+set(symbolfinder_SRC
+	src/main.cpp
+	src/Window/MainWindow/findermainwindow.cpp
+	src/Window/MainWindow/UI/ui.cpp
 	src/ConnectVerifier/connectverifier.cpp
 )
 
+#Add Qt's resource file here.
 set_property(SOURCE src/resources.qrc PROPERTY AUTORCC_OPTIONS "--compress;9")
 
-# Tell CMake to create the helloworld executable
-add_executable(symbolfinder ${symbolfinder_SRC} src/resources.qrc)
+# Tell CMake to create the symbolfinder executable
+add_executable(symbolfinder ${symbolfinder_SRC} ${DriverWidgets_SRC} src/resources.qrc)
 
 #############Option to handle the documentation generation#############
 option(BUILD_DOC "Build documentation with Doxygen." OFF)
@@ -72,10 +77,15 @@ handle_sanitizers(symbolfinder
 			${ENABLE_LSAN}
 			${ENABLE_MSAN})
 
-handle_include_use(symbolfinder ON)
+####################Option to compile with iwyu#######################
+option(INCLUDE_USE "Build with iwyu to analyze includes." OFF)
+handle_include_use(symbolfinder ${INCLUDE_USE})
 
 # Use the Widgets module from Qt 5.
-target_link_libraries(symbolfinder Qt5::Widgets Qt5::Widgets Qt5::Gui)
+target_link_libraries(symbolfinder scanner Qt5::Core Qt5::Widgets Qt5::Gui)
 
 # Install the executable
-install(TARGETS symbolfinder DESTINATION bin)
+install(TARGETS symbolfinder
+	RUNTIME		DESTINATION ${CMAKE_INSTALL_BINDIR}
+	LIBRARY		DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)

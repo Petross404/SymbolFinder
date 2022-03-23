@@ -2,12 +2,7 @@ In `Scanner` directory there is the source code that acts as a wrapper around `D
 
 It defines an interface for accessing various functions of the selected `Driver` (`m_d`).
 
-
-				 _______________________________________
-				|	  Inheritance Diagram:		|
-				 ---------------------------------------
-
-
+```
 					 -----------------------
 					|	`QObject`	|
 					 _______________________
@@ -16,15 +11,15 @@ It defines an interface for accessing various functions of the selected `Driver`
 						   |
 						   |
 
-	---------------------------------------------------------------------------------------
-	|			`Scanner : public QObject`				 	|	(Wrapper class)
+	 ---------------------------------------------------------------------------------------
+	|			`Scanner : public QObject`				 	|
 	|					   		 	 			|
 	| ------------------------------  ----------------------------------------------------- |
-	||- `Process::IDriver* m_d;` 	||+`QString symbolName() const;`		       ||
-	||- `QString m_name`		||+`QByteArray standardOut() const;`		       ||
-	||- `QByteArray m_stdOut	||+`void setInvocation( const QString& args,	       ||
-	||				||			const QString& secret = "" );` ||
-	||- `void init()`		||						       ||
+	||- Process::IDriver* m_d; 	||+ QString symbolName() const;			       ||
+	||- QString m_name		||+ QByteArray standardOut() const;		       ||
+	||- QByteArray m_stdOut		||+ void setInvocation( const QString& args,	       ||
+	||				||			const QString& secret = "" );  ||
+	||- void init()			||						       ||
 	|| etc				||						       ||
 	| ------------------------------  ----------------------------------------------------- |
 	 _______________________________________________________________________________________
@@ -33,3 +28,4 @@ It defines an interface for accessing various functions of the selected `Driver`
 			|					|
 			|					|
 		(Private members)		(Public data and member functions)
+```
