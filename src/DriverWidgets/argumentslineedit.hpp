@@ -9,9 +9,10 @@
 #include <qlineedit.h>	    // for QLineEdit
 #include <qobjectdefs.h>    // for Q_OBJECT, Q_PROPERTY, signals
 #include <qstring.h>	    // for QString
-#include <stdint.h>
 
-#include "../Scanner/Drivers/idriver.hpp"
+#include <cstdint>
+
+#include "../Scanner/interface/idriver.hpp"
 
 class QKeyEvent;
 class QMouseEvent;

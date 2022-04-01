@@ -19,12 +19,13 @@
 #ifndef SCANELFDRIVER_H
 #define SCANELFDRIVER_H
 
+#include <qfile.h>
 #include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
 #include <qobjectdefs.h>    // for Q_OBJECT
 #include <qstring.h>	    // for QString
 #include <qstringlist.h>    // for QStringList
 
-#include "driver.hpp"	 // for IDriver
+#include "../interface/driver.hpp"    // for IDriver
 class QObject;
 
 /*!
@@ -35,6 +36,9 @@ class QObject;
 class ScanelfDriver: public Driver
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA( IID "ScanelfDriver" FILE "scanelfplugin.json" )
+	Q_INTERFACES( Process::IDriver )
+
 	Q_DISABLE_COPY_MOVE( ScanelfDriver )
 
 public:
@@ -44,23 +48,19 @@ public:
 	 */
 	ScanelfDriver( QObject* parent = nullptr );
 
+	static Process::IDriver* create();
+
 	/*! Default destructor */
 	~ScanelfDriver() override;
-
-	[[nodiscard]] QStringList defaultInvocation() const override;
-
-	static const QString name();
-
-	static const QStringList argList();
-
-	static const QString	 m_program;
-	static const QStringList m_defArgList;
 
 private slots:
 	void updateStopIndexSlot();
 
 private:
+	QFile	    m_jsonFile;
 	QStringList m_effectiveArgList;
+	QStringList m_defaultArguments;
+	QString	    m_name;
 };
 
 #endif	  // SCANELFDRIVER_H

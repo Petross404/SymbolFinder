@@ -25,22 +25,27 @@
 #include <qcheckbox.h>		 // for QCheckBox
 #include <qcombobox.h>		 // for QComboBox
 #include <qcoreapplication.h>	 // for qAppName
-#include <qgridlayout.h>	 // for QGridLayout
-#include <qgroupbox.h>		 // for QGroupBox
-#include <qicon.h>		 // for QIcon
-#include <qlineedit.h>		 // for QLineEdit
-#include <qmenu.h>		 // for QMenu
-#include <qmenubar.h>		 // for QMenuBar
-#include <qnamespace.h>		 // for UniqueConnection
-#include <qpushbutton.h>	 // for QPushButton
-#include <qsize.h>		 // for QSize
-#include <qstatusbar.h>		 // for QStatusBar
-#include <qstringlist.h>	 // for QStringList
-#include <qtabwidget.h>		 // for QTabWidget
-#include <qtextbrowser.h>	 // for QTextBrowser
-#include <qtimer.h>		 // for QTimer
+#include <qdebug.h>
+#include <qevent.h>
+#include <qgridlayout.h>    // for QGridLayout
+#include <qgroupbox.h>	    // for QGroupBox
+#include <qicon.h>	    // for QIcon
+#include <qlineedit.h>	    // for QLineEdit
+#include <qmenu.h>	    // for QMenu
+#include <qmenubar.h>	    // for QMenuBar
+#include <qmessagebox.h>
+#include <qnamespace.h>	   // for UniqueConnection
+#include <qpluginloader.h>
+#include <qpushbutton.h>     // for QPushButton
+#include <qsize.h>	     // for QSize
+#include <qstatusbar.h>	     // for QStatusBar
+#include <qstringlist.h>     // for QStringList
+#include <qtabwidget.h>	     // for QTabWidget
+#include <qtextbrowser.h>    // for QTextBrowser
+#include <qtimer.h>	     // for QTimer
 
-#include <cstdlib>	  // for exit
+#include <cstdlib>    // for exit
+#include <iostream>
 #include <type_traits>	  // for enable_if<>::type
 #include <utility>	  // for move
 
@@ -48,8 +53,8 @@
 #include "../../DriverWidgets/argumentslineedit.hpp"	// for ArgumentsLineEdit
 #include "../../DriverWidgets/messagewidget.hpp"	// for MessageWidget
 #include "../../DriverWidgets/symbollineedit.hpp"	// for SymbolLineEdit
-#include "../../Scanner/Drivers/nmdriver.hpp"		// for NmDriver
-#include "../../Scanner/Drivers/scanelfdriver.hpp"	// for ScanelfDriver
+#include "../../Scanner/plugins/nmdriver.hpp"		// for NmDriver
+#include "../../Scanner/plugins/scanelfdriver.hpp"	// for ScanelfDriver
 #include "../../Scanner/scanner.hpp"			// for Scanner
 #include "UI/ui.hpp"					// for Interface
 class QWidget;						// lines 36-36
@@ -59,8 +64,8 @@ constexpr QChar spaceChar{ ' ' };
 
 MainWindow::MainWindow( QWidget* parent )
 	: QMainWindow{ parent }
-	, m_scanner{ new Scanner{ NmDriver::name(), this } }
-	, m_ui{ new Ui::Interface{ m_scanner, this } }
+	, m_ui{ new Ui::Interface{ this } }
+	, m_scanner{ new Scanner{ m_ui->scannersBox()->itemText( 0 ), this } }
 {
 	setCentralWidget( m_ui );
 
@@ -200,13 +205,14 @@ void MainWindow::setupConnections()
 		     &MainWindow::scanFinishedSlot,
 		     Qt::UniqueConnection );
 
-	v = connect( m_scanner, &Scanner::driverInitialized, this, [this]( const QString& name ) {
-		setWindowTitle( qAppName() + " " + name );
-		std::exit( -1 );
-	} );
+	v = connect( m_scanner,
+		     &Scanner::driverInitialized,
+		     this,
+		     &MainWindow::driverInitalizedSlot,
+		     Qt::UniqueConnection );
 
 	v = connect( m_ui->scannersBox(),
-		     &QComboBox::textActivated,
+		     &QComboBox::currentTextChanged,
 		     this,
 		     &MainWindow::resetScannerInstanceSlot );
 }
@@ -240,26 +246,12 @@ void MainWindow::setupWidgets()
 	m_ui->searchBtn()->setEnabled( !m_ui->symbolEdit()->text().isEmpty() );
 	/**********************************************************/
 
-	QString symbolName   = m_ui->symbolEdit()->text();
-	QString advancedArgs = m_scanner->invocation().join( spaceChar );
-
-	m_ui->argumentsEdit()->setToolTip(
-		tr( "Enter here any additional arguments. Do not edit the "
-		    "symbol name here!" ) );
-	if ( m_ui->argumentsEdit()->text() != advancedArgs )
-	{
-		m_ui->argumentsEdit()->setText( advancedArgs );
-	}
+	QString symbolName{ m_ui->symbolEdit()->text() };
 
 	m_ui->argumentsEdit()->setClearButtonEnabled( true );
-
 	setWindowIcon( QIcon{ ":resources/pngegg.png" } );
 
-	if ( m_ui->scannersBox()->count() == 0 )
-	{
-		m_ui->scannersBox()->addItem( NmDriver::name() );
-		m_ui->scannersBox()->addItem( ScanelfDriver::name() );
-	}
+	scannerPlugins();
 }
 
 void MainWindow::showStdErrorTab()
@@ -352,6 +344,15 @@ void MainWindow::resetAdvancedLineEditSlot()
 	} );
 }
 
+void MainWindow::driverInitalizedSlot( const QString& name )
+{
+	qApp->setApplicationName( qAppName() + " " + name );
+
+	// Set the current symbol for the new driver
+	const QString symbol{ m_ui->symbolEdit()->text() };
+	m_scanner->driverInitializedSlot( symbol );
+}
+
 void MainWindow::resetAdvancedArgumentsSlot() { m_scanner->resetInvocation(); }
 
 void MainWindow::resetSymbolLineWarningSlot()
@@ -383,9 +384,6 @@ void MainWindow::setInvocationSlot( const QString& advancedArgs )
 void MainWindow::resetScannerInstanceSlot( const QString& scannerName )
 {
 	m_scanner->reset( scannerName );
-
-	const QString& arguments{ m_scanner->invocation().join( spaceChar ) };
-	// m_ui->argumentsEdit()->setText( arguments );
 }
 
 void MainWindow::scanStartedSlot()
@@ -401,4 +399,56 @@ void MainWindow::scanFinishedSlot()
 
 	updateStdOutputSlot();
 	updateStdErrorSlot();
+}
+
+void MainWindow::scannerPlugins()
+{
+	auto vecLoader = m_scanner->plugins();
+	int  sz	       = vecLoader.size();
+
+	QString firstPluginName;
+	QString firstPluginArgs;
+
+	for ( int i = 0; i < sz; i++ )
+	{
+		auto jsonObject{
+			vecLoader.at( i )->metaData().value( "MetaData" ).toObject() };
+		auto name{ jsonObject.value( "name" ) };
+		auto args{ jsonObject.value( "arguments" ) };
+
+		if ( name.isUndefined() && args.isUndefined() ) { return; }
+
+		if ( i == 0 )
+		{
+			firstPluginName = name.toString();
+			firstPluginArgs = args.toString();
+		}
+		m_ui->scannersBox()->addItem( name.toString() );
+	}
+
+	if ( m_ui->argumentsEdit()->text() != firstPluginArgs )
+	{
+		m_ui->argumentsEdit()->setText( firstPluginArgs );
+	}
+}
+
+void MainWindow::closeEvent( QCloseEvent* event )
+{
+	if ( m_scanner->canQuit() )
+	{
+		if ( auto b = QMessageBox::Yes;
+		     b
+		     == QMessageBox::question(
+			     this,
+			     tr( "Still searching..." ),
+			     tr( "Do you want to quit while still searching?" ),
+			     QMessageBox::Yes | QMessageBox::No ) )
+		{
+			QMainWindow::closeEvent( event );
+		}
+		else
+		{
+			event->accept();
+		}
+	}
 }

@@ -29,13 +29,13 @@
 class QObject;
 
 Driver::Driver( QObject* parent )
-	: IDriver{ parent }
+	: QProcess{ parent }
 {
 	init();
 }
 
 Driver::Driver( QString program, QStringList defArgList, QObject* parent )
-	: IDriver{ parent }
+	: QProcess{ parent }
 	, m_program{ std::move( program ) }
 	, m_defArgList{ std::move( defArgList ) }
 	, m_effectiveArgList{ m_defArgList }
@@ -43,9 +43,13 @@ Driver::Driver( QString program, QStringList defArgList, QObject* parent )
 	init();
 }
 
-void Driver::init() { emit driverInitialized( driverName() ); }
+void Driver::init() { emit driverInitialized( m_program ); }
 
 Driver::~Driver() = default;
+
+Process::IDriver* Driver::create() { return this; }
+
+QStringList Driver::defaultInvocation() const { return m_defArgList; }
 
 QString Driver::driverName() const { return m_program; }
 
@@ -69,16 +73,30 @@ void Driver::setSymbolName( const QString& symbolName )
 {
 	if ( m_symbol != symbolName )
 	{
+		// Keep this for later.
+		bool sizeChanged = m_symbol.size() != symbolName.size();
+
 		m_symbol = symbolName;
-		emit stopIndexUpdated();
+
+		if ( sizeChanged )
+		{
+			emit stopIndexUpdated();
+			emit symbolSizeChanged( symbolName.size() );
+		}
 	}
 }
 
 QString Driver::symbolName() const { return m_symbol; }
 
+bool Driver::canDriverQuit() const
+{
+	return state() == QProcess::ProcessState::Running
+	       || state() == QProcess::ProcessState::Starting;
+}
+
 void Driver::exec()
 {
-	start( driverName(), invocation() );
+	QProcess::start( driverName(), invocation() );
 
 	QString message;
 	switch ( state() )
@@ -117,6 +135,13 @@ QStringList Driver::invocation() const { return m_effectiveArgList; }
 void Driver::setStopIndexSlot( StopIndex sIndex )
 {
 	m_stopIndex = std::move( sIndex );
+}
+
+void Driver::setDriverName( const QString& name ) { m_program = name; }
+
+void Driver::setDefaultInvocation( const QStringList& argList )
+{
+	m_defArgList = argList;
 }
 
 StopIndex Driver::stopIndex() const { return m_stopIndex; }

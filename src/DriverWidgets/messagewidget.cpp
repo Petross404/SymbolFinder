@@ -51,26 +51,34 @@ MessageWidget::MessageWidget( const QString& text,
 
 MessageWidget::~MessageWidget() = default;
 
-void MessageWidget::setPallete()
+void MessageWidget::setPallete( const QPalette& paletteArgument, bool forceParameter )
 {
-	QColor bgBaseColor;
+	QColor	 bgBaseColor;
+	QPalette palette;
 
-	switch ( m_messageType )
+	if ( !forceParameter )
 	{
-		case MessageWidget::Information:
-			bgBaseColor.setRgb( 61, 174, 233 );
-			break;
-		case MessageWidget::Warning:
-			bgBaseColor.setRgb( 246, 116, 0 );
-			break;
-		case MessageWidget::Error:
-			bgBaseColor.setRgb( 218, 68, 83 );
-			break;
-		default: break;
-	}
+		switch ( m_messageType )
+		{
+			case MessageWidget::Information:
+				bgBaseColor.setRgb( 61, 174, 233 );
+				break;
+			case MessageWidget::Warning:
+				bgBaseColor.setRgb( 246, 116, 0 );
+				break;
+			case MessageWidget::Error:
+				bgBaseColor.setRgb( 218, 68, 83 );
+				break;
+			default: break;
+		}
 
-	QPalette palette = this->palette();
-	palette.setColor( QPalette::Window, bgBaseColor );
+		palette = this->palette();
+		palette.setColor( QPalette::Window, bgBaseColor );
+	}
+	else
+	{
+		palette = paletteArgument;
+	}
 
 	const QColor parentTextColor =
 		( this->parentWidget() ? this->parentWidget()->palette()
@@ -126,7 +134,7 @@ void MessageWidget::createLayout()
 {
 	m_grid->addWidget( m_label, 0, 0 );
 	m_grid->addWidget( m_closeBtn, 0, 1 );
-	this->setLayout( m_grid );
+	setLayout( m_grid );
 
 	layout()->setContentsMargins( layout()->contentsMargins() + borderSize );
 
@@ -168,7 +176,7 @@ void MessageWidget::setupConnections()
 	connect( qApp,
 		 &QApplication::paletteChanged,
 		 this,
-		 &MessageWidget::setPallete,
+		 std::bind( &MessageWidget::setPallete, this, std::placeholders::_1, true ),	// Force palette.
 		 Qt::UniqueConnection );
 }
 
@@ -199,7 +207,8 @@ void MessageWidget::paintEvent( QPaintEvent* event )
 						  ? parentWidget()->palette()
 						  : qApp->palette() )
 						.color( QPalette::Window ) };
-	const int    newRed = ( color.red() * alpha )
+
+	const int newRed = ( color.red() * alpha )
 			   + ( parentWindowColor.red() * ( 1 - alpha ) );
 	const int newGreen = ( color.green() * alpha )
 			     + ( parentWindowColor.green() * ( 1 - alpha ) );

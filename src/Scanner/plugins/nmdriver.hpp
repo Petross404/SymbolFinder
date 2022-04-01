@@ -19,12 +19,13 @@
 #ifndef NMDRIVER_H
 #define NMDRIVER_H
 
+#include <qfile.h>
 #include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
 #include <qobjectdefs.h>    // for Q_OBJECT
 #include <qstring.h>	    // for QString
 #include <qstringlist.h>    // for QStringList
 
-#include "driver.hpp"	 // for IDriver
+#include "../interface/driver.hpp"    // for IDriver
 class QObject;
 
 /*!
@@ -35,6 +36,9 @@ class QObject;
 class NmDriver: public Driver
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA( IID "NmDriver" FILE "nmplugin.json" )
+	Q_INTERFACES( Process::IDriver )
+
 	Q_DISABLE_COPY_MOVE( NmDriver )
 
 public:
@@ -44,29 +48,19 @@ public:
 	 */
 	NmDriver( QObject* parent = nullptr );
 
-	/*!
-	 * Destructor
-	 */
+	static Process::IDriver* create();
+
+	/*! Destructor */
 	~NmDriver() override;
-
-	[[nodiscard]] QStringList defaultInvocation() const override;
-
-	static QString name();
-
-	static QStringList argList();
-
-	static const QString m_program; /*!< The name of the executable to call */
-	static const QStringList m_defArgList; /*! The default arguments for nm */
 
 private slots:
 	void updateStopIndexSlot();
 
 private:
-	const QStringList l{ "-Dn -o --defined-only /lib/* /usr/lib64/* 2> "
-			     "/dev/null | grep '\b\b'" };
-
-	QStringList m_effectiveArgList{ l };
-	QString	    m_symbol;
+	QFile	    m_jsonFile;
+	QStringList m_effectiveArgList;
+	QStringList m_defaultArguments;
+	QString	    m_name;
 };
 
 #endif	  // NMDRIVER_H

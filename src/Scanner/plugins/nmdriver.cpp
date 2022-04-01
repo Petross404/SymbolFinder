@@ -19,25 +19,27 @@
 #include "nmdriver.hpp"
 
 #include <qdebug.h>
+#include <qfile.h>
+#include <qjsondocument.h>
 #include <qnamespace.h>	   // for UniqueConnection
 #include <stdint.h>	   // for uint16_t
 
-#include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
-#include "driver.hpp"					// for Driver
-#include "idriver.hpp"					// for StopIndex
-class QObject;						// lines 12-12
+#include <QJsonObject>
 
-const QString	  NmDriver::m_program{ "nm" };
-const QStringList NmDriver::m_defArgList{
+#include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
+#include "../interface/driver.hpp"			// for Driver
+#include "../interface/idriver.hpp"			// for StopIndex
+
+class QObject;	  // lines 12-12
+
+const QString	  g_program{ "nm" };
+const QStringList g_defaultArguments{
 	"-Dn -o --defined-only /lib/* /usr/lib64/* 2> /dev/null | grep "
 	"'\b\b'" };
 
-QString NmDriver::name() { return NmDriver::m_program; }
-
-QStringList NmDriver::argList() { return NmDriver::m_defArgList; }
-
 NmDriver::NmDriver( QObject* parent )
-	: Driver{ NmDriver::m_program, NmDriver::m_defArgList, parent }
+	: Driver{ g_program, g_defaultArguments, parent }
+	, m_jsonFile{ "nmplugin.json", this }
 {
 	updateStopIndexSlot();
 
@@ -51,7 +53,7 @@ NmDriver::NmDriver( QObject* parent )
 
 NmDriver::~NmDriver() = default;
 
-QStringList NmDriver::defaultInvocation() const { return m_defArgList; }
+Process::IDriver* NmDriver::create() { return new NmDriver{}; }
 
 void NmDriver::updateStopIndexSlot()
 {

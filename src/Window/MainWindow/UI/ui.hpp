@@ -56,7 +56,7 @@ public:
 	 * need this to extract some info for our custom widgets.
 	 * \param parent is a ptr to the parent widget.
 	 */
-	explicit Interface( Scanner* scanner, QWidget* parent = nullptr );
+	explicit Interface( QWidget* parent = nullptr );
 
 	/*!
 	 * Virtual, default destructor.

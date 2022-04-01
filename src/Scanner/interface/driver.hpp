@@ -31,10 +31,12 @@ class QObject;
  * `Driver` is a concrete class for the `IDriver`. It defines some generic
  * fuctions for the derived `NmDriver` and `ScanelfDriver`.
  */
-class Driver: public Process::IDriver
+class Driver
+	: public QProcess
+	, public Process::IDriver
 {
 	Q_OBJECT
-	// Q_DISABLE_COPY_MOVE( Driver )
+	Q_INTERFACES( Process::IDriver )
 
 public:
 	/*!
@@ -43,14 +45,21 @@ public:
 	 */
 	Driver( QObject* parent = nullptr );
 
-	/*!
-	 * Destructor
-	 */
+	/*! Destructor */
 	~Driver() override;
 
+	[[nodiscard]] Process::IDriver* create();
+
+	/*
+	 * Mark the following functions as "final" and don't allow
+	 * derived classes to override them further.
+	 * https://en.cppreference.com/w/cpp/language/final
+	 */
 	[[nodiscard]] QString driverName() const final;
 
 	[[nodiscard]] bool isSymbolInArgs() const final;
+
+	[[nodiscard]] QStringList defaultInvocation() const final;
 
 	void setSymbolName( const QString& symbolName ) final;
 
@@ -59,6 +68,8 @@ public:
 	[[nodiscard]] QString symbolName() const final;
 
 	void exec() final;
+
+	[[nodiscard]] bool canDriverQuit() const final;
 
 	[[nodiscard]] QStringList invocation() const final;
 
@@ -94,6 +105,17 @@ signals:
 	 * \sa void Driver::setStopIndexSlot( StopIndex sIndex )
 	 */
 	void stopIndexUpdated();
+
+	void driverInitialized( const QString& name );
+
+	void stopIndexUpdatingFailed();
+
+	void symbolSizeChanged( uint16_t size );
+
+protected:
+	void setDriverName( const QString& name ) override;
+
+	void setDefaultInvocation( const QStringList& argList ) override;
 
 private:
 	QString m_program; /*!< Program name, ie nm */

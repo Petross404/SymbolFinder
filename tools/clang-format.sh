@@ -7,4 +7,4 @@ then
     exit
 fi
 
-find . -regex '.*\.\(cpp\|hpp\|cu\|c\|h\)' -exec clang-format -style=file -i {} \;
+find . -regex '.*\.\(cpp\|hpp\|cxx\|ixx\|cu\|c\|h\)' -exec clang-format -style=file -i {} \;

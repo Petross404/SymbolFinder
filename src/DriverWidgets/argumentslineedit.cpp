@@ -8,9 +8,9 @@
 #include <qnamespace.h>	   // for MouseButton, Uniq...
 #include <qpoint.h>	   // for QPoint
 
-#include "src/ConnectVerifier/connectverifier.hpp"    // for ConnectVerifier
-#include "src/Scanner/Drivers/idriver.hpp"	      // for StopIndex
-class QWidget;					      // lines 14-14
+#include "../ConnectVerifier/connectverifier.hpp"    // for ConnectVerifier
+#include "../Scanner/interface/idriver.hpp"	     // for StopIndex
+class QWidget;					     // lines 14-14
 
 ArgumentsLineEdit::ArgumentsLineEdit( const QString& text, StopIndex stopIndex, QWidget* parent )
 	: QLineEdit{ text, parent }
@@ -31,6 +31,7 @@ ArgumentsLineEdit::~ArgumentsLineEdit() = default;
 void ArgumentsLineEdit::setStopIndex( const StopIndex& stopIndex )
 {
 	m_stopIndex = stopIndex;
+	m_stopIndex.indexOfStop -= 2;
 }
 
 StopIndex ArgumentsLineEdit::stopIndex() const { return m_stopIndex; }
@@ -59,6 +60,14 @@ void ArgumentsLineEdit::init()
 		     this,
 		     &ArgumentsLineEdit::setSymbolSizeSlot,
 		     Qt::UniqueConnection );
+
+	m_synbolSz = m_text.count() + 2;
+
+	if ( !m_stopIndex.isNull() ) { m_stopIndex.indexOfStop -= 2; }
+	else
+	{
+		m_stopIndex.indexOfStop = 0;
+	}
 }
 
 void ArgumentsLineEdit::checkStopString()

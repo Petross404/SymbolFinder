@@ -32,12 +32,12 @@
 
 #include "../../../DriverWidgets/argumentslineedit.hpp"	   // for ArgumentsLineEdit
 #include "../../../DriverWidgets/symbollineedit.hpp"	   // for SymbolLineEdit
-#include "../../../Scanner/Drivers/idriver.hpp"
+#include "../../../Scanner/interface/idriver.hpp"
 #include "../../../Scanner/scanner.hpp"	   // for Scanner
 
 constexpr int btnMinWidth = 150;
 
-Ui::Interface::Interface( Scanner* scanner, QWidget* parent )
+Ui::Interface::Interface( QWidget* parent )
 	: QWidget{ parent }
 	, m_gridLayout{ new QGridLayout{ this } }
 	, m_buttonsGrid{ new QGridLayout{ this } }
@@ -53,9 +53,7 @@ Ui::Interface::Interface( Scanner* scanner, QWidget* parent )
 	, m_scannersBox{ new QComboBox{ this } }
 	, m_advancedCheckBox{ new QCheckBox{ tr( "Advanced arguments" ), this } }
 	, m_symbolEdit{ new SymbolLineEdit{ this } }
-	, m_argumentsEdit{ new ArgumentsLineEdit{ scanner->invocation().join( ' ' ),
-						  scanner->driver()->stopIndex(),
-						  this } }
+	, m_argumentsEdit{ new ArgumentsLineEdit{ this } }
 	, m_tabWidget{ new QTabWidget{ this } }
 	, m_textBrowserStdOut{ new QTextBrowser{ this } }
 	, m_textBrowserStdErr{ new QTextBrowser{ this } }

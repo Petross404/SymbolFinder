@@ -18,6 +18,7 @@ include("${CMAKE_MODULE_PATH}/ClangFormat.cmake")
 include("${CMAKE_MODULE_PATH}/ClangTidy.cmake")
 include("${CMAKE_MODULE_PATH}/IncludeUse.cmake")
 include("${CMAKE_MODULE_PATH}/BuildDoc.cmake")
+include("${CMAKE_MODULE_PATH}/BuildPlugins.cmake")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

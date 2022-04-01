@@ -18,28 +18,27 @@
 
 #include "scanelfdriver.hpp"
 
-#include <qchar.h>	   // for operator==, QChar
+#include <qchar.h>    // for operator==, QChar
+#include <qdebug.h>
+#include <qfile.h>
+#include <qjsondocument.h>
+#include <qjsonobject.h>
 #include <qnamespace.h>	   // for UniqueConnection
-#include <stdint.h>	   // for uint16_t
+#include <qpluginloader.h>
+
+#include <cstdint>    // for uint16_t
 
 #include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
-#include "driver.hpp"					// for Driver
-#include "idriver.hpp"					// for StopIndex
+#include "../interface/driver.hpp"			// for Driver
+#include "../interface/idriver.hpp"			// for StopIndex
 class QObject;						// lines 12-12
 
-const QString	  ScanelfDriver::m_program{ "scanelf" };
-const QStringList ScanelfDriver::m_defArgList{ "-qRys + /usr/lib64/ /lib64/" };
-
-const QString ScanelfDriver::name() { return ScanelfDriver::m_program; }
-
-const QStringList ScanelfDriver::argList()
-{
-	return ScanelfDriver::m_defArgList;
-}
+const QString	  g_program{ "scanelf" };
+const QStringList g_defaultArguments{ "-qRys + /lib64/" };
 
 ScanelfDriver::ScanelfDriver( QObject* parent )
-	: Driver{ ScanelfDriver::m_program, ScanelfDriver::m_defArgList, parent }
-	, m_effectiveArgList{ ScanelfDriver::m_defArgList }
+	: Driver{ g_program, g_defaultArguments, parent }
+	, m_jsonFile{ "scanelfplugin.json", this }
 {
 	updateStopIndexSlot();
 
@@ -52,11 +51,6 @@ ScanelfDriver::ScanelfDriver( QObject* parent )
 }
 
 ScanelfDriver::~ScanelfDriver() = default;
-
-QStringList ScanelfDriver::defaultInvocation() const
-{
-	return ScanelfDriver::m_defArgList;
-}
 
 void ScanelfDriver::updateStopIndexSlot()
 {
@@ -86,3 +80,5 @@ void ScanelfDriver::updateStopIndexSlot()
 		}
 	}
 }
+
+Process::IDriver* ScanelfDriver::create() { return new ScanelfDriver{}; }

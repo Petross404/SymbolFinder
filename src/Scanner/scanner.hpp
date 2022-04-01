@@ -28,10 +28,13 @@
 #include <qstringlist.h>    // for QStringList
 #include <stdint.h>	    // for uint16_t
 
-#include <array>
 #include <gsl/pointers>	   // for owner
+#include <vector>
 
-#include "Drivers/idriver.hpp"	  // for StopIndex
+#include "interface/idriver.hpp"    // for StopIndex
+
+class Driver;
+class QPluginLoader;
 
 /*!
  * `Scanner` class creates an object that can hold an `Procees::IDriver*` instance.
@@ -64,7 +67,7 @@ public:
 	 * Return the `IDriver` ptr (m_d for this class)
 	 * \return The driver that is selected.
 	 */
-	[[nodiscard]] Process::IDriver* driver() const;
+	[[nodiscard]] Driver* driver() const;
 
 	/*! Return the default arguments that the active driver is called
 	 * \return A list of default arguments
@@ -90,7 +93,7 @@ public:
 	 * simple way was chosen.
 	 * \sa `void setSymbolName(const QString& symbol)`
 	 */
-	void setInvocation( const QString& args, const QString& secret = "" );
+	void setInvocation( const QString& arguments, const QString& secret = "" );
 
 	[[nodiscard]] StopIndex stopIndexOfDriver() const;
 
@@ -122,18 +125,30 @@ public:
 	[[nodiscard]] QString symbolName() const;
 
 	/*!
+	 * Can the driver quit (hence the application) or is it still searching?
+	 * \return true if the driver isn't searching
+	 */
+	[[nodiscard]] bool canQuit() const;
+
+	/*!
 	 * When the driver in the combobox is changed, reset to another
 	 * `Driver`.
 	 * \param driverName is the new driver's name.
 	 */
 	void reset( const QString& driverName );
 
+	[[nodiscard]] std::vector<QPluginLoader*> plugins() const;
+
 	/*! Destructor */
 	~Scanner() override;
 
 public slots:
 	/*! The function that searches for the symbol with the predefined driver. */
-	void performScanSlot();
+	void performScanSlot() const;
+
+	void driverInitializedSlot( const QString& symbol );
+
+	void aboutToCloseSlot();
 
 signals:
 	/*! IDriver got stderr ready */
@@ -169,6 +184,10 @@ signals:
 	 */
 	void driverInitialized( const QString& name );
 
+	void pluginsLoaded( int numberOfPlugins, const QStringList& pluginNames );
+
+	void aboutToClose();
+
 protected:
 	/*!
 	 * Set's the driver's name. This function is used only internally to re-init
@@ -188,14 +207,16 @@ private:
 	QByteArray m_stdout; /*!< stdout text from the underlying driver */
 	QByteArray m_stderr; /*!< stderr text from the underlying driver */
 
-	gsl::owner<Process::IDriver*> m_d{
-		nullptr }; /*!< Ptr to the `Process::IDriver` instance */
+	gsl::owner<Driver*> m_d{ nullptr }; /*!< Ptr to the `Process::IDriver` instance */
+	std::vector<QPluginLoader*> m_plugins;
 
 	//! Private function to setup all the connections that have to be made
 	void setupConnections() const;
 
 	void init();
 	void init( const QString& driverName );
+
+	int loadDriverPlugins();
 };
 
 #endif	  // SCANNER_H

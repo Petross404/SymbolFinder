@@ -110,6 +110,13 @@ public slots:
 	void updateAdvancedArgumentsSlot();
 
 	/*!
+	 * When the driver is changed or first-initialized, we must handle
+	 * this change.
+	 * \param name is the driver's name.
+	 */
+	void driverInitalizedSlot( const QString& name );
+
+	/*!
 	 * Slot to reset the blocked advanced arguments widgets. This
 	 * happens when the user tries to edit the symbol name directly
 	 * in this widget.
@@ -151,9 +158,12 @@ public slots:
 
 	/*!
 	 * Every time a different driver will be selected in the combobox,
-	 * a new scanner
+	 * a new driver will be initialized.
+	 * \param scannerName is the name of the new scanner driver.
 	 */
 	void resetScannerInstanceSlot( const QString& scannerName );
+
+	void scannerPlugins();
 
 signals:
 	/*!
@@ -163,9 +173,12 @@ signals:
 	 */
 	void advancedArgumentssUnblocked() const;
 
+protected:
+	void closeEvent( QCloseEvent* event ) override;
+
 private:
-	gsl::owner<Scanner*> m_scanner; /*!< Ptr to the scanner instance */
 	gsl::owner<Ui::Interface*> m_ui; /*!< Ptr to the hand-made user interface */
+	gsl::owner<Scanner*> m_scanner; /*!< Ptr to the scanner instance */
 
 	void setupConnections();
 	void setupWidgets();

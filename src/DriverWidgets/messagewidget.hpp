@@ -47,12 +47,11 @@ public:
 				QFrame::Shape	    shape = QFrame::StyledPanel,
 				QFrame::Shadow	    shadow = QFrame::Raised );
 
-	/*!
-	 * Virtual destructor
-	 */
+	/*! Virtual destructor */
 	~MessageWidget() override;
 
-	void setPallete();
+	void setPallete( const QPalette& paletteArgument = QPalette{},
+			 bool		 forceParameter	 = false );
 
 	[[nodiscard]] QString text() const;
 

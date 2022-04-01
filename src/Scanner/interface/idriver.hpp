@@ -60,22 +60,20 @@ namespace Process {
  * `IDriver` inherits from `QProcess` and it's an abstract class just to
  * define an interface for other classes to inherit.
  */
-class IDriver: public QProcess
+class IDriver
 {
-	Q_OBJECT
-	Q_DISABLE_COPY_MOVE( IDriver )
-
 public:
 	/*!
 	 * Constructor for `IDriver`
-	 * \param parent QObject* that by default is null
 	 */
-	IDriver( QObject* parent = nullptr );
+	IDriver();
+
+	IDriver( QObject* parent );
 
 	/*!
 	 * Abstract destructor (=0)
 	 */
-	~IDriver() override = 0;
+	~IDriver();
 
 	/*!
 	 * The driver's name (ie nm)
@@ -123,16 +121,30 @@ public:
 
 	[[nodiscard]] virtual bool isSymbolInArgs() const = 0;
 
+	[[nodiscard]] virtual bool canDriverQuit() const = 0;
 	/*!
 	 * Return the `StopIndex` of the arguments.
 	 *\return The `StopIndex` value.
 	 */
 	[[nodiscard]] virtual StopIndex stopIndex() const = 0;
 
-signals:
-	void driverInitialized( const QString& name );
+	static Process::IDriver* create();
 
-	void stopIndexUpdatingFailed();
+protected:
+	/*!
+	 *
+	 */
+	virtual void setDriverName( const QString& nane ) = 0;
+
+	/*!
+	 *
+	 */
+	virtual void setDefaultInvocation( const QStringList& argList ) = 0;
 };
 }    // namespace Process
+
+#define IDriver_iid "org.qt.IDriver"
+
+Q_DECLARE_INTERFACE( Process::IDriver, IDriver_iid )
+
 #endif	  // IDRIVER_H
