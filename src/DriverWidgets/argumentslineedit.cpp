@@ -30,8 +30,8 @@ ArgumentsLineEdit::~ArgumentsLineEdit() = default;
 
 void ArgumentsLineEdit::setStopIndex( const StopIndex& stopIndex )
 {
-	m_stopIndex = stopIndex;
-	m_stopIndex.indexOfStop -= 2;
+	m_stopIndex		= stopIndex;
+	m_stopIndex.indexOfStop = m_stopIndex.indexOfStop - 2;
 }
 
 StopIndex ArgumentsLineEdit::stopIndex() const { return m_stopIndex; }

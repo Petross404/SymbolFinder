@@ -37,7 +37,7 @@ class NmDriver: public Driver
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA( IID "NmDriver" FILE "nmplugin.json" )
-	Q_INTERFACES( Process::IDriver )
+	Q_INTERFACES( IDriver )
 
 	Q_DISABLE_COPY_MOVE( NmDriver )
 
@@ -48,7 +48,7 @@ public:
 	 */
 	NmDriver( QObject* parent = nullptr );
 
-	static Process::IDriver* create();
+	IDriver* create( QObject* parent );
 
 	/*! Destructor */
 	~NmDriver() override;

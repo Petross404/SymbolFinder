@@ -30,10 +30,8 @@ bool StopIndex::isNull()
 	return is_null;
 }
 
-Process::IDriver::IDriver() = default;
+IDriver::IDriver() = default;
 
-Process::IDriver::IDriver( QObject* parent ){ Q_UNUSED( parent ) }
+IDriver::IDriver( QObject* parent ){ Q_UNUSED( parent ) }
 
-Process::IDriver::~IDriver() = default;
-
-Process::IDriver* Process::IDriver::create() {}
+IDriver::~IDriver() = default;

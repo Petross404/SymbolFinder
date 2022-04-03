@@ -29,14 +29,14 @@ class QObject;
 
 /*!
  * `Driver` is a concrete class for the `IDriver`. It defines some generic
- * fuctions for the derived `NmDriver` and `ScanelfDriver`.
+ * fuctions for the derived plugins.
  */
 class Driver
 	: public QProcess
-	, public Process::IDriver
+	, public IDriver
 {
 	Q_OBJECT
-	Q_INTERFACES( Process::IDriver )
+	Q_INTERFACES( IDriver )
 
 public:
 	/*!
@@ -48,7 +48,7 @@ public:
 	/*! Destructor */
 	~Driver() override;
 
-	[[nodiscard]] Process::IDriver* create();
+	[[nodiscard]] IDriver* create( QObject* parent ) override;
 
 	/*
 	 * Mark the following functions as "final" and don't allow

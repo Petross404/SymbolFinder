@@ -15,6 +15,10 @@ Extra Arguments=
 Install Directory=/usr/local
 Runtime=Host System
 
+[ClangTidy]
+EnabledChecks=-*,clang-*,-clang-analyzer-apiModeling.StdCLibraryFunctions
+UseConfigFile=false
+
 [CustomDefinesAndIncludes][ProjectPath0]
 Path=.
 parseAmbiguousAsCPP=true

@@ -42,6 +42,8 @@ ScanelfDriver::ScanelfDriver( QObject* parent )
 {
 	updateStopIndexSlot();
 
+	qDebug() << "I am scanelf's ctor";
+
 	ConnectVerifier v;
 	v = connect( this,
 		     &Driver::stopIndexUpdated,
@@ -81,4 +83,7 @@ void ScanelfDriver::updateStopIndexSlot()
 	}
 }
 
-Process::IDriver* ScanelfDriver::create() { return new ScanelfDriver{}; }
+IDriver* ScanelfDriver::create( QObject* parent )
+{
+	return new ScanelfDriver{ parent };
+}

@@ -53,7 +53,6 @@ struct StopIndex
 	bool isNull();
 };
 
-namespace Process {
 /*!
  * \brief `IDriver` serves as an interface for `NmDriver` and `ScanelfDriver`.
  *
@@ -128,7 +127,7 @@ public:
 	 */
 	[[nodiscard]] virtual StopIndex stopIndex() const = 0;
 
-	static Process::IDriver* create();
+	[[nodiscard]] virtual IDriver* create( QObject* parent ) = 0;
 
 protected:
 	/*!
@@ -141,10 +140,9 @@ protected:
 	 */
 	virtual void setDefaultInvocation( const QStringList& argList ) = 0;
 };
-}    // namespace Process
 
 #define IDriver_iid "org.qt.IDriver"
 
-Q_DECLARE_INTERFACE( Process::IDriver, IDriver_iid )
+Q_DECLARE_INTERFACE( IDriver, IDriver_iid )
 
 #endif	  // IDRIVER_H

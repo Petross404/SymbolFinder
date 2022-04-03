@@ -37,7 +37,7 @@ class ScanelfDriver: public Driver
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA( IID "ScanelfDriver" FILE "scanelfplugin.json" )
-	Q_INTERFACES( Process::IDriver )
+	Q_INTERFACES( IDriver )
 
 	Q_DISABLE_COPY_MOVE( ScanelfDriver )
 
@@ -48,7 +48,7 @@ public:
 	 */
 	ScanelfDriver( QObject* parent = nullptr );
 
-	static Process::IDriver* create();
+	IDriver* create( QObject* parent );
 
 	/*! Default destructor */
 	~ScanelfDriver() override;

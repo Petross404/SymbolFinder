@@ -65,7 +65,7 @@ constexpr QChar spaceChar{ ' ' };
 MainWindow::MainWindow( QWidget* parent )
 	: QMainWindow{ parent }
 	, m_ui{ new Ui::Interface{ this } }
-	, m_scanner{ new Scanner{ m_ui->scannersBox()->itemText( 0 ), this } }
+	, m_scanner{ new Scanner{ this } }
 {
 	setCentralWidget( m_ui );
 
@@ -351,6 +351,10 @@ void MainWindow::driverInitalizedSlot( const QString& name )
 	// Set the current symbol for the new driver
 	const QString symbol{ m_ui->symbolEdit()->text() };
 	m_scanner->driverInitializedSlot( symbol );
+
+	// Don't forget to set the stop index
+	StopIndex index{ m_scanner->stopIndexOfDriver() };
+	m_ui->argumentsEdit()->setStopIndex( index );
 }
 
 void MainWindow::resetAdvancedArgumentsSlot() { m_scanner->resetInvocation(); }
@@ -404,19 +408,19 @@ void MainWindow::scanFinishedSlot()
 void MainWindow::scannerPlugins()
 {
 	auto vecLoader = m_scanner->plugins();
-	int  sz	       = vecLoader.size();
+	int  size      = vecLoader.size();
 
 	QString firstPluginName;
 	QString firstPluginArgs;
 
-	for ( int i = 0; i < sz; i++ )
+	for ( int i = 0; i < size; i++ )
 	{
 		auto jsonObject{
 			vecLoader.at( i )->metaData().value( "MetaData" ).toObject() };
 		auto name{ jsonObject.value( "name" ) };
 		auto args{ jsonObject.value( "arguments" ) };
 
-		if ( name.isUndefined() && args.isUndefined() ) { return; }
+		if ( name.isUndefined() || args.isUndefined() ) { return; }
 
 		if ( i == 0 )
 		{

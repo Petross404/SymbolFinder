@@ -31,20 +31,24 @@
 #include <gsl/pointers>	   // for owner
 #include <vector>
 
+#include "interface/driverfactory.hpp"
 #include "interface/idriver.hpp"    // for StopIndex
 
 class Driver;
 class QPluginLoader;
 
 /*!
- * `Scanner` class creates an object that can hold an `Procees::IDriver*` instance.
+ * `Scanner` class can create and hold an `IDriver*` instance.
  *
- * `Scanner` inherits the `QObject` class and defines the interface that gives the
- * `MainWindow` the ability to I/O information to and from the supporteddrivers.
+ * `Scanner` inherits the `QObject` and DriverFactory class and defines
+ * the interface that gives the `MainWindow` the ability to I/O information
+ * to and from the supported driver plugins.
  *
  * As of now, the only supported drivers are `nm` and `scanelf`.
  */
-class Scanner: public QObject
+class Scanner
+	: public QObject
+	, public DriverFactory
 {
 	Q_OBJECT
 	Q_DISABLE_COPY_MOVE( Scanner )
@@ -165,8 +169,8 @@ signals:
 	 * This signal is emitted when the scanner finishes. After the IDriver
 	 * has finished, the buffers in QProcess are still intact. You can still
 	 * read any data that the process may have written before it finished.
-	 * \param exitCode is the exit code of the process (only valid for
-	 * normal exits) \param exitStatus is the exit status.
+	 * \param exitCode is the exit code of the process.
+	 * \param exitStatus is the exit status.
 	 */
 	void scanFinished( int exitCode, QProcess::ExitStatus exitStatus );
 
@@ -184,22 +188,22 @@ signals:
 	 */
 	void driverInitialized( const QString& name );
 
-	void pluginsLoaded( int numberOfPlugins, const QStringList& pluginNames );
+	void pluginsLoaded( const QStringList& pluginNames );
 
 	void aboutToClose();
 
 protected:
 	/*!
 	 * Set's the driver's name. This function is used only internally to re-init
-	 * the `Process::IDriver` instance, thus it isn't public.
+	 * the `IDriver` instance, thus it isn't public.
 	 * \param driverName is the driver's name.
 	 */
 	void setDriverName( const QString& driverName );
 
 protected slots:
-	/*! Read the stderr of the `Process::IDriver` to set the `m_stderr` */
+	/*! Read the stderr of the `IDriver` to set the `m_stderr` */
 	void setStandardErrSlot();
-	/*! Read the stdout of the `Process::IDriver` to set the `m_stdout` */
+	/*! Read the stdout of the `IDriver` to set the `m_stdout` */
 	void setStandardOutSlot();
 
 private:
@@ -207,7 +211,7 @@ private:
 	QByteArray m_stdout; /*!< stdout text from the underlying driver */
 	QByteArray m_stderr; /*!< stderr text from the underlying driver */
 
-	gsl::owner<Driver*> m_d{ nullptr }; /*!< Ptr to the `Process::IDriver` instance */
+	gsl::owner<Driver*> m_d{ nullptr }; /*!< Ptr to the `IDriver` instance */
 	std::vector<QPluginLoader*> m_plugins;
 
 	//! Private function to setup all the connections that have to be made

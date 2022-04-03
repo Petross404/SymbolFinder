@@ -43,6 +43,8 @@ NmDriver::NmDriver( QObject* parent )
 {
 	updateStopIndexSlot();
 
+	qDebug() << "I am nmdriver's ctor";
+
 	ConnectVerifier v;
 	v = connect( this,
 		     &Driver::stopIndexUpdated,
@@ -53,12 +55,13 @@ NmDriver::NmDriver( QObject* parent )
 
 NmDriver::~NmDriver() = default;
 
-Process::IDriver* NmDriver::create() { return new NmDriver{}; }
+IDriver* NmDriver::create( QObject* parent ) { return new NmDriver{ parent }; }
 
 void NmDriver::updateStopIndexSlot()
 {
 	const QString s{ "\b" };
-	auto	      i = m_effectiveArgList.join( ' ' ).indexOf( s );
+
+	int i = m_effectiveArgList.join( ' ' ).indexOf( s );
 	qDebug() << i;
 
 	if ( i > 0 )

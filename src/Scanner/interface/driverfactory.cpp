@@ -4,17 +4,20 @@
 
 #include "driverfactory.hpp"
 
-std::map<QString, CreateCallback> DriverFactory::tableOfDrivers;
+#include <qobject.h>
 
-DriverFactory::DriverFactory( QObject* parent )
-	: QObject{ parent }
-{}
+DriverFactory::DriverFactory()	= default;
+DriverFactory::~DriverFactory() = default;
 
-Process::IDriver* DriverFactory::createDriver( const QString& name )
+IDriver* DriverFactory::createDriver( const QString& name, QObject* parent )
 {
 	std::map<QString, CreateCallback>::iterator it{ tableOfDrivers.find( name ) };
 
-	if ( it != tableOfDrivers.end() ) { return ( it->second )(); }
+	if ( it != tableOfDrivers.end() )
+	{
+		auto d = ( *( it->second ) )( parent );
+		return d;
+	}
 
 	return nullptr;
 }
@@ -27,4 +30,9 @@ void DriverFactory::registerDriver( const QString& name, CreateCallback cb )
 void DriverFactory::unregisterDriver( const QString& name )
 {
 	tableOfDrivers.erase( name );
+}
+
+std::map<QString, CreateCallback> DriverFactory::registeredPlugins()
+{
+	return tableOfDrivers;
 }

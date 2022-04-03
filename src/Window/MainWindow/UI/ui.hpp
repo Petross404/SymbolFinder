@@ -34,7 +34,7 @@ class QGroupBox;	    // lines 35-35
 class QObject;
 class QPushButton;	 // lines 30-30
 class QTabWidget;	 // lines 32-32
-class QTextBrowser;	 // lines 36-36
+class QTextEdit;	 // lines 36-36
 class Scanner;		 // lines 26-26
 class SymbolLineEdit;	 // lines 39-39
 
@@ -77,12 +77,12 @@ public:
 	gsl::owner<SymbolLineEdit*>    symbolEdit();
 	gsl::owner<ArgumentsLineEdit*> argumentsEdit();
 
-	gsl::owner<QTabWidget*>	  tabWidget();
-	gsl::owner<QTextBrowser*> textBrowserStdOut();
-	gsl::owner<QTextBrowser*> textBrowserStdErr();
-	gsl::owner<QAction*>	  actionScan();
-	gsl::owner<QAction*>	  actionQuit();
-	gsl::owner<QAction*>	  actionAboutQt();
+	gsl::owner<QTabWidget*> tabWidget();
+	gsl::owner<QTextEdit*>	textBrowserStdOut();
+	gsl::owner<QTextEdit*>	textBrowserStdErr();
+	gsl::owner<QAction*>	actionScan();
+	gsl::owner<QAction*>	actionQuit();
+	gsl::owner<QAction*>	actionAboutQt();
 
 public slots:
 	void resizeLineEditWidgetsSlot( int w ) const;
@@ -102,12 +102,12 @@ private:
 	gsl::owner<SymbolLineEdit*>    m_symbolEdit;
 	gsl::owner<ArgumentsLineEdit*> m_argumentsEdit;
 
-	gsl::owner<QTabWidget*>	  m_tabWidget;
-	gsl::owner<QTextBrowser*> m_textBrowserStdOut;
-	gsl::owner<QTextBrowser*> m_textBrowserStdErr;
-	gsl::owner<QAction*>	  m_actionScan;
-	gsl::owner<QAction*>	  m_actionQuit;
-	gsl::owner<QAction*>	  m_actionAboutQt;
+	gsl::owner<QTabWidget*> m_tabWidget;
+	gsl::owner<QTextEdit*>	m_textEditStdOut;
+	gsl::owner<QTextEdit*>	m_textEditStdErr;
+	gsl::owner<QAction*>	m_actionScan;
+	gsl::owner<QAction*>	m_actionQuit;
+	gsl::owner<QAction*>	m_actionAboutQt;
 };
 }    // end namespace Ui
 #endif	  // INTERFACE_H

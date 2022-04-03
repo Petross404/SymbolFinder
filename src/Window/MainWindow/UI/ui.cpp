@@ -18,17 +18,17 @@
 
 #include "ui.hpp"
 
-#include <qaction.h>	     // for QAction
-#include <qbytearray.h>	     // for QByteArray
-#include <qcheckbox.h>	     // for QCheckBox
-#include <qcombobox.h>	     // for QComboBox
-#include <qgridlayout.h>     // for QGridLayout
-#include <qgroupbox.h>	     // for QGroupBox
-#include <qicon.h>	     // for QIcon
-#include <qpushbutton.h>     // for QPushButton
-#include <qstringlist.h>     // for QStringList
-#include <qtabwidget.h>	     // for QTabWidget
-#include <qtextbrowser.h>    // for QTextBrowser
+#include <qaction.h>	    // for QAction
+#include <qbytearray.h>	    // for QByteArray
+#include <qcheckbox.h>	    // for QCheckBox
+#include <qcombobox.h>	    // for QComboBox
+#include <qgridlayout.h>    // for QGridLayout
+#include <qgroupbox.h>	    // for QGroupBox
+#include <qicon.h>	    // for QIcon
+#include <qpushbutton.h>    // for QPushButton
+#include <qstringlist.h>    // for QStringList
+#include <qtabwidget.h>	    // for QTabWidget
+#include <qtextedit.h>	    // for QTextBrowser
 
 #include "../../../DriverWidgets/argumentslineedit.hpp"	   // for ArgumentsLineEdit
 #include "../../../DriverWidgets/symbollineedit.hpp"	   // for SymbolLineEdit
@@ -55,8 +55,8 @@ Ui::Interface::Interface( QWidget* parent )
 	, m_symbolEdit{ new SymbolLineEdit{ this } }
 	, m_argumentsEdit{ new ArgumentsLineEdit{ this } }
 	, m_tabWidget{ new QTabWidget{ this } }
-	, m_textBrowserStdOut{ new QTextBrowser{ this } }
-	, m_textBrowserStdErr{ new QTextBrowser{ this } }
+	, m_textEditStdOut{ new QTextEdit{ this } }
+	, m_textEditStdErr{ new QTextEdit{ this } }
 	, m_actionScan{ new QAction{ QIcon::fromTheme( "edit-find" ), tr( "Scan" ), this } }
 	, m_actionQuit{ new QAction{
 		  QIcon::fromTheme( "application-exit" ), tr( "&Quit" ), this } }
@@ -87,10 +87,10 @@ Ui::Interface::Interface( QWidget* parent )
 	m_buttonsGrid->addWidget( m_resetArgsBtn, 1, 3 );
 
 	m_tabsGrid->addWidget( m_tabWidget, 0, 0 );
-	QWidget* tabStdOut{ new QWidget{ this } };
-	QWidget* tabStdErr{ new QWidget{ this } };
-	m_tabWidget->insertTab( 0, tabStdOut, tr( "Standard Output " ) );
-	m_tabWidget->insertTab( 1, tabStdErr, tr( "Standard Error " ) );
+	m_textEditStdOut->setReadOnly( true );
+	m_tabWidget->insertTab( 0, m_textEditStdOut, tr( "Standard Output " ) );
+	m_textEditStdErr->setReadOnly( true );
+	m_tabWidget->insertTab( 1, m_textEditStdErr, tr( "Standard Error " ) );
 
 	m_tabWidget->setTabToolTip( 0, tr( "Standard output is redirected here" ) );
 	m_tabWidget->setTabToolTip(
@@ -145,18 +145,17 @@ gsl::owner<QPushButton*> Ui::Interface::resetArgsBtn()
 	return m_resetArgsBtn;
 }
 
-gsl::owner<QTextBrowser*> Ui::Interface::textBrowserStdErr()
+gsl::owner<QTextEdit*> Ui::Interface::textBrowserStdErr()
 {
-	return m_textBrowserStdErr;
+	return m_textEditStdErr;
 }
 
-gsl::owner<QTextBrowser*> Ui::Interface::textBrowserStdOut()
+gsl::owner<QTextEdit*> Ui::Interface::textBrowserStdOut()
 {
-	return m_textBrowserStdOut;
+	return m_textEditStdOut;
 }
 
 void Ui::Interface::resizeLineEditWidgetsSlot( int w ) const
 {
 	m_argumentsEdit->setMinimumWidth( w );
-	//+ btnMinWidth + advancedCheckBox->width()
 }
