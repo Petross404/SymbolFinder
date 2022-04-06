@@ -42,6 +42,8 @@ public:
 	 */
 	~SymbolLineEdit() override;
 
+	QString text() const;
+
 public slots:
 	/*!
 	 * Handle here what needs to be handled when the text is changed

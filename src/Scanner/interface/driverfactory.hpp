@@ -5,24 +5,31 @@
 #ifndef DRIVERFACTORY_H
 #define DRIVERFACTORY_H
 
+#include <qstring.h>
+
 #include <functional>
 #include <map>
-
-#include "driver.hpp"
+#include <utility>
 
 class QObject;
+class QPluginLoader;
+class IDriver;
 
-//! Alias for `std::function<IDriver*> (IDriver::*)(QObject*)>`
-using CreateCallback = std::function<IDriver* (IDriver::*)( QObject* )>;
+//! Alias for `std::function<IDriver* (IDriver::*)(QObject*)>`
+using callback_t = std::function<IDriver*( QObject* )>;
+
+//! Alias for `std::map<QString, callback_t>`
+using plugins_table_t = std::map<QString, callback_t>;
 
 /*!
- * Implements the factory pattern for `IDriver` plugins.
+ * Implements the factory pattern for the `IDriver` plugins.
  */
 class DriverFactory
 {
 public:
 	/*! Constructor */
 	DriverFactory();
+
 	/*! Destructor */
 	~DriverFactory();
 
@@ -31,25 +38,25 @@ public:
 	 * \param name is the driver's name
 	 * \param cb is the driver's callback to create an instance.
 	 */
-	void registerDriver( const QString& name, CreateCallback cb );
+	void registerPlugin( const QString& name, callback_t cb );
 
 	/*!
 	 * Uregister the specified driver.
 	 * \param name is the driver to be unregistered.
 	 */
-	void unregisterDriver( const QString& name );
+	void unregisterPlugin( const QString& name );
 
 	/*!
 	 * Get the table of the registered drivers.
 	 */
-	std::map<QString, CreateCallback> registeredPlugins();
+	std::map<QString, callback_t> registeredPlugins() const;
 
 	/*!
 	 */
 	IDriver* createDriver( const QString& name, QObject* parent );
 
 private:
-	std::map<QString, CreateCallback> tableOfDrivers;
+	plugins_table_t tableOfDrivers;
 };
 
 #endif	  // DRIVERFACTORY_H

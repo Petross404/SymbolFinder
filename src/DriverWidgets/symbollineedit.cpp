@@ -34,7 +34,8 @@ SymbolLineEdit::~SymbolLineEdit() = default;
 
 void SymbolLineEdit::focusInEvent( QFocusEvent* event )
 {
-	if ( text().contains( msg ) )
+	// Use QLineEdit::text() on purpose, this class hides this function with another!
+	if ( QLineEdit::text().contains( msg ) )
 	{
 		blockSignals( true );
 		clear();
@@ -72,14 +73,15 @@ void SymbolLineEdit::init()
 {
 	setMaximumHeight( 30 );
 	setClearButtonEnabled( true );
-
+	setAlignment( Qt::AlignCenter );
 	setToolTip( msg );
+
 	setStyleSheet( "QLineEdit{ "
 		       "padding: 0 8px;"
 		       "selection-background-color: black;"
 		       "selection-background-color: blue;"
 		       "font-family: Lucida Console, Courier New, monospace;"
-		       "font-size: 12px;}" );
+		       "font-size: 13px;}" );
 
 	connect( this,
 		 &SymbolLineEdit::keyEnterPressed,
@@ -94,30 +96,15 @@ void SymbolLineEdit::init()
 		 Qt::UniqueConnection );
 }
 
+QString SymbolLineEdit::text() const { return QLineEdit::text().remove( msg ); }
+
 void SymbolLineEdit::textChangedSlot( const QString& txt )
 {
 	if ( Q_LIKELY( txt != msg ) )
 	{
-		/*
-		 *
-		 */
-		int index = 0;
-		for ( size_t i = 0; i < txt.size(); i++ )
-		{
-			if ( QChar c = txt.at( i ); c.isSpace() ) { index++; }
-			else
-			{
-				break;
-			}
-		}
+		emit symbolChanged( txt );
 
-		// Keep the text without the first blanc characters.
-		QString rightmostText = txt.right( txt.size() - index );
-		qDebug() << "rightmostText" << rightmostText;
-
-		bool enableSearch = !( rightmostText.contains( " " ) );
-
-		emit symbolChanged( rightmostText );
+		bool enableSearch = txt.contains( " " );
 
 		if ( enableSearch != m_enableSearch )
 		{

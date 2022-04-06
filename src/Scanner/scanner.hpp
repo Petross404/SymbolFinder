@@ -29,10 +29,12 @@
 #include <stdint.h>	    // for uint16_t
 
 #include <gsl/pointers>	   // for owner
+#include <utility>
 #include <vector>
 
 #include "interface/driverfactory.hpp"
 #include "interface/idriver.hpp"    // for StopIndex
+#include "interface/pluginpair.hpp"
 
 class Driver;
 class QPluginLoader;
@@ -71,7 +73,7 @@ public:
 	 * Return the `IDriver` ptr (m_d for this class)
 	 * \return The driver that is selected.
 	 */
-	[[nodiscard]] Driver* driver() const;
+	[[nodiscard]] IDriver* driver() const;
 
 	/*! Return the default arguments that the active driver is called
 	 * \return A list of default arguments
@@ -141,7 +143,7 @@ public:
 	 */
 	void reset( const QString& driverName );
 
-	[[nodiscard]] std::vector<QPluginLoader*> plugins() const;
+	[[nodiscard]] std::vector<PluginDriver> plugins() const;
 
 	/*! Destructor */
 	~Scanner() override;
@@ -188,6 +190,8 @@ signals:
 	 */
 	void driverInitialized( const QString& name );
 
+	void driverReset( const QString& symbolName );
+
 	void pluginsLoaded( const QStringList& pluginNames );
 
 	void aboutToClose();
@@ -207,20 +211,28 @@ protected slots:
 	void setStandardOutSlot();
 
 private:
-	QString	   m_name;   /*!< Driver's name */
+	QString	   m_choosenDriverName; /*!< Driver's name */
 	QByteArray m_stdout; /*!< stdout text from the underlying driver */
 	QByteArray m_stderr; /*!< stderr text from the underlying driver */
 
-	gsl::owner<Driver*> m_d{ nullptr }; /*!< Ptr to the `IDriver` instance */
-	std::vector<QPluginLoader*> m_plugins;
+	gsl::owner<IDriver*> m_d{ nullptr }; /*!< Ptr to the `IDriver` instance */
+	std::vector<PluginDriver> m_plugins;
 
-	//! Private function to setup all the connections that have to be made
+	/*! Private function to setup all the connections that have to be made */
 	void setupConnections() const;
 
 	void init();
-	void init( const QString& driverName );
+	void init( const QString& driverName, bool calledFromConstructor = false );
 
 	int loadDriverPlugins();
+
+	/*!
+	 * Copy and set the newDriver in the paired driver (with QPluginLoader)
+	 * and also copy the value to m_d
+	 * \param pairDriver is the IDriver* paired with it's QPluginLoader
+	 * \param newDriver is the newly created IDriver*
+	 */
+	void setDriver( IDriver* pairDriver, callback_t createDriver );
 };
 
 #endif	  // SCANNER_H

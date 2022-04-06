@@ -416,7 +416,7 @@ void MainWindow::scannerPlugins()
 	for ( int i = 0; i < size; i++ )
 	{
 		auto jsonObject{
-			vecLoader.at( i )->metaData().value( "MetaData" ).toObject() };
+			vecLoader.at( i ).loader->metaData().value( "MetaData" ).toObject() };
 		auto name{ jsonObject.value( "name" ) };
 		auto args{ jsonObject.value( "arguments" ) };
 

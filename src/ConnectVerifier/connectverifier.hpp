@@ -25,6 +25,14 @@
 
 #include <qobject.h>
 
+#include <exception>
+#include <iostream>
+
+struct ConnectVerifierException: public std::exception
+{
+	const char* what() const throw();
+};
+
 /*!
  * `ConnectVerifier` provides a way to assert if some `QObject::connection`
  * silenty failed. It works only on Debug builds.

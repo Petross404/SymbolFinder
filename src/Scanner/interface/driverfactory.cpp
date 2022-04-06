@@ -6,33 +6,58 @@
 
 #include <qobject.h>
 
+#include <exception>
+#include <iostream>
+
+#include "idriver.hpp"
+
 DriverFactory::DriverFactory()	= default;
 DriverFactory::~DriverFactory() = default;
 
 IDriver* DriverFactory::createDriver( const QString& name, QObject* parent )
 {
-	std::map<QString, CreateCallback>::iterator it{ tableOfDrivers.find( name ) };
+	plugins_table_t::const_iterator it{ tableOfDrivers.find( name ) };
 
 	if ( it != tableOfDrivers.end() )
 	{
-		auto d = ( *( it->second ) )( parent );
+		// std::map<QString, callback_t>, the callback is second.
+		IDriver* d{ ( it->second )( parent ) };
+
+		if ( d == nullptr )
+		{
+			const char* msg{
+			QObject::tr( "Driver is nullptr" ).toLatin1() };
+				throw std::runtime_error( msg );
+		}
+
 		return d;
 	}
 
 	return nullptr;
 }
 
-void DriverFactory::registerDriver( const QString& name, CreateCallback cb )
+void DriverFactory::registerPlugin( const QString& name, callback_t cb )
 {
-	tableOfDrivers[name] = cb;
+	// Make sure the driver name doesn't exist already with another cb
+	plugins_table_t::const_iterator it{ tableOfDrivers.find( name ) };
+
+	if ( it != tableOfDrivers.end() )
+	{
+		if ( it->second.target_type() != cb.target_type() )
+		{
+			tableOfDrivers.at( name ) = cb;
+		}
+	}
+
+	tableOfDrivers.insert( { name, cb } );
 }
 
-void DriverFactory::unregisterDriver( const QString& name )
+void DriverFactory::unregisterPlugin( const QString& name )
 {
 	tableOfDrivers.erase( name );
 }
 
-std::map<QString, CreateCallback> DriverFactory::registeredPlugins()
+std::map<QString, callback_t> DriverFactory::registeredPlugins() const
 {
 	return tableOfDrivers;
 }

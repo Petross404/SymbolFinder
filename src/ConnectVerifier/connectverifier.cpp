@@ -18,19 +18,23 @@
 
 #include "connectverifier.hpp"
 
-/**********C++ Headers***********/
-#include <cassert>
-/********************************/
+const char* g_msg{ "Connection failed" };
+
+const char* ConnectVerifierException::what() const throw()
+{
+	return QObject::tr( g_msg ).toLatin1();
+}
 
 ConnectVerifier::ConnectVerifier( const bool& b )
 {
-	assert( b );
+	if ( !b ) { throw ConnectVerifierException{}; }
 	(void)( b );
 }
 
 ConnectVerifier& ConnectVerifier::operator=( const bool& b )
 {
-	assert( b );
+	if ( !b ) { throw ConnectVerifierException{}; }
+
 	(void)( b );
 	return *this;
 }

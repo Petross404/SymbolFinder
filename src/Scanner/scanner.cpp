@@ -44,17 +44,17 @@ Scanner::Scanner( QObject* parent )
 	: QObject{ parent }
 	, DriverFactory{}
 {
-	init();
-	setupConnections();
+	bool calledFromCtor = true;
+	init( m_choosenDriverName, calledFromCtor );
 }
 
 Scanner::Scanner( const QString& driverName, QObject* parent )
 	: QObject{ parent }
 	, DriverFactory{}
-	, m_name{ driverName }
+	, m_choosenDriverName{ driverName }
 {
-	init();
-	setupConnections();
+	bool calledFromCtor = true;
+	init( m_choosenDriverName, calledFromCtor );
 }
 
 Scanner::~Scanner() = default;
@@ -66,32 +66,53 @@ QStringList Scanner::defaultInvocation() const
 
 QStringList Scanner::invocation() const { return driver()->invocation(); }
 
-// Call setInvocation with m_secretSetResetArgument
 void Scanner::resetInvocation()
 {
+	// Call setInvocation with m_resetArg
 	setInvocation( defaultInvocation().join( spaceChar ), m_resetArg );
 }
 
-Driver* Scanner::driver() const { return m_d; }
+IDriver* Scanner::driver() const { return m_d; }
 
-void Scanner::init( const QString& driverName )
+void Scanner::init( const QString& driverName, bool calledFromCtor )
 {
-	setDriverName( driverName );
-	init();
+	try
+	{
+		setDriverName( driverName );
+		init();
+
+		if ( calledFromCtor )
+		{
+			setupConnections();
+		}
+	}
+	catch ( ConnectVerifierException& e )
+	{
+		std::cerr << e.what() << std::endl;
+	}
+	catch ( std::exception& e )
+	{
+		std::cerr << e.what() << std::endl;
+	}
 }
 
+/*
+ * init can be ran multiple times; not just the first time Scanner is contructed.
+ */
 void Scanner::init()
 {
 	// Only run the first time ie when m_plugins is empty
-	if ( m_plugins.empty() )
+	if ( m_plugins.empty() && m_choosenDriverName.isEmpty() )
 	{
 		if ( loadDriverPlugins() != 0 )
 		{
 			static QStringList pluginNames;
-			for ( QPluginLoader* loader : m_plugins )
+			for ( PluginDriver pair : m_plugins )
 			{
 				QJsonObject jObject{
-					loader->metaData().value( "MetaData" ).toObject() };
+					pair.loader->metaData()
+						.value( "MetaData" )
+						.toObject() };
 				pluginNames << jObject.value( "name" ).toString();
 			}
 			emit pluginsLoaded( pluginNames );
@@ -99,68 +120,82 @@ void Scanner::init()
 		}
 	}
 
-	if ( !driver() )
+	if ( !driver() || m_choosenDriverName.isEmpty() )
 	{
-		qDebug() << "m_name" << m_name;
+		qDebug() << "m_name" << m_choosenDriverName;
 		int i = -1;
-		for ( QPluginLoader* loader : m_plugins )
+		for ( PluginDriver& pair : m_plugins )
 		{
 			i++;
-			QJsonValue name{ loader->metaData()
+
+			QJsonValue name{ pair.loader->metaData()
 						 .value( "MetaData" )
 						 .toObject()
 						 .value( "name" ) };
 
 			if ( name.isUndefined() )
 			{
-				Q_ASSERT( "JSON key name is undefined!" );
-				return;
+				throw tr( "JSON name is undefined!" );
 			}
 
 			// TODO !!! Make scanner{} to NOT initialize m_name, and append to m_d the first plugin.
 			// TODO Later, inform the UI about the plugins and let it handle the insertion. For now,
 			//  m_d must be initialized to the first plugin, and inform the combobox about it to select it visually.
-			const QString currentName{ loader->metaData()
+			const QString currentName{ pair.loader->metaData()
 							   .value( "MetaData" )
 							   .toObject()
 							   .value( "name" )
 							   .toString() };
 
-			if ( auto d = qobject_cast<Driver*>( loader->instance() );
-			     d != nullptr && !m_name.isEmpty() )
+			/*
+			 * It make sense to initialize m_d to the first available plugin as none is
+			 * selected when the UI first starts.
+			 */
+			if ( auto d = qobject_cast<IDriver*>( pair.loader->instance() );
+			     d != nullptr && !m_choosenDriverName.isEmpty() )
 			{
-				if ( m_name == currentName )
+				if ( m_choosenDriverName == currentName )
 				{
-					m_d = dynamic_cast<Driver*>(
-						createPlugin( m_name ) );
+					m_d = qobject_cast<IDriver*>(pair.loader->instance());
+// 					setDriver( pair.driver,
+// 						   std::bind( &Scanner::createDriver,
+// 							      this,
+// 							      currentName,
+// 							      this ) );
 				}
 			}
-			else if ( m_name.isEmpty() && i == 0 )
+			else if ( m_choosenDriverName.isEmpty() && i == 0 )
 			{
-				m_d = dynamic_cast<Driver*>( createPlugin( currentName ) );
+				m_d = qobject_cast<IDriver*>(pair.loader->instance());
+// 				setDriver( pair.driver,
+// 					   std::bind( &Scanner::createDriver,
+// 						      this,
+// 						      currentName,
+// 						      this ) );
 			}
-
-			std::cout << name.toString().toStdString() << "...."
-				  << std::endl;
 		}
 	}
 	else
 	{
-		for ( QPluginLoader* loader : m_plugins )
+		for ( PluginDriver& pair : m_plugins )
 		{
 			const QJsonObject jObject{
-				loader->metaData().value( "MetaData" ).toObject() };
+				pair.loader->metaData().value( "MetaData" ).toObject() };
 			const QString currentPluginName{
 				jObject.value( "name" ).toString() };
 
-			if ( m_name == jObject.value( "name" ).toString() )
+			if ( m_choosenDriverName == jObject.value( "name" ).toString() )
 			{
-				m_d = dynamic_cast<Driver*>(
-					createPlugin( currentPluginName ) );
-
-				Q_ASSERT_X( m_d != nullptr,
-					    tr( "m_d failed" ).toLocal8Bit(),
-					    tr( "" ).toLocal8Bit() );
+				// Allocate a new Driver, if there isn't already created for this plugin.
+				if ( pair.driver == nullptr || pair.driver != m_d )
+				{
+					m_d = qobject_cast<IDriver*>(pair.loader->instance());
+// 					setDriver( pair.driver,
+// 						   std::bind( &Scanner::createDriver,
+// 							      this,
+// 							      currentPluginName,
+// 							      this ) );
+				}
 
 				qDebug() << driver()->driverName()
 					 << driver()->defaultInvocation().join( spaceChar );
@@ -193,7 +228,7 @@ int Scanner::loadDriverPlugins()
 
 	QDir pluginDir{ appDir };
 
-	qDebug() << QCoreApplication::libraryPaths();
+	// qDebug() << QCoreApplication::libraryPaths();
 	if ( isRunningInRepo )
 	{
 		if ( !pluginDir.cd( "src/Scanner/plugins" ) )
@@ -213,7 +248,7 @@ int Scanner::loadDriverPlugins()
 	 * Read the contents of the directory and keep only the libraries
 	 * and those who aren't symlinks.
 	 */
-	QStringList pluginList;
+	QStringList pluginNameList;
 	for ( const QFileInfo& fileInfo : pluginDir.entryInfoList( QDir::Files ) )
 	{
 		if ( QLibrary::isLibrary( fileInfo.absoluteFilePath() )
@@ -225,26 +260,32 @@ int Scanner::loadDriverPlugins()
 		)
 		{
 			qDebug() << "fileInfo" << fileInfo.fileName();
-			pluginList.append( fileInfo.fileName() );
+			pluginNameList.append( fileInfo.fileName() );
 		}
 	}
 
-	for ( const QString& fileName : pluginList )
+	/*
+	 * Straightforward enough, iterate the plugins and store their
+	 * QPluginLoaders. Register the plugins with their respective "create"
+	 * function so that later we can instantiate them based on their name.
+	 */
+	for ( const QString& fileName : pluginNameList )
 	{
 		QPluginLoader* loader{ new QPluginLoader{
 			pluginDir.absoluteFilePath( fileName ),
 			this } };
 
-		if ( auto d{ qobject_cast<IDriver*>( loader->instance() ) }; d != nullptr )
+		if ( auto dr{ qobject_cast<IDriver*>( loader->instance() ) }; dr != nullptr )
 		{
-			m_plugins.push_back( loader );
+			// push_back current plugin's loader and nullptr for IDriver for now.
+			m_plugins.push_back( PluginDriver{ loader, dr } );
 
-			QJsonObject jObject{ loader->metaData().value("MetaData").toObject() };
+			QJsonObject jObject{
+				loader->metaData().value( "MetaData" ).toObject() };
 
-			registerDriver( jObject.value("name").toString(),
-					std::bind( &IDriver::create, d, this ) );
-
-			qDebug() << d->driverName();
+			// Register the plugin, it will be retrieved later to be instantiated.
+			registerPlugin( jObject.value( "name" ).toString(),
+					std::bind( &IDriver::create, dr, this ) );
 		}
 		else
 		{
@@ -255,59 +296,72 @@ int Scanner::loadDriverPlugins()
 	return m_plugins.size();
 }
 
-std::vector<QPluginLoader*> Scanner::plugins() const { return m_plugins; }
+std::vector<PluginDriver> Scanner::plugins() const { return m_plugins; }
 
 void Scanner::setupConnections() const
 {
+	// When no driver plugins are found, this shouldn't crash.
+	Driver* d{ static_cast<Driver*>( driver() ) };
+	if ( d == nullptr ) { return; }
+
 	ConnectVerifier v;
 
-	// When no driver plugins are found, this shouldn't crash.
-	if ( Driver * d{ driver() }; d != nullptr )
-	{
-		/*
-		 * When the Driver is done producing output in the stdout,
-		 * set the relevant property of Scanner by reading the former.
-		 */
-		v = connect( d,
-			     &QProcess::readyReadStandardOutput,
-			     this,
-			     &Scanner::setStandardOutSlot,
-			     Qt::UniqueConnection );
+	//v = false;
+	/*
+	 * When the Driver is done producing output in the stdout,
+	 * set the relevant property of Scanner by reading the former.
+	 */
+	v = connect( d,
+		     &QProcess::readyReadStandardOutput,
+		     this,
+		     &Scanner::setStandardOutSlot,
+		     Qt::UniqueConnection );
 
-		/*
-		 * When the Driver is done producing output in the stderr,
-		 * set the relevant property of Scanner by reading the former.
-		 */
-		v = connect( d,
-			     &QProcess::readyReadStandardError,
-			     this,
-			     &Scanner::setStandardErrSlot,
-			     Qt::UniqueConnection );
+	/*
+	 * When the Driver is done producing output in the stderr,
+	 * set the relevant property of Scanner by reading the former.
+	 */
+	v = connect( d,
+		     &QProcess::readyReadStandardError,
+		     this,
+		     &Scanner::setStandardErrSlot,
+		     Qt::UniqueConnection );
 
-		// Emit a signal when the driver is started.
-		v = connect( d, &QProcess::started, this, &Scanner::scanStarted, Qt::UniqueConnection );
+	// Emit a signal when the driver is started.
+	v = connect( d, &QProcess::started, this, &Scanner::scanStarted, Qt::UniqueConnection );
 
-		// Emit a signal when the driver is finished.
-		v = connect( d,
-			     qOverload<int, QProcess::ExitStatus>( &QProcess::finished ),
-			     this,
-			     &Scanner::scanFinished,
-			     Qt::UniqueConnection );
+	// Emit a signal when the driver is finished.
+	v = connect( d,
+		     qOverload<int, QProcess::ExitStatus>( &QProcess::finished ),
+		     this,
+		     &Scanner::scanFinished,
+		     Qt::UniqueConnection );
 
-		// Emit a signal when the driver is (re)initialized.
-		v = connect( d,
-			     &Driver::driverInitialized,
-			     this,
-			     &Scanner::driverInitialized,
-			     Qt::UniqueConnection );
+	// Emit a signal when the driver is (re)initialized.
+	v = connect( d,
+		     &Driver::driverInitialized,
+		     this,
+		     &Scanner::driverInitialized,
+		     Qt::UniqueConnection );
 
-		// Emit a signal when the driver's symbol, internally changed size.
-		v = connect( d,
-			     &Driver::symbolSizeChanged,
-			     this,
-			     &Scanner::symbolSizeChanged,
-			     Qt::UniqueConnection );
-	}
+	v = connect( this,
+		     &Scanner::driverInitialized,
+		     this,
+		     &Scanner::driverInitializedSlot,
+		     Qt::UniqueConnection );
+
+	v = connect( this,
+		     &Scanner::driverReset,
+		     this,
+		     &Scanner::driverInitializedSlot,
+		     Qt::UniqueConnection );
+
+	// Emit a signal when the driver's symbol, internally changed size.
+	v = connect( d,
+		     &Driver::symbolSizeChanged,
+		     this,
+		     &Scanner::symbolSizeChanged,
+		     Qt::UniqueConnection );
 }
 
 void Scanner::performScanSlot() const { driver()->exec(); }
@@ -315,22 +369,22 @@ void Scanner::performScanSlot() const { driver()->exec(); }
 bool Scanner::canQuit() const
 {
 	bool quit = true;
-	if ( Driver * d{ driver() }; d != nullptr )
+	if ( IDriver * d{ driver() }; d != nullptr )
 	{
 		quit = d->canDriverQuit();
+	}
+	else
+	{
+		throw std::runtime_error( tr( "Driver is null" ).toLatin1() );
 	}
 	return quit;
 }
 
-void Scanner::reset( const QString& driverName )
-{
-	init( driverName );
-	setSymbolName( symbolName() );
-}
+void Scanner::reset( const QString& driverName ) { init( driverName ); }
 
 void Scanner::setDriverName( const QString& driverName )
 {
-	m_name = driverName;
+	m_choosenDriverName = driverName;
 }
 
 void Scanner::setSymbolName( const QString& symbol )
@@ -423,6 +477,7 @@ void Scanner::setInvocation( const QString& arguments, const QString& secret )
 
 void Scanner::driverInitializedSlot( const QString& symbol )
 {
+	resetInvocation();
 	setSymbolName( symbol );
 }
 
@@ -432,14 +487,43 @@ QString Scanner::symbolName() const { return m_d->symbolName(); }
 
 void Scanner::setStandardOutSlot()
 {
-	m_stdout = m_d->readAllStandardOutput();
+	m_stdout = static_cast<Driver*>( m_d )->readAllStandardOutput();
 	qDebug() << m_stdout;
 }
 
-void Scanner::setStandardErrSlot() { m_stderr = m_d->readAllStandardError(); }
+void Scanner::setStandardErrSlot()
+{
+	m_stderr = static_cast<Driver*>( m_d )->readAllStandardError();
+}
 
 QByteArray Scanner::standardOut() const { return m_stdout; }
 
 QByteArray Scanner::standardError() const { return m_stderr; }
 
 void Scanner::aboutToCloseSlot() {}
+
+void Scanner::setDriver( IDriver* pairDriver, callback_t createDriver )
+{
+	// Throw if newDriver is null and append it to the driver that is paired with QPluginLoader.
+	IDriver* newDriver{ createDriver( this ) };
+	if ( !newDriver )
+	{
+		throw std::runtime_error( tr( "Driver is null" ).toLatin1() );
+	}
+	pairDriver = newDriver;
+
+	// Now get busy with m_d
+	IDriver* oldDriver = driver();
+	if ( oldDriver != newDriver )
+	{
+		m_d = newDriver;
+
+		QString symbolName{ "" };
+		if ( oldDriver != nullptr )
+		{
+			symbolName = oldDriver->symbolName();
+		}
+
+		emit driverReset( symbolName );
+	}
+}

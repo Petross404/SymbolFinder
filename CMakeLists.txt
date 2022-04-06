@@ -42,6 +42,9 @@ handle_dependency_clang_format()
 #Add libscanner here.
 add_subdirectory(src/Scanner)
 
+##Add Exceptions here.
+add_subdirectory(src/Exceptions)
+
 #Set source code variables.
 set(DriverWidgets_SRC
 	src/DriverWidgets/argumentslineedit.cpp

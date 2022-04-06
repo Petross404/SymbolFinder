@@ -32,6 +32,7 @@
 
 class QObject;	  // lines 12-12
 
+const QChar	  spaceChar{ ' ' };
 const QString	  g_program{ "nm" };
 const QStringList g_defaultArguments{
 	"-Dn -o --defined-only /lib/* /usr/lib64/* 2> /dev/null | grep "
@@ -41,7 +42,7 @@ NmDriver::NmDriver( QObject* parent )
 	: Driver{ g_program, g_defaultArguments, parent }
 	, m_jsonFile{ "nmplugin.json", this }
 {
-	updateStopIndexSlot();
+	//updateStopIndexSlot();
 
 	qDebug() << "I am nmdriver's ctor";
 
@@ -59,10 +60,13 @@ IDriver* NmDriver::create( QObject* parent ) { return new NmDriver{ parent }; }
 
 void NmDriver::updateStopIndexSlot()
 {
+	std::exit(-1);
 	const QString s{ "\b" };
 
-	int i = m_effectiveArgList.join( ' ' ).indexOf( s );
-	qDebug() << i;
+	QString strArgs{ m_effectiveArgList.join( spaceChar ) };
+
+	int i = strArgs.indexOf( s );
+	qDebug() << "index of" << s << i;
 
 	if ( i > 0 )
 	{

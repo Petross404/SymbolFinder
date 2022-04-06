@@ -38,9 +38,7 @@ public:
 	};
 	Q_ENUM( Type )
 
-	/*!
-	 * Default constructor
-	 */
+	/*! Default constructor */
 	explicit MessageWidget( const QString&	    text,
 				MessageWidget::Type type   = Type::Information,
 				QWidget*	    parent = nullptr,
