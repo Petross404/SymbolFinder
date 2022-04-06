@@ -25,9 +25,8 @@ IDriver* DriverFactory::createDriver( const QString& name, QObject* parent )
 
 		if ( d == nullptr )
 		{
-			const char* msg{
-			QObject::tr( "Driver is nullptr" ).toLatin1() };
-				throw std::runtime_error( msg );
+			const char* msg{ QObject::tr( "Driver is nullptr" ).toLatin1() };
+			throw std::runtime_error( msg );
 		}
 
 		return d;

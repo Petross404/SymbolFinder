@@ -10,8 +10,7 @@ const char* g_msg{ "Connection failed!" };
 
 ConnectException::ConnectException( const char* msg )
 	: m_msg{ QObject::tr( msg ).toLocal8Bit().data() }
-{
-}
+{}
 
 const char* ConnectException::what() const throw()
 {

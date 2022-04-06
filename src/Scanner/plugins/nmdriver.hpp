@@ -36,9 +36,6 @@ class QObject;
 class NmDriver: public Driver
 {
 	Q_OBJECT
-	Q_PLUGIN_METADATA( IID "NmDriver" FILE "nmplugin.json" )
-	Q_INTERFACES( IDriver )
-
 	Q_DISABLE_COPY_MOVE( NmDriver )
 
 public:
@@ -48,10 +45,12 @@ public:
 	 */
 	NmDriver( QObject* parent = nullptr );
 
-	IDriver* create( QObject* parent );
-
 	/*! Destructor */
 	~NmDriver() override;
+
+	static IDriver*	   create( QObject* parent );
+	static QString	   driverNameStatic();
+	static QStringList argumentsStatic();
 
 private slots:
 	void updateStopIndexSlot();

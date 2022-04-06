@@ -47,14 +47,6 @@ void Driver::init() { emit driverInitialized( m_program ); }
 
 Driver::~Driver() = default;
 
-IDriver* Driver::create( QObject* parent )
-{
-	Q_UNUSED( parent )
-	qDebug() << "Create in Driver";
-
-	return this;
-}
-
 QStringList Driver::defaultInvocation() const { return m_defArgList; }
 
 QString Driver::driverName() const { return m_program; }

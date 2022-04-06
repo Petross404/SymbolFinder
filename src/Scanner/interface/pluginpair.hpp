@@ -5,13 +5,16 @@
 #ifndef PLUGINPAIR_H
 #define PLUGINPAIR_H
 
-class QPluginLoader;
+#include <QString>
+#include <QStringList>
+
 class IDriver;
 
 struct PluginDriver
 {
-	QPluginLoader* loader;
-	IDriver*       driver;
+	QString	    driverName;
+	QStringList defArguments;
+	IDriver*    driver;
 };
 
 #endif

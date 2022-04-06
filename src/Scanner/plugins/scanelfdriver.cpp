@@ -83,7 +83,8 @@ void ScanelfDriver::updateStopIndexSlot()
 	}
 }
 
-IDriver* ScanelfDriver::create( QObject* parent )
-{
-	return new ScanelfDriver{ parent };
-}
+IDriver* create( QObject* parent ) { return new ScanelfDriver{ parent }; }
+
+QString ScanelfDriver::driverNameStatic() { return g_program; }
+
+QStringList ScanelfDriver::argumentsStatic() { return g_defaultArguments; }

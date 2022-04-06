@@ -211,6 +211,7 @@ protected slots:
 	void setStandardOutSlot();
 
 private:
+	uint32_t   m_pluginCount = 0;
 	QString	   m_choosenDriverName; /*!< Driver's name */
 	QByteArray m_stdout; /*!< stdout text from the underlying driver */
 	QByteArray m_stderr; /*!< stderr text from the underlying driver */

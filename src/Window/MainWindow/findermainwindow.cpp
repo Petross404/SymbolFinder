@@ -415,19 +415,16 @@ void MainWindow::scannerPlugins()
 
 	for ( int i = 0; i < size; i++ )
 	{
-		auto jsonObject{
-			vecLoader.at( i ).loader->metaData().value( "MetaData" ).toObject() };
-		auto name{ jsonObject.value( "name" ) };
-		auto args{ jsonObject.value( "arguments" ) };
-
-		if ( name.isUndefined() || args.isUndefined() ) { return; }
+		auto plugin{ vecLoader.at( i ) };
+		auto name{ plugin.driverName };
+		auto args{ plugin.defArguments };
 
 		if ( i == 0 )
 		{
-			firstPluginName = name.toString();
-			firstPluginArgs = args.toString();
+			firstPluginName = name;
+			firstPluginArgs = args.join( spaceChar );
 		}
-		m_ui->scannersBox()->addItem( name.toString() );
+		m_ui->scannersBox()->addItem( name );
 	}
 
 	if ( m_ui->argumentsEdit()->text() != firstPluginArgs )

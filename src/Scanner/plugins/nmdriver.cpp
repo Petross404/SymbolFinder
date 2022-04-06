@@ -42,7 +42,7 @@ NmDriver::NmDriver( QObject* parent )
 	: Driver{ g_program, g_defaultArguments, parent }
 	, m_jsonFile{ "nmplugin.json", this }
 {
-	//updateStopIndexSlot();
+	// updateStopIndexSlot();
 
 	qDebug() << "I am nmdriver's ctor";
 
@@ -56,11 +56,9 @@ NmDriver::NmDriver( QObject* parent )
 
 NmDriver::~NmDriver() = default;
 
-IDriver* NmDriver::create( QObject* parent ) { return new NmDriver{ parent }; }
-
 void NmDriver::updateStopIndexSlot()
 {
-	std::exit(-1);
+	std::exit( -1 );
 	const QString s{ "\b" };
 
 	QString strArgs{ m_effectiveArgList.join( spaceChar ) };
@@ -77,3 +75,9 @@ void NmDriver::updateStopIndexSlot()
 		emit stopIndexUpdatingFailed();
 	}
 }
+
+IDriver* create( QObject* parent ) { return new NmDriver{ parent }; }
+
+QString NmDriver::driverNameStatic() { return g_program; }
+
+QStringList NmDriver::argumentsStatic() { return g_defaultArguments; }

@@ -5,16 +5,15 @@
 #ifndef CONNECTEXCEPTION_H
 #define CONNECTEXCEPTION_H
 
-#include <stdexcept>
 #include <exception>
+#include <stdexcept>
 #include <string>
 
-class ConnectException : std::exception
+class ConnectException: std::exception
 {
-
 public:
 	ConnectException() = default;
-	explicit ConnectException(const char* msg);
+	explicit ConnectException( const char* msg );
 
 	const char* what() const throw() override;
 
@@ -22,4 +21,4 @@ private:
 	std::string m_msg;
 };
 
-#endif // CONNECTEXCEPTION_H
+#endif	  // CONNECTEXCEPTION_H

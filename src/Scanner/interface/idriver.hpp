@@ -127,8 +127,6 @@ public:
 	 */
 	[[nodiscard]] virtual StopIndex stopIndex() const = 0;
 
-	[[nodiscard]] virtual IDriver* create( QObject* parent ) = 0;
-
 protected:
 	/*!
 	 *
@@ -140,9 +138,5 @@ protected:
 	 */
 	virtual void setDefaultInvocation( const QStringList& argList ) = 0;
 };
-
-#define IDriver_iid "org.qt.IDriver"
-
-Q_DECLARE_INTERFACE( IDriver, IDriver_iid )
 
 #endif	  // IDRIVER_H

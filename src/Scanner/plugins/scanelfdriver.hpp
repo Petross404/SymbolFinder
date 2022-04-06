@@ -36,9 +36,6 @@ class QObject;
 class ScanelfDriver: public Driver
 {
 	Q_OBJECT
-	Q_PLUGIN_METADATA( IID "ScanelfDriver" FILE "scanelfplugin.json" )
-	Q_INTERFACES( IDriver )
-
 	Q_DISABLE_COPY_MOVE( ScanelfDriver )
 
 public:
@@ -48,10 +45,12 @@ public:
 	 */
 	ScanelfDriver( QObject* parent = nullptr );
 
-	IDriver* create( QObject* parent );
-
 	/*! Default destructor */
 	~ScanelfDriver() override;
+
+	static IDriver*	   create( QObject* parent );
+	static QString	   driverNameStatic();
+	static QStringList argumentsStatic();
 
 private slots:
 	void updateStopIndexSlot();

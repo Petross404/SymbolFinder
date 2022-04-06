@@ -22,7 +22,8 @@
 #include <qchar.h>    // for QChar
 #include <qdebug.h>
 #include <qdir.h>
-#include <qglobal.h>	   // for QNonConstOverload
+#include <qglobal.h>	// for QNonConstOverload
+#include <qlibrary.h>
 #include <qnamespace.h>	   // for UniqueConnection
 #include <qpluginloader.h>
 
@@ -39,6 +40,10 @@ constexpr int	NoPlugin = -1;
 
 const QString m_symbolArg{ "#symbol#" }; /*<! Call from setSymbolName */
 const QString m_resetArg{ "#default#" }; /*<! Call from resetInvocation */
+
+using CreateCallBack	 = IDriver* (*)( QObject* parent );
+using DriverNameCallback = QString ( * )();
+using ArgumentsCallBack	 = QStringList ( * )();
 
 Scanner::Scanner( QObject* parent )
 	: QObject{ parent }
@@ -81,16 +86,11 @@ void Scanner::init( const QString& driverName, bool calledFromCtor )
 		setDriverName( driverName );
 		init();
 
-		if ( calledFromCtor )
-		{
-			setupConnections();
-		}
-	}
-	catch ( ConnectVerifierException& e )
+		if ( calledFromCtor ) { setupConnections(); }
+	} catch ( ConnectVerifierException& e )
 	{
 		std::cerr << e.what() << std::endl;
-	}
-	catch ( std::exception& e )
+	} catch ( std::exception& e )
 	{
 		std::cerr << e.what() << std::endl;
 	}
@@ -102,18 +102,14 @@ void Scanner::init( const QString& driverName, bool calledFromCtor )
 void Scanner::init()
 {
 	// Only run the first time ie when m_plugins is empty
-	if ( m_plugins.empty() && m_choosenDriverName.isEmpty() )
+	if ( m_pluginCount && m_choosenDriverName.isEmpty() )
 	{
 		if ( loadDriverPlugins() != 0 )
 		{
 			static QStringList pluginNames;
 			for ( PluginDriver pair : m_plugins )
 			{
-				QJsonObject jObject{
-					pair.loader->metaData()
-						.value( "MetaData" )
-						.toObject() };
-				pluginNames << jObject.value( "name" ).toString();
+				pluginNames << pair.driverName;
 			}
 			emit pluginsLoaded( pluginNames );
 			qDebug() << pluginNames;
@@ -128,50 +124,36 @@ void Scanner::init()
 		{
 			i++;
 
-			QJsonValue name{ pair.loader->metaData()
-						 .value( "MetaData" )
-						 .toObject()
-						 .value( "name" ) };
-
-			if ( name.isUndefined() )
-			{
-				throw tr( "JSON name is undefined!" );
-			}
-
 			// TODO !!! Make scanner{} to NOT initialize m_name, and append to m_d the first plugin.
 			// TODO Later, inform the UI about the plugins and let it handle the insertion. For now,
 			//  m_d must be initialized to the first plugin, and inform the combobox about it to select it visually.
-			const QString currentName{ pair.loader->metaData()
-							   .value( "MetaData" )
-							   .toObject()
-							   .value( "name" )
-							   .toString() };
+			const QString currentName{ pair.driverName };
 
 			/*
 			 * It make sense to initialize m_d to the first available plugin as none is
 			 * selected when the UI first starts.
 			 */
-			if ( auto d = qobject_cast<IDriver*>( pair.loader->instance() );
+			if ( auto d = static_cast<IDriver*>( pair.driver );
 			     d != nullptr && !m_choosenDriverName.isEmpty() )
 			{
 				if ( m_choosenDriverName == currentName )
 				{
-					m_d = qobject_cast<IDriver*>(pair.loader->instance());
-// 					setDriver( pair.driver,
-// 						   std::bind( &Scanner::createDriver,
-// 							      this,
-// 							      currentName,
-// 							      this ) );
+					m_d = static_cast<IDriver*>( pair.driver );
+					setDriver( pair.driver,
+						   std::bind( &Scanner::createDriver,
+							      this,
+							      currentName,
+							      this ) );
 				}
 			}
 			else if ( m_choosenDriverName.isEmpty() && i == 0 )
 			{
-				m_d = qobject_cast<IDriver*>(pair.loader->instance());
-// 				setDriver( pair.driver,
-// 					   std::bind( &Scanner::createDriver,
-// 						      this,
-// 						      currentName,
-// 						      this ) );
+				m_d = static_cast<IDriver*>( pair.driver );
+				setDriver( pair.driver,
+					   std::bind( &Scanner::createDriver,
+						      this,
+						      currentName,
+						      this ) );
 			}
 		}
 	}
@@ -179,22 +161,17 @@ void Scanner::init()
 	{
 		for ( PluginDriver& pair : m_plugins )
 		{
-			const QJsonObject jObject{
-				pair.loader->metaData().value( "MetaData" ).toObject() };
-			const QString currentPluginName{
-				jObject.value( "name" ).toString() };
-
-			if ( m_choosenDriverName == jObject.value( "name" ).toString() )
+			if ( m_choosenDriverName == pair.driverName )
 			{
 				// Allocate a new Driver, if there isn't already created for this plugin.
 				if ( pair.driver == nullptr || pair.driver != m_d )
 				{
-					m_d = qobject_cast<IDriver*>(pair.loader->instance());
-// 					setDriver( pair.driver,
-// 						   std::bind( &Scanner::createDriver,
-// 							      this,
-// 							      currentPluginName,
-// 							      this ) );
+					m_d = static_cast<IDriver*>( pair.driver );
+					setDriver( pair.driver,
+						   std::bind( &Scanner::createDriver,
+							      this,
+							      m_choosenDriverName,
+							      this ) );
 				}
 
 				qDebug() << driver()->driverName()
@@ -265,27 +242,29 @@ int Scanner::loadDriverPlugins()
 	}
 
 	/*
-	 * Straightforward enough, iterate the plugins and store their
-	 * QPluginLoaders. Register the plugins with their respective "create"
+	 * Register the plugins with their respective "create"
 	 * function so that later we can instantiate them based on their name.
 	 */
 	for ( const QString& fileName : pluginNameList )
 	{
-		QPluginLoader* loader{ new QPluginLoader{
-			pluginDir.absoluteFilePath( fileName ),
-			this } };
+		QLibrary* library{ new QLibrary{ fileName, this } };
 
-		if ( auto dr{ qobject_cast<IDriver*>( loader->instance() ) }; dr != nullptr )
+		CreateCallBack createDriverFn{ reinterpret_cast<CreateCallBack>(library->resolve( "create" ) ) };
+		DriverNameCallback driverNameFn{
+			reinterpret_cast<DriverNameCallback>(library->resolve(
+				"driverNameStatic" ) ) };
+		ArgumentsCallBack argumentsFn =
+			(ArgumentsCallBack)library->resolve(
+				"argumentsStatic" );
+
+		if ( createDriverFn && driverNameFn && argumentsFn )
 		{
-			// push_back current plugin's loader and nullptr for IDriver for now.
-			m_plugins.push_back( PluginDriver{ loader, dr } );
-
-			QJsonObject jObject{
-				loader->metaData().value( "MetaData" ).toObject() };
-
+			const QString driverName{ driverNameFn() };
 			// Register the plugin, it will be retrieved later to be instantiated.
-			registerPlugin( jObject.value( "name" ).toString(),
-					std::bind( &IDriver::create, dr, this ) );
+			registerPlugin( driverName,
+					std::bind( createDriverFn, this ) );
+
+			m_pluginCount++;
 		}
 		else
 		{
@@ -293,7 +272,7 @@ int Scanner::loadDriverPlugins()
 		}
 	}
 
-	return m_plugins.size();
+	return m_pluginCount;
 }
 
 std::vector<PluginDriver> Scanner::plugins() const { return m_plugins; }
@@ -306,7 +285,7 @@ void Scanner::setupConnections() const
 
 	ConnectVerifier v;
 
-	//v = false;
+	// v = false;
 	/*
 	 * When the Driver is done producing output in the stdout,
 	 * set the relevant property of Scanner by reading the former.

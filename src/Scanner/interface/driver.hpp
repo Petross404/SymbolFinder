@@ -36,7 +36,6 @@ class Driver
 	, public IDriver
 {
 	Q_OBJECT
-	Q_INTERFACES( IDriver )
 
 public:
 	/*!
@@ -47,8 +46,6 @@ public:
 
 	/*! Destructor */
 	~Driver() override;
-
-	[[nodiscard]] IDriver* create( QObject* parent ) override;
 
 	/*
 	 * Mark the following functions as "final" and don't allow
