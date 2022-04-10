@@ -19,6 +19,12 @@
 #ifndef IDRIVER_H
 #define IDRIVER_H
 
+#ifdef Q_OS_WIN
+#	define DLLEXPORT __declspec( dllexport )
+#else
+#	define DLLEXPORT
+#endif
+
 #include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
 #include <qobjectdefs.h>    // for Q_OBJECT, signals
 #include <qprocess.h>	    // for QProcess
@@ -139,4 +145,10 @@ protected:
 	virtual void setDefaultInvocation( const QStringList& argList ) = 0;
 };
 
+extern "C" DLLEXPORT
+{
+	IDriver*    create( QObject * parent );
+	const char* driverNameStatic();
+	const char* argumentsStatic();
+}
 #endif	  // IDRIVER_H

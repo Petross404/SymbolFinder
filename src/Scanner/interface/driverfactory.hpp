@@ -33,6 +33,7 @@ public:
 	/*! Destructor */
 	~DriverFactory();
 
+protected:
 	/*!
 	 * Register the driver
 	 * \param name is the driver's name

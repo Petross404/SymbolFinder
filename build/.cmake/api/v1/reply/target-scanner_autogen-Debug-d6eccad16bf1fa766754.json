@@ -1,0 +1,69 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"src/Scanner/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "driver::@ab59c5d322e91a1682f5"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "exceptions::@3023312f3ef61b2a61ca"
+		}
+	],
+	"id" : "scanner_autogen::@d4cac137d082aa57c356",
+	"isGeneratorProvided" : true,
+	"name" : "scanner_autogen",
+	"paths" : 
+	{
+		"build" : "src/Scanner",
+		"source" : "src/Scanner"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/src/Scanner/CMakeFiles/scanner_autogen",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/src/Scanner/CMakeFiles/scanner_autogen.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

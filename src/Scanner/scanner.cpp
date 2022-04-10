@@ -32,6 +32,7 @@
 
 #include "../ConnectVerifier/connectverifier.hpp"    // for ConnectVerifier
 #include "interface/driverfactory.hpp"
+#include "interface/pluginmanager.hpp"
 #include "plugins/nmdriver.hpp"		// for NmDriver
 #include "plugins/scanelfdriver.hpp"	// for ScanelfDriver
 
@@ -47,7 +48,7 @@ using ArgumentsCallBack	 = QStringList ( * )();
 
 Scanner::Scanner( QObject* parent )
 	: QObject{ parent }
-	, DriverFactory{}
+	, m_pluginManager{}
 {
 	bool calledFromCtor = true;
 	init( m_choosenDriverName, calledFromCtor );
@@ -55,8 +56,8 @@ Scanner::Scanner( QObject* parent )
 
 Scanner::Scanner( const QString& driverName, QObject* parent )
 	: QObject{ parent }
-	, DriverFactory{}
 	, m_choosenDriverName{ driverName }
+	, m_pluginManager{}
 {
 	bool calledFromCtor = true;
 	init( m_choosenDriverName, calledFromCtor );
@@ -101,15 +102,18 @@ void Scanner::init( const QString& driverName, bool calledFromCtor )
  */
 void Scanner::init()
 {
+	static QStringList		       pluginNames;
+	static const std::vector<PluginDriver> pluginsDriver{
+		m_pluginManager->registeredPlugins() };
+
 	// Only run the first time ie when m_plugins is empty
-	if ( m_pluginCount && m_choosenDriverName.isEmpty() )
+	if ( !m_pluginCount && m_choosenDriverName.isEmpty() )
 	{
 		if ( loadDriverPlugins() != 0 )
 		{
-			static QStringList pluginNames;
-			for ( PluginDriver pair : m_plugins )
+			for ( const PluginDriver& pd : pluginsDriver )
 			{
-				pluginNames << pair.driverName;
+				pluginNames << pd.driverName;
 			}
 			emit pluginsLoaded( pluginNames );
 			qDebug() << pluginNames;
@@ -120,167 +124,63 @@ void Scanner::init()
 	{
 		qDebug() << "m_name" << m_choosenDriverName;
 		int i = -1;
-		for ( PluginDriver& pair : m_plugins )
+		for ( const PluginDriver& pd : pluginsDriver )
 		{
 			i++;
 
 			// TODO !!! Make scanner{} to NOT initialize m_name, and append to m_d the first plugin.
 			// TODO Later, inform the UI about the plugins and let it handle the insertion. For now,
 			//  m_d must be initialized to the first plugin, and inform the combobox about it to select it visually.
-			const QString currentName{ pair.driverName };
+			const QString currentName{ pd.driverName };
 
 			/*
 			 * It make sense to initialize m_d to the first available plugin as none is
 			 * selected when the UI first starts.
 			 */
-			if ( auto d = static_cast<IDriver*>( pair.driver );
+			if ( auto d = m_pluginManager->driver( currentName );
 			     d != nullptr && !m_choosenDriverName.isEmpty() )
 			{
 				if ( m_choosenDriverName == currentName )
 				{
-					m_d = static_cast<IDriver*>( pair.driver );
-					setDriver( pair.driver,
-						   std::bind( &Scanner::createDriver,
-							      this,
-							      currentName,
-							      this ) );
+					setDriver( d );
 				}
 			}
 			else if ( m_choosenDriverName.isEmpty() && i == 0 )
 			{
-				m_d = static_cast<IDriver*>( pair.driver );
-				setDriver( pair.driver,
-					   std::bind( &Scanner::createDriver,
-						      this,
-						      currentName,
-						      this ) );
+				const QString firstDriverName{ pluginNames.at( i ) };
+				IDriver* d{ m_pluginManager->driver( firstDriverName ) };
+				setDriver( d );
 			}
 		}
 	}
 	else
 	{
-		for ( PluginDriver& pair : m_plugins )
+		for ( const PluginDriver& pd : pluginsDriver )
 		{
-			if ( m_choosenDriverName == pair.driverName )
+			if ( const QString currDriverName{ pd.driverName };
+			     m_choosenDriverName == currDriverName )
 			{
-				// Allocate a new Driver, if there isn't already created for this plugin.
-				if ( pair.driver == nullptr || pair.driver != m_d )
-				{
-					m_d = static_cast<IDriver*>( pair.driver );
-					setDriver( pair.driver,
-						   std::bind( &Scanner::createDriver,
-							      this,
-							      m_choosenDriverName,
-							      this ) );
-				}
-
-				qDebug() << driver()->driverName()
-					 << driver()->defaultInvocation().join( spaceChar );
-
-				setSymbolName( symbolName() );
-				emit driverInitialized( driver()->driverName() );
+				setDriver( m_pluginManager->driver( currDriverName ) );
 			}
+
+			qDebug() << driver()->driverName()
+				 << driver()->defaultInvocation().join( spaceChar );
+
+			setSymbolName( symbolName() );
+			emit driverInitialized( driver()->driverName() );
 		}
 	}
 	qDebug() << "After init" << m_d->driverName();
 }
 
-int Scanner::loadDriverPlugins()
-{
-	/*
-	 * The plugins have a different directory stucture from the one when
-	 * they are installed. If the app is being ran from the src tree, we
-	 * must take care of this situation.
-	 */
-	bool isRunningInRepo = true;
-	QDir appDir{ QApplication::applicationDirPath() };
-
-	if ( !appDir.absolutePath().contains( "build" )
-	     || !appDir.absolutePath().contains( qAppName(), Qt::CaseInsensitive ) )
-	{
-		isRunningInRepo = false;
-	}
-
-	// ${PREFIX}/lib64/scanner/plugins/*
-
-	QDir pluginDir{ appDir };
-
-	// qDebug() << QCoreApplication::libraryPaths();
-	if ( isRunningInRepo )
-	{
-		if ( !pluginDir.cd( "src/Scanner/plugins" ) )
-		{
-			return NoPlugin;
-		}
-	}
-	else
-	{
-		QDir root = QDir::root();
-		root.cd( "usr/lib64/Scanner/plugins" );
-
-		if ( !pluginDir.cd( root.absolutePath() ) ) { return NoPlugin; }
-	}
-
-	/*
-	 * Read the contents of the directory and keep only the libraries
-	 * and those who aren't symlinks.
-	 */
-	QStringList pluginNameList;
-	for ( const QFileInfo& fileInfo : pluginDir.entryInfoList( QDir::Files ) )
-	{
-		if ( QLibrary::isLibrary( fileInfo.absoluteFilePath() )
-#ifdef Q_OS_UNIX
-		     && !fileInfo.isSymbolicLink()
-#elif Q_OS_WIN
-		     && fileInfo.isShortcut()
-#endif
-		)
-		{
-			qDebug() << "fileInfo" << fileInfo.fileName();
-			pluginNameList.append( fileInfo.fileName() );
-		}
-	}
-
-	/*
-	 * Register the plugins with their respective "create"
-	 * function so that later we can instantiate them based on their name.
-	 */
-	for ( const QString& fileName : pluginNameList )
-	{
-		QLibrary* library{ new QLibrary{ fileName, this } };
-
-		CreateCallBack createDriverFn{ reinterpret_cast<CreateCallBack>(library->resolve( "create" ) ) };
-		DriverNameCallback driverNameFn{
-			reinterpret_cast<DriverNameCallback>(library->resolve(
-				"driverNameStatic" ) ) };
-		ArgumentsCallBack argumentsFn =
-			(ArgumentsCallBack)library->resolve(
-				"argumentsStatic" );
-
-		if ( createDriverFn && driverNameFn && argumentsFn )
-		{
-			const QString driverName{ driverNameFn() };
-			// Register the plugin, it will be retrieved later to be instantiated.
-			registerPlugin( driverName,
-					std::bind( createDriverFn, this ) );
-
-			m_pluginCount++;
-		}
-		else
-		{
-			return NoPlugin;
-		}
-	}
-
-	return m_pluginCount;
-}
+int Scanner::loadDriverPlugins() { return m_pluginManager->pluginsNumber(); }
 
 std::vector<PluginDriver> Scanner::plugins() const { return m_plugins; }
 
 void Scanner::setupConnections() const
 {
 	// When no driver plugins are found, this shouldn't crash.
-	Driver* d{ static_cast<Driver*>( driver() ) };
+	const Driver* d{ static_cast<Driver*>( driver() ) };
 	if ( d == nullptr ) { return; }
 
 	ConnectVerifier v;
@@ -481,17 +381,8 @@ QByteArray Scanner::standardError() const { return m_stderr; }
 
 void Scanner::aboutToCloseSlot() {}
 
-void Scanner::setDriver( IDriver* pairDriver, callback_t createDriver )
+void Scanner::setDriver( IDriver* newDriver )
 {
-	// Throw if newDriver is null and append it to the driver that is paired with QPluginLoader.
-	IDriver* newDriver{ createDriver( this ) };
-	if ( !newDriver )
-	{
-		throw std::runtime_error( tr( "Driver is null" ).toLatin1() );
-	}
-	pairDriver = newDriver;
-
-	// Now get busy with m_d
 	IDriver* oldDriver = driver();
 	if ( oldDriver != newDriver )
 	{

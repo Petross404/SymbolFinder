@@ -37,7 +37,7 @@
 #include "interface/pluginpair.hpp"
 
 class Driver;
-class QPluginLoader;
+class PluginManager;
 
 /*!
  * `Scanner` class can create and hold an `IDriver*` instance.
@@ -48,9 +48,7 @@ class QPluginLoader;
  *
  * As of now, the only supported drivers are `nm` and `scanelf`.
  */
-class Scanner
-	: public QObject
-	, public DriverFactory
+class Scanner: public QObject
 {
 	Q_OBJECT
 	Q_DISABLE_COPY_MOVE( Scanner )
@@ -217,6 +215,9 @@ private:
 	QByteArray m_stderr; /*!< stderr text from the underlying driver */
 
 	gsl::owner<IDriver*> m_d{ nullptr }; /*!< Ptr to the `IDriver` instance */
+
+	PluginManager* m_pluginManager;
+
 	std::vector<PluginDriver> m_plugins;
 
 	/*! Private function to setup all the connections that have to be made */
@@ -233,7 +234,7 @@ private:
 	 * \param pairDriver is the IDriver* paired with it's QPluginLoader
 	 * \param newDriver is the newly created IDriver*
 	 */
-	void setDriver( IDriver* pairDriver, callback_t createDriver );
+	void setDriver( IDriver* newDriver );
 };
 
 #endif	  // SCANNER_H

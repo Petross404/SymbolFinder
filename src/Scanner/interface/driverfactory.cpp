@@ -38,7 +38,7 @@ IDriver* DriverFactory::createDriver( const QString& name, QObject* parent )
 void DriverFactory::registerPlugin( const QString& name, callback_t cb )
 {
 	// Make sure the driver name doesn't exist already with another cb
-	plugins_table_t::const_iterator it{ tableOfDrivers.find( name ) };
+	plugins_table_t::const_iterator it{ DriverFactory::tableOfDrivers.find( name ) };
 
 	if ( it != tableOfDrivers.end() )
 	{

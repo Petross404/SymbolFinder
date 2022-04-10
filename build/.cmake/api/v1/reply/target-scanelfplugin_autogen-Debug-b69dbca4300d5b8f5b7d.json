@@ -1,0 +1,65 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"src/Scanner/plugins/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 0,
+			"id" : "driver::@ab59c5d322e91a1682f5"
+		}
+	],
+	"id" : "scanelfplugin_autogen::@05c2de25b9dd4dfb4703",
+	"isGeneratorProvided" : true,
+	"name" : "scanelfplugin_autogen",
+	"paths" : 
+	{
+		"build" : "src/Scanner/plugins",
+		"source" : "src/Scanner/plugins"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/src/Scanner/plugins/CMakeFiles/scanelfplugin_autogen",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/src/Scanner/plugins/CMakeFiles/scanelfplugin_autogen.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

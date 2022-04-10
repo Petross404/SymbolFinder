@@ -25,10 +25,12 @@
 #include <stdint.h>	   // for uint16_t
 
 #include <QJsonObject>
+#include <functional>
 
 #include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
 #include "../interface/driver.hpp"			// for Driver
 #include "../interface/idriver.hpp"			// for StopIndex
+#include "../interface/pluginmanager.hpp"
 
 class QObject;	  // lines 12-12
 
@@ -78,6 +80,9 @@ void NmDriver::updateStopIndexSlot()
 
 IDriver* create( QObject* parent ) { return new NmDriver{ parent }; }
 
-QString NmDriver::driverNameStatic() { return g_program; }
+const char* driverNameStatic() { return g_program.toStdString().c_str(); }
 
-QStringList NmDriver::argumentsStatic() { return g_defaultArguments; }
+const char* argumentsStatic()
+{
+	return g_defaultArguments.join( ' ' ).toStdString().c_str();
+}

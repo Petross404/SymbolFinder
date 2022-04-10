@@ -1,4 +1,4 @@
-set(Driver_SRC  idriver.cpp driver.cpp driverfactory.cpp)
+set(Driver_SRC  idriver.cpp driver.cpp driverfactory.cpp pluginmanager.cpp)
 
 add_library(driver SHARED ${Driver_SRC})
 set_target_properties(driver PROPERTIES VERSION ${PROJECT_VERSION})

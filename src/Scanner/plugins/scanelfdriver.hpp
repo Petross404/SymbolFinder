@@ -49,8 +49,8 @@ public:
 	~ScanelfDriver() override;
 
 	static IDriver*	   create( QObject* parent );
-	static QString	   driverNameStatic();
-	static QStringList argumentsStatic();
+	static const char* driverNameStatic();
+	static const char* argumentsStatic();
 
 private slots:
 	void updateStopIndexSlot();

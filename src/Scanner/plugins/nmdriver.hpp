@@ -49,8 +49,8 @@ public:
 	~NmDriver() override;
 
 	static IDriver*	   create( QObject* parent );
-	static QString	   driverNameStatic();
-	static QStringList argumentsStatic();
+	static const char* driverNameStatic();
+	static const char* argumentsStatic();
 
 private slots:
 	void updateStopIndexSlot();
@@ -61,5 +61,4 @@ private:
 	QStringList m_defaultArguments;
 	QString	    m_name;
 };
-
 #endif	  // NMDRIVER_H

@@ -1,0 +1,107 @@
+[
+{
+  "directory": "/home/petros/projects/symbolfinder/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/petros/projects/symbolfinder/build -I/home/petros/projects/symbolfinder -I/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fno-omit-frame-pointer -g -ggdb -fsanitize=address -fPIC -std=gnu++2a -o CMakeFiles/symbolfinder.dir/symbolfinder_autogen/mocs_compilation.cpp.o -c /home/petros/projects/symbolfinder/build/symbolfinder_autogen/mocs_compilation.cpp",
+  "file": "/home/petros/projects/symbolfinder/build/symbolfinder_autogen/mocs_compilation.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/petros/projects/symbolfinder/build -I/home/petros/projects/symbolfinder -I/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fno-omit-frame-pointer -g -ggdb -fsanitize=address -fPIC -std=gnu++2a -o CMakeFiles/symbolfinder.dir/src/main.cpp.o -c /home/petros/projects/symbolfinder/src/main.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/main.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/petros/projects/symbolfinder/build -I/home/petros/projects/symbolfinder -I/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fno-omit-frame-pointer -g -ggdb -fsanitize=address -fPIC -std=gnu++2a -o CMakeFiles/symbolfinder.dir/src/Window/MainWindow/findermainwindow.cpp.o -c /home/petros/projects/symbolfinder/src/Window/MainWindow/findermainwindow.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/Window/MainWindow/findermainwindow.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/petros/projects/symbolfinder/build -I/home/petros/projects/symbolfinder -I/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fno-omit-frame-pointer -g -ggdb -fsanitize=address -fPIC -std=gnu++2a -o CMakeFiles/symbolfinder.dir/src/Window/MainWindow/UI/ui.cpp.o -c /home/petros/projects/symbolfinder/src/Window/MainWindow/UI/ui.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/Window/MainWindow/UI/ui.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/petros/projects/symbolfinder/build -I/home/petros/projects/symbolfinder -I/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fno-omit-frame-pointer -g -ggdb -fsanitize=address -fPIC -std=gnu++2a -o CMakeFiles/symbolfinder.dir/src/ConnectVerifier/connectverifier.cpp.o -c /home/petros/projects/symbolfinder/src/ConnectVerifier/connectverifier.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/ConnectVerifier/connectverifier.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/petros/projects/symbolfinder/build -I/home/petros/projects/symbolfinder -I/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fno-omit-frame-pointer -g -ggdb -fsanitize=address -fPIC -std=gnu++2a -o CMakeFiles/symbolfinder.dir/src/DriverWidgets/argumentslineedit.cpp.o -c /home/petros/projects/symbolfinder/src/DriverWidgets/argumentslineedit.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/DriverWidgets/argumentslineedit.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/petros/projects/symbolfinder/build -I/home/petros/projects/symbolfinder -I/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fno-omit-frame-pointer -g -ggdb -fsanitize=address -fPIC -std=gnu++2a -o CMakeFiles/symbolfinder.dir/src/DriverWidgets/symbollineedit.cpp.o -c /home/petros/projects/symbolfinder/src/DriverWidgets/symbollineedit.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/DriverWidgets/symbollineedit.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/petros/projects/symbolfinder/build -I/home/petros/projects/symbolfinder -I/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fno-omit-frame-pointer -g -ggdb -fsanitize=address -fPIC -std=gnu++2a -o CMakeFiles/symbolfinder.dir/src/DriverWidgets/messagewidget.cpp.o -c /home/petros/projects/symbolfinder/src/DriverWidgets/messagewidget.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/DriverWidgets/messagewidget.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/petros/projects/symbolfinder/build -I/home/petros/projects/symbolfinder -I/home/petros/projects/symbolfinder/build/symbolfinder_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fno-omit-frame-pointer -g -ggdb -fsanitize=address -fPIC -std=gnu++2a -o CMakeFiles/symbolfinder.dir/symbolfinder_autogen/UVLADIE3JM/qrc_resources.cpp.o -c /home/petros/projects/symbolfinder/build/symbolfinder_autogen/UVLADIE3JM/qrc_resources.cpp",
+  "file": "/home/petros/projects/symbolfinder/build/symbolfinder_autogen/UVLADIE3JM/qrc_resources.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Dscanner_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner -I/home/petros/projects/symbolfinder/src/Scanner -I/home/petros/projects/symbolfinder/build/src/Scanner/scanner_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/scanner.dir/scanner_autogen/mocs_compilation.cpp.o -c /home/petros/projects/symbolfinder/build/src/Scanner/scanner_autogen/mocs_compilation.cpp",
+  "file": "/home/petros/projects/symbolfinder/build/src/Scanner/scanner_autogen/mocs_compilation.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Dscanner_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner -I/home/petros/projects/symbolfinder/src/Scanner -I/home/petros/projects/symbolfinder/build/src/Scanner/scanner_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/scanner.dir/scanner.cpp.o -c /home/petros/projects/symbolfinder/src/Scanner/scanner.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/Scanner/scanner.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner/plugins",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Dscanelfplugin_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner/plugins -I/home/petros/projects/symbolfinder/src/Scanner/plugins -I/home/petros/projects/symbolfinder/build/src/Scanner/plugins/scanelfplugin_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/scanelfplugin.dir/scanelfplugin_autogen/mocs_compilation.cpp.o -c /home/petros/projects/symbolfinder/build/src/Scanner/plugins/scanelfplugin_autogen/mocs_compilation.cpp",
+  "file": "/home/petros/projects/symbolfinder/build/src/Scanner/plugins/scanelfplugin_autogen/mocs_compilation.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner/plugins",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Dscanelfplugin_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner/plugins -I/home/petros/projects/symbolfinder/src/Scanner/plugins -I/home/petros/projects/symbolfinder/build/src/Scanner/plugins/scanelfplugin_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/scanelfplugin.dir/scanelfdriver.cpp.o -c /home/petros/projects/symbolfinder/src/Scanner/plugins/scanelfdriver.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/Scanner/plugins/scanelfdriver.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner/plugins",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Dnmplugin_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner/plugins -I/home/petros/projects/symbolfinder/src/Scanner/plugins -I/home/petros/projects/symbolfinder/build/src/Scanner/plugins/nmplugin_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/nmplugin.dir/nmplugin_autogen/mocs_compilation.cpp.o -c /home/petros/projects/symbolfinder/build/src/Scanner/plugins/nmplugin_autogen/mocs_compilation.cpp",
+  "file": "/home/petros/projects/symbolfinder/build/src/Scanner/plugins/nmplugin_autogen/mocs_compilation.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner/plugins",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Dnmplugin_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner/plugins -I/home/petros/projects/symbolfinder/src/Scanner/plugins -I/home/petros/projects/symbolfinder/build/src/Scanner/plugins/nmplugin_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/nmplugin.dir/nmdriver.cpp.o -c /home/petros/projects/symbolfinder/src/Scanner/plugins/nmdriver.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/Scanner/plugins/nmdriver.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner/interface",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Ddriver_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner/interface -I/home/petros/projects/symbolfinder/src/Scanner/interface -I/home/petros/projects/symbolfinder/build/src/Scanner/interface/driver_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/driver.dir/driver_autogen/mocs_compilation.cpp.o -c /home/petros/projects/symbolfinder/build/src/Scanner/interface/driver_autogen/mocs_compilation.cpp",
+  "file": "/home/petros/projects/symbolfinder/build/src/Scanner/interface/driver_autogen/mocs_compilation.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner/interface",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Ddriver_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner/interface -I/home/petros/projects/symbolfinder/src/Scanner/interface -I/home/petros/projects/symbolfinder/build/src/Scanner/interface/driver_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/driver.dir/idriver.cpp.o -c /home/petros/projects/symbolfinder/src/Scanner/interface/idriver.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/Scanner/interface/idriver.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner/interface",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Ddriver_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner/interface -I/home/petros/projects/symbolfinder/src/Scanner/interface -I/home/petros/projects/symbolfinder/build/src/Scanner/interface/driver_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/driver.dir/driver.cpp.o -c /home/petros/projects/symbolfinder/src/Scanner/interface/driver.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/Scanner/interface/driver.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner/interface",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Ddriver_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner/interface -I/home/petros/projects/symbolfinder/src/Scanner/interface -I/home/petros/projects/symbolfinder/build/src/Scanner/interface/driver_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/driver.dir/driverfactory.cpp.o -c /home/petros/projects/symbolfinder/src/Scanner/interface/driverfactory.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/Scanner/interface/driverfactory.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Scanner/interface",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -Ddriver_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Scanner/interface -I/home/petros/projects/symbolfinder/src/Scanner/interface -I/home/petros/projects/symbolfinder/build/src/Scanner/interface/driver_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/driver.dir/pluginmanager.cpp.o -c /home/petros/projects/symbolfinder/src/Scanner/interface/pluginmanager.cpp",
+  "file": "/home/petros/projects/symbolfinder/src/Scanner/interface/pluginmanager.cpp"
+},
+{
+  "directory": "/home/petros/projects/symbolfinder/build/src/Exceptions",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -Dexceptions_EXPORTS -I/home/petros/projects/symbolfinder/build/src/Exceptions -I/home/petros/projects/symbolfinder/src/Exceptions -I/home/petros/projects/symbolfinder/build/src/Exceptions/exceptions_autogen/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -g -fPIC -fPIC -std=gnu++2a -o CMakeFiles/exceptions.dir/exceptions_autogen/mocs_compilation.cpp.o -c /home/petros/projects/symbolfinder/build/src/Exceptions/exceptions_autogen/mocs_compilation.cpp",
+  "file": "/home/petros/projects/symbolfinder/build/src/Exceptions/exceptions_autogen/mocs_compilation.cpp"
+}
+]

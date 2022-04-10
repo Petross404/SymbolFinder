@@ -28,10 +28,13 @@
 
 #include <cstdint>    // for uint16_t
 
+// TODO When this plugin (and others) are installed, this path won't work
 #include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
 #include "../interface/driver.hpp"			// for Driver
 #include "../interface/idriver.hpp"			// for StopIndex
-class QObject;						// lines 12-12
+#include "../interface/pluginmanager.hpp"
+
+class QObject;	  // lines 12-12
 
 const QString	  g_program{ "scanelf" };
 const QStringList g_defaultArguments{ "-qRys + /lib64/" };
@@ -83,8 +86,17 @@ void ScanelfDriver::updateStopIndexSlot()
 	}
 }
 
-IDriver* create( QObject* parent ) { return new ScanelfDriver{ parent }; }
+IDriver* ScanelfDriver::create( QObject* parent )
+{
+	return new ScanelfDriver{ parent };
+}
 
-QString ScanelfDriver::driverNameStatic() { return g_program; }
+const char* ScanelfDriver::driverNameStatic()
+{
+	return g_program.toStdString().c_str();
+}
 
-QStringList ScanelfDriver::argumentsStatic() { return g_defaultArguments; }
+const char* ScanelfDriver::argumentsStatic()
+{
+	return g_defaultArguments.join( ' ' ).toStdString().c_str();
+}
