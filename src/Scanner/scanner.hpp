@@ -216,7 +216,7 @@ private:
 
 	gsl::owner<IDriver*> m_d{ nullptr }; /*!< Ptr to the `IDriver` instance */
 
-	PluginManager* m_pluginManager;
+	gsl::owner<PluginManager*> m_pluginManager{ nullptr };
 
 	std::vector<PluginDriver> m_plugins;
 

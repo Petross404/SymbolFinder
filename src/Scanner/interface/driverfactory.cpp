@@ -4,6 +4,7 @@
 
 #include "driverfactory.hpp"
 
+#include <qdebug.h>
 #include <qobject.h>
 
 #include <exception>
@@ -14,7 +15,7 @@
 DriverFactory::DriverFactory()	= default;
 DriverFactory::~DriverFactory() = default;
 
-IDriver* DriverFactory::createDriver( const QString& name, QObject* parent )
+IDriver* DriverFactory::createDriver_impl( const QString& name, QObject* parent )
 {
 	plugins_table_t::const_iterator it{ tableOfDrivers.find( name ) };
 
@@ -35,8 +36,14 @@ IDriver* DriverFactory::createDriver( const QString& name, QObject* parent )
 	return nullptr;
 }
 
-void DriverFactory::registerPlugin( const QString& name, callback_t cb )
+void DriverFactory::registerPlugin_impl( const QString& name, callback_t cb )
 {
+	if ( !cb )
+	{
+		qDebug() << "cb is null";
+		return;
+	}
+
 	// Make sure the driver name doesn't exist already with another cb
 	plugins_table_t::const_iterator it{ DriverFactory::tableOfDrivers.find( name ) };
 
@@ -51,12 +58,19 @@ void DriverFactory::registerPlugin( const QString& name, callback_t cb )
 	tableOfDrivers.insert( { name, cb } );
 }
 
-void DriverFactory::unregisterPlugin( const QString& name )
+void DriverFactory::unregisterPlugin_impl( const QString& name )
 {
 	tableOfDrivers.erase( name );
 }
 
-std::map<QString, callback_t> DriverFactory::registeredPlugins() const
+plugins_table_t DriverFactory::registeredPlugins_impl() const
 {
-	return tableOfDrivers;
+	plugins_table_t t;
+
+	if ( !tableOfDrivers.empty() ) { t = tableOfDrivers; }
+	else
+	{
+		throw std::runtime_error( "Empty tableOfDrivers" );
+	}
+	return t;
 }

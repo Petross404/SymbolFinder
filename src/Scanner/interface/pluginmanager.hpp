@@ -73,9 +73,11 @@ public:
 	std::vector<PluginDriver> registeredPlugins();
 
 private:
-	int m_pluginCount;
+	int m_pluginCount = 0;
 
 	std::vector<PluginDriver> m_vecOfDrivers;
+
+	int indexOfLibSuffix( const QString& libName );
 };
 
 #endif	  // PLUGINMANAGER_H

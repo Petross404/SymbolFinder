@@ -22,18 +22,21 @@
 #include <qdebug.h>
 #include <qdir.h>
 #include <qlibrary.h>
+#include <qlibraryinfo.h>
+#include <qregularexpression.h>
 
 #include <functional>
 
-using CreateCallBack	 = IDriver* (*)( QObject* parent );
-using DriverNameCallback = QString ( * )();
-using ArgumentsCallBack	 = QStringList ( * )();
+#include "idriver.hpp"
 
-constexpr int NoPlugin = -1;
+using CreateCB	   = IDriver* (*)( QObject* parent );
+using DriverNameCB = QString ( * )();
+using ArgumentsCB  = QStringList ( * )();
+
+constexpr int NoPlugin = 0;
 
 PluginManager::PluginManager( QObject* parent )
 	: QObject{ parent }
-	, DriverFactory{}
 {
 	look();
 }
@@ -56,73 +59,99 @@ void PluginManager::look()
 		isRunningInRepo = false;
 	}
 
-	// ${PREFIX}/lib64/scanner/plugins/*
+	QString location{ QLibraryInfo::location( QLibraryInfo::PluginsPath ) + "scanner" };
 
-	QDir pluginDir{ appDir };
+	QDir pluginDir;
 
-	// qDebug() << QCoreApplication::libraryPaths();
 	if ( isRunningInRepo )
 	{
-		if ( !pluginDir.cd( "src/Scanner/plugins" ) )
+		QCoreApplication::addLibraryPath( "src/Scanner/plugins" );
+		QCoreApplication::removeLibraryPath(appDir.absolutePath());
+		QCoreApplication::removeLibraryPath(QLibraryInfo::location( QLibraryInfo::PluginsPath ));
+
+		if ( auto path{appDir.absolutePath() + "/src/Scanner/plugins" }; !pluginDir.cd( path ) )
 		{
-			m_pluginCount = NoPlugin;
+			qDebug() << "cd error for plugin dir";
 			return;
 		}
-	}
 	else
 	{
-		QDir root = QDir::root();
-		root.cd( "usr/lib64/Scanner/plugins" );
+		QCoreApplication::addLibraryPath( location );
 
-		if ( !pluginDir.cd( root.absolutePath() ) )
-		{
-			m_pluginCount = NoPlugin;
-			return;
+		for ( auto pluginPath : QCoreApplication::libraryPaths() )
+			if ( !pluginDir.cd( pluginPath ) )
+			{
+				qDebug() << "cd error for plugin dir";
+				return;
+			}
 		}
 	}
+
+	qDebug() << QCoreApplication::libraryPaths();
 
 	/*
 	 * Read the contents of the directory and keep only the libraries
 	 * and those who aren't symlinks.
 	 */
 	QStringList pluginNameList;
-	for ( const QFileInfo& fileInfo : pluginDir.entryInfoList( QDir::Files ) )
+	for ( const QFileInfo& fileInfo : pluginDir.entryInfoList( QDir::Filter::Files ) )
 	{
-		if ( QLibrary::isLibrary( fileInfo.absoluteFilePath() )
+		if ( !QLibrary::isLibrary( fileInfo.absoluteFilePath() )
 #ifdef Q_OS_UNIX
-		     && !fileInfo.isSymbolicLink()
+		     && fileInfo.isSymbolicLink()
 #elif Q_OS_WIN
 		     && fileInfo.isShortcut()
 #endif
 		)
 		{
-			qDebug() << "fileInfo" << fileInfo.fileName();
-			pluginNameList.append( fileInfo.fileName() );
+			continue;
+		}
 
-			QLibrary* library{
-				new QLibrary{ fileInfo.absoluteFilePath(), this } };
+		qDebug() << "fileInfo" << fileInfo.fileName();
+		pluginNameList << fileInfo.fileName();
 
-			CreateCallBack createDriverFn{ reinterpret_cast<CreateCallBack>(
-				library->resolve( "create" ) ) };
-			DriverNameCallback driverNameFn{ reinterpret_cast<DriverNameCallback>(
-				library->resolve( "driverNameStatic" ) ) };
-			ArgumentsCallBack argumentsFn =
-				(ArgumentsCallBack)library->resolve(
-					"argumentsStatic" );
+		QString libName;
+		if ( isRunningInRepo )
+		{
+			QRegularExpression re{ "([^.]+)" };
+			qDebug() << fileInfo.completeSuffix() << fileInfo.baseName();
+			libName = fileInfo.absoluteFilePath().remove(
+				fileInfo.completeSuffix() );
+			libName.remove( '.' );
+		}
+		else
+		{
+			libName = fileInfo.baseName();
+		}
 
-			qDebug() << library->errorString();
+		qDebug() << "LibName: " << libName;
 
-			if ( createDriverFn && driverNameFn && argumentsFn )
-			{
-				const QString driverName{ driverNameFn() };
-				qDebug() << "driverNane" << driverName;
+		QLibrary* library{ new QLibrary{ libName, this } };
 
-				// Register the plugin, it will be retrieved later to be instantiated.
-				registerPlugin( driverName,
-						std::bind( createDriverFn, this ) );
+		auto createDriverFn{ (CreateCB)library->resolve( "create" ) };
+		auto driverNameFn{
+			(DriverNameCB)library->resolve( "driverNameStatic" ) };
+		auto argumentsFn{
+			(ArgumentsCB)library->resolve( "argumentsStatic" ) };
 
-				m_pluginCount++;
-			}
+		/*
+		 * At this point the library should be loaded already;
+		 * Make sure it is and if not, print the error.
+		 */
+		if ( !library->isLoaded() )
+		{
+			qDebug() << "Library error : " << library->errorString();
+		}
+
+		if ( createDriverFn && driverNameFn && argumentsFn )
+		{
+			const QString driverName{ driverNameFn() };
+
+			// Register the plugin, it will be retrieved later to be instantiated.
+			registerPlugin_impl( driverName,
+					     std::bind( createDriverFn, this ) );
+
+			m_pluginCount++;
 		}
 		qDebug() << "mpluginCount " << m_pluginCount;
 	}
@@ -132,7 +161,8 @@ int PluginManager::pluginsNumber() const { return m_pluginCount; }
 
 std::vector<PluginDriver> PluginManager::registeredPlugins()
 {
-	plugins_table_t map{ DriverFactory::registeredPlugins() };
+	plugins_table_t map{ registeredPlugins_impl() };
+
 	plugins_table_t::const_iterator it{ map.begin() };
 
 	for ( int i = 0; i < map.size(); i++ )
@@ -145,15 +175,26 @@ std::vector<PluginDriver> PluginManager::registeredPlugins()
 
 void PluginManager::registerIDriver( const QString& driverName, callback_t createCb )
 {
-	registerPlugin( driverName, createCb );
+	registerPlugin_impl( driverName, std::move( createCb ) );
 }
 
 void PluginManager::unregisterIDriver( const QString& driverName )
 {
-	unregisterPlugin( driverName );
+	unregisterPlugin_impl( driverName );
 }
 
 IDriver* PluginManager::driver( const QString& driverName )
 {
-	return createDriver( driverName, this );
+	return createDriver_impl( driverName, this );
+}
+
+int PluginManager::indexOfLibSuffix( const QString& libName )
+{
+	int index = 0;
+	for ( const QChar c : libName )
+	{
+		if ( c == '.' ) { index++; }
+	}
+
+	return index;
 }

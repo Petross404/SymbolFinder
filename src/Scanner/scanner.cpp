@@ -42,13 +42,12 @@ constexpr int	NoPlugin = -1;
 const QString m_symbolArg{ "#symbol#" }; /*<! Call from setSymbolName */
 const QString m_resetArg{ "#default#" }; /*<! Call from resetInvocation */
 
-using CreateCallBack	 = IDriver* (*)( QObject* parent );
-using DriverNameCallback = QString ( * )();
-using ArgumentsCallBack	 = QStringList ( * )();
+using CreateCB	   = IDriver* (*)( QObject* parent );
+using DriverNameCB = QString ( * )();
+using ArgumentsCB  = QStringList ( * )();
 
 Scanner::Scanner( QObject* parent )
 	: QObject{ parent }
-	, m_pluginManager{}
 {
 	bool calledFromCtor = true;
 	init( m_choosenDriverName, calledFromCtor );
@@ -57,7 +56,6 @@ Scanner::Scanner( QObject* parent )
 Scanner::Scanner( const QString& driverName, QObject* parent )
 	: QObject{ parent }
 	, m_choosenDriverName{ driverName }
-	, m_pluginManager{}
 {
 	bool calledFromCtor = true;
 	init( m_choosenDriverName, calledFromCtor );
@@ -102,15 +100,17 @@ void Scanner::init( const QString& driverName, bool calledFromCtor )
  */
 void Scanner::init()
 {
-	static QStringList		       pluginNames;
-	static const std::vector<PluginDriver> pluginsDriver{
-		m_pluginManager->registeredPlugins() };
+	static QStringList pluginNames;
+
+	static std::vector<PluginDriver> pluginsDriver;
 
 	// Only run the first time ie when m_plugins is empty
 	if ( !m_pluginCount && m_choosenDriverName.isEmpty() )
 	{
 		if ( loadDriverPlugins() != 0 )
 		{
+			pluginsDriver = m_pluginManager->registeredPlugins();
+
 			for ( const PluginDriver& pd : pluginsDriver )
 			{
 				pluginNames << pd.driverName;
@@ -173,7 +173,11 @@ void Scanner::init()
 	qDebug() << "After init" << m_d->driverName();
 }
 
-int Scanner::loadDriverPlugins() { return m_pluginManager->pluginsNumber(); }
+int Scanner::loadDriverPlugins()
+{
+	m_pluginManager = new PluginManager{ this };
+	return m_pluginManager->pluginsNumber();
+}
 
 std::vector<PluginDriver> Scanner::plugins() const { return m_plugins; }
 
@@ -366,13 +370,13 @@ QString Scanner::symbolName() const { return m_d->symbolName(); }
 
 void Scanner::setStandardOutSlot()
 {
-	m_stdout = static_cast<Driver*>( m_d )->readAllStandardOutput();
+	m_stdout = dynamic_cast<Driver*>( m_d )->readAllStandardOutput();
 	qDebug() << m_stdout;
 }
 
 void Scanner::setStandardErrSlot()
 {
-	m_stderr = static_cast<Driver*>( m_d )->readAllStandardError();
+	m_stderr = dynamic_cast<Driver*>( m_d )->readAllStandardError();
 }
 
 QByteArray Scanner::standardOut() const { return m_stdout; }
@@ -383,12 +387,13 @@ void Scanner::aboutToCloseSlot() {}
 
 void Scanner::setDriver( IDriver* newDriver )
 {
-	IDriver* oldDriver = driver();
+	const IDriver* oldDriver{ driver() };
+
 	if ( oldDriver != newDriver )
 	{
 		m_d = newDriver;
 
-		QString symbolName{ "" };
+		static QString symbolName{ "" };
 		if ( oldDriver != nullptr )
 		{
 			symbolName = oldDriver->symbolName();
