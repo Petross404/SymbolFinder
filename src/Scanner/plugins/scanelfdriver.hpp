@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SCANELFDRIVER_H
-#define SCANELFDRIVER_H
+#ifndef SCANELFDRIVER_HPP
+#define SCANELFDRIVER_HPP
 
 #include <qfile.h>
 #include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
@@ -25,15 +25,27 @@
 #include <qstring.h>	    // for QString
 #include <qstringlist.h>    // for QStringList
 
-#include "../interface/driver.hpp"    // for IDriver
-class QObject;
+#include <optional>
+// #include <tl/expected.hpp>
+
+#include "../interface/genericdriver.hpp"    // for IDriver
+
+#if defined( SCANELFDRIVER_HPP )
+#	ifdef Q_OS_WIN
+#		define SCANELFLIB_EXPORT __declspec( dllexport )
+#	else
+#		define SCANELFLIB_EXPORT Q_DECL_EXPORT
+#	endif
+#else
+#	define SCANELFLIB_EXPORT Q_DECL_IMPORT
+#endif
 
 /*!
  * \brief `ScanelfDriver` acts as a driver for `scanelf`.
  * `ScanelfDriver`  inherits from `IDriver` and defines some scanelf-specific
  * functions.
  */
-class ScanelfDriver: public Driver
+class SCANELFLIB_EXPORT ScanelfDriver: public GenericDriver
 {
 	Q_OBJECT
 	Q_DISABLE_COPY_MOVE( ScanelfDriver )
@@ -43,23 +55,18 @@ public:
 	 * Construct a ScanelfDriver
 	 * \param parent is the `QObject` parent of this object
 	 */
-	ScanelfDriver( QObject* parent = nullptr );
+	explicit ScanelfDriver( std::optional<QObject*> parent );
 
 	/*! Default destructor */
 	~ScanelfDriver() override;
 
-	static IDriver*	   create( QObject* parent );
-	static const char* driverNameStatic();
-	static const char* argumentsStatic();
-
 private slots:
 	void updateStopIndexSlot();
-
-private:
-	QFile	    m_jsonFile;
-	QStringList m_effectiveArgList;
-	QStringList m_defaultArguments;
-	QString	    m_name;
 };
 
-#endif	  // SCANELFDRIVER_H
+extern "C" SCANELFLIB_EXPORT IDriver*	 init( QObject* parent );
+extern "C" SCANELFLIB_EXPORT const char* driverNameGlobal();
+extern "C" SCANELFLIB_EXPORT const char* driverDescGlobal();
+extern "C" SCANELFLIB_EXPORT const char* argumentsGlobal();
+
+#endif	  // SCANELFDRIVER_HPP

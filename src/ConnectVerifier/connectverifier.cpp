@@ -18,12 +18,9 @@
 
 #include "connectverifier.hpp"
 
-const char* g_msg{ "Connection failed" };
+const char* const g_msg{ "Connection failed" };
 
-const char* ConnectVerifierException::what() const throw()
-{
-	return QObject::tr( g_msg ).toLatin1();
-}
+const char* ConnectVerifierException::what() const noexcept { return g_msg; }
 
 ConnectVerifier::ConnectVerifier( const bool& b )
 {

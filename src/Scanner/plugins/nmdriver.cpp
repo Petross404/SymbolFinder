@@ -28,29 +28,26 @@
 #include <functional>
 
 #include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
-#include "../interface/driver.hpp"			// for Driver
+#include "../interface/genericdriver.hpp"		// for Driver
 #include "../interface/idriver.hpp"			// for StopIndex
 #include "../interface/pluginmanager.hpp"
 
 class QObject;	  // lines 12-12
 
-const QChar	  spaceChar{ ' ' };
-const QString	  g_program{ "nm" };
-const QStringList g_defaultArguments{
-	"-Dn -o --defined-only /lib/* /usr/lib64/* 2> /dev/null | grep "
-	"'\b\b'" };
+constexpr char	      g_spaceChar{ ' ' };
+constexpr char const* g_program{ "nm" };
+constexpr char const* g_defArgs{ "-Dn -o --defined-only /lib/* /usr/lib64/* 2> "
+				 "/dev/null | grep '\b\b'" };
 
-NmDriver::NmDriver( QObject* parent )
-	: Driver{ g_program, g_defaultArguments, parent }
-	, m_jsonFile{ "nmplugin.json", this }
+NmDriver::NmDriver( std::optional<QObject*> parent )
+	: GenericDriver{ g_program, g_defArgs, parent.value_or( nullptr ) }
 {
-	// updateStopIndexSlot();
-
-	qDebug() << "I am nmdriver's ctor";
+	updateStopIndexSlot();
 
 	ConnectVerifier v;
+
 	v = connect( this,
-		     &Driver::stopIndexUpdated,
+		     &GenericDriver::stopIndexUpdated,
 		     this,
 		     &NmDriver::updateStopIndexSlot,
 		     Qt::UniqueConnection );
@@ -60,29 +57,57 @@ NmDriver::~NmDriver() = default;
 
 void NmDriver::updateStopIndexSlot()
 {
-	std::exit( -1 );
-	const QString s{ "\b" };
+	std::string_view s{ "\b" };
 
-	QString strArgs{ m_effectiveArgList.join( spaceChar ) };
+	std::list<std::string_view> strArgs{ invocation() };
 
-	int i = strArgs.indexOf( s );
-	qDebug() << "index of" << s << i;
+	std::list<std::string_view>::iterator it{ std::ranges::find( strArgs, s ) };
 
-	if ( i > 0 )
+	if ( int index = std::distance( strArgs.begin(), it ); index )
 	{
-		setStopIndexSlot( StopIndex{ static_cast<uint32_t>( i ), s } );
+		const StopIndex si{ StopIndex::makeStopIndex( (uint32_t)index, s ) };
+		setStopIndexSlot( std::cref( si ) );
 	}
-	else
-	{
-		emit stopIndexUpdatingFailed();
-	}
+	else { emit stopIndexUpdatingFailed(); }
 }
 
-IDriver* create( QObject* parent ) { return new NmDriver{ parent }; }
+IDriver* init( QObject* parent ) { return new NmDriver{ parent }; }
 
-const char* driverNameStatic() { return g_program.toStdString().c_str(); }
-
-const char* argumentsStatic()
+const char* driverNameGlobal()
 {
-	return g_defaultArguments.join( ' ' ).toStdString().c_str();
+	const size_t size = strlen( g_program );
+
+	char* p = new char[size + 1];
+	strcpy( p, g_program );
+
+	return p;
+}
+
+const char* driverDescGlobal()
+{
+	std::unique_ptr<QProcess> pr{ std::make_unique<QProcess>() };
+
+	const QStringList args{ "--help" };
+	pr->start( g_program, args );
+	pr->waitForFinished( -1 );
+
+	QByteArray  result{ pr->readAllStandardOutput() };
+	QStringList lines{ QString::fromLocal8Bit( result ).split( '\n' ) };
+
+	const size_t size = strlen( qPrintable( result ) );
+
+	char* pc = new char[size + 1];
+	strcpy( pc, result );
+
+	return pc;
+}
+
+const char* argumentsGlobal()
+{
+	const size_t size = strlen( g_defArgs );
+
+	char* p = new char[size + 1];
+	strcpy( p, g_defArgs );
+
+	return p;
 }

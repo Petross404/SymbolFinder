@@ -1,5 +1,0 @@
-{
-	"name": "nm",
-	"arguments": "-Dn -o --defined-only /lib/* /usr/lib64/* 2> /dev/null | grep '\b\b'",
-	"stopstring": ["'\b"]
-}

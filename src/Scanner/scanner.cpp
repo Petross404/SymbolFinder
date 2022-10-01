@@ -18,6 +18,8 @@
 
 #include "scanner.hpp"
 
+#include <bits/basic_string.h>
+#include <fmt/core.h>
 #include <qapplication.h>
 #include <qchar.h>    // for QChar
 #include <qdebug.h>
@@ -26,66 +28,92 @@
 #include <qlibrary.h>
 #include <qnamespace.h>	   // for UniqueConnection
 #include <qpluginloader.h>
+#include <qstringliteral.h>
 
 #include <algorithm>
+#include <future>
 #include <iostream>
+#include <thread>
 
 #include "../ConnectVerifier/connectverifier.hpp"    // for ConnectVerifier
-#include "interface/driverfactory.hpp"
+#include "../Helper/string.hpp"
 #include "interface/pluginmanager.hpp"
 #include "plugins/nmdriver.hpp"		// for NmDriver
 #include "plugins/scanelfdriver.hpp"	// for ScanelfDriver
+// #include <QtConcurrent/qtconcurrentrun.h>
 
-constexpr QChar spaceChar{ ' ' };
-constexpr int	NoPlugin = -1;
+constexpr char g_spaceChar{ ' ' };
+constexpr int  NoPlugin = -1;
 
-const QString m_symbolArg{ "#symbol#" }; /*<! Call from setSymbolName */
-const QString m_resetArg{ "#default#" }; /*<! Call from resetInvocation */
+std::string_view g_emptyStr{ "" };
 
-using CreateCB	   = IDriver* (*)( QObject* parent );
-using DriverNameCB = QString ( * )();
-using ArgumentsCB  = QStringList ( * )();
+namespace Invocation::Source {
+std::string_view FromSymbol{ "#symbol#" }; /*<! Call from setSymbolName */
+std::string_view FromReset{ "#default#" }; /*<! Call from resetInvocation */
+};					   // namespace Invocation::Source
 
-Scanner::Scanner( QObject* parent )
-	: QObject{ parent }
+Scanner::Scanner( std::optional<QObject*> parent )
+	: QObject{ parent.value_or( nullptr ) }
 {
-	bool calledFromCtor = true;
-	init( m_choosenDriverName, calledFromCtor );
-}
-
-Scanner::Scanner( const QString& driverName, QObject* parent )
-	: QObject{ parent }
-	, m_choosenDriverName{ driverName }
-{
-	bool calledFromCtor = true;
-	init( m_choosenDriverName, calledFromCtor );
+	init( m_selectedDriverName );
 }
 
 Scanner::~Scanner() = default;
 
-QStringList Scanner::defaultInvocation() const
+std::list<std::string_view> Scanner::defaultInvocation() const
 {
-	return driver()->defaultInvocation();
+	return driver().has_value() ? driver().value()->defaultInvocation()
+				    : string::create_list( g_emptyStr );
 }
 
-QStringList Scanner::invocation() const { return driver()->invocation(); }
+std::list<std::string_view> Scanner::invocation() const
+{
+	return driver().has_value() ? driver().value()->invocation()
+				    : string::create_list( g_emptyStr );
+}
 
 void Scanner::resetInvocation()
 {
 	// Call setInvocation with m_resetArg
-	setInvocation( defaultInvocation().join( spaceChar ), m_resetArg );
+	std::string_view strDefArguments{ string::join_string_list( defaultInvocation() ) };
+
+	setInvocation( strDefArguments, Invocation::Source::FromReset );
 }
 
-IDriver* Scanner::driver() const { return m_d; }
+std::optional<IDriver*> Scanner::driver() const
+{
+	return m_d.has_value() ? m_d : std::nullopt;
+}
 
-void Scanner::init( const QString& driverName, bool calledFromCtor )
+void Scanner::init( std::string_view driverName )
 {
 	try
 	{
-		setDriverName( driverName );
+		setEffectiveDriverName( driverName );
 		init();
 
-		if ( calledFromCtor ) { setupConnections(); }
+		const IDriver* d{ driver().has_value() ? driver().value() : nullptr };
+		const std::string drName{ d != nullptr ? d->driverName() : g_emptyStr };
+
+		/*
+		 * setupConnections must be ran the first time a driver got
+		 * initialized. Any subsequent invocation of this code must
+		 * ignore setupConnections.
+		 */
+		static std::uint16_t initCounter     = 0;
+		const std::uint16_t  firstInvocation = 1;
+
+		if ( d != nullptr )
+		{
+			if ( initCounter == firstInvocation )
+			{
+				setupConnections( initCounter, drName );
+			}
+		}
+
+		// Increment counter until next time.
+		initCounter++;
+
 	} catch ( ConnectVerifierException& e )
 	{
 		std::cerr << e.what() << std::endl;
@@ -96,84 +124,24 @@ void Scanner::init( const QString& driverName, bool calledFromCtor )
 }
 
 /*
- * init can be ran multiple times; not just the first time Scanner is contructed.
+ * init() can be ran multiple times; not just the first time Scanner is contructed.
+ * The first this is called, no driver name is set. Thus
  */
 void Scanner::init()
 {
-	static QStringList pluginNames;
-
-	static std::vector<PluginDriver> pluginsDriver;
-
-	// Only run the first time ie when m_plugins is empty
-	if ( !m_pluginCount && m_choosenDriverName.isEmpty() )
+	// Only discover load the plugins the first time...
+	if ( !PluginManager::pluginsCounter() && selectedDriverName().empty() )
 	{
-		if ( loadDriverPlugins() != 0 )
+		if ( !loadDriverPlugins() )
 		{
-			pluginsDriver = m_pluginManager->registeredPlugins();
-
-			for ( const PluginDriver& pd : pluginsDriver )
-			{
-				pluginNames << pd.driverName;
-			}
-			emit pluginsLoaded( pluginNames );
-			qDebug() << pluginNames;
+			// TODO
 		}
 	}
 
-	if ( !driver() || m_choosenDriverName.isEmpty() )
-	{
-		qDebug() << "m_name" << m_choosenDriverName;
-		int i = -1;
-		for ( const PluginDriver& pd : pluginsDriver )
-		{
-			i++;
-
-			// TODO !!! Make scanner{} to NOT initialize m_name, and append to m_d the first plugin.
-			// TODO Later, inform the UI about the plugins and let it handle the insertion. For now,
-			//  m_d must be initialized to the first plugin, and inform the combobox about it to select it visually.
-			const QString currentName{ pd.driverName };
-
-			/*
-			 * It make sense to initialize m_d to the first available plugin as none is
-			 * selected when the UI first starts.
-			 */
-			if ( auto d = m_pluginManager->driver( currentName );
-			     d != nullptr && !m_choosenDriverName.isEmpty() )
-			{
-				if ( m_choosenDriverName == currentName )
-				{
-					setDriver( d );
-				}
-			}
-			else if ( m_choosenDriverName.isEmpty() && i == 0 )
-			{
-				const QString firstDriverName{ pluginNames.at( i ) };
-				IDriver* d{ m_pluginManager->driver( firstDriverName ) };
-				setDriver( d );
-			}
-		}
-	}
-	else
-	{
-		for ( const PluginDriver& pd : pluginsDriver )
-		{
-			if ( const QString currDriverName{ pd.driverName };
-			     m_choosenDriverName == currDriverName )
-			{
-				setDriver( m_pluginManager->driver( currDriverName ) );
-			}
-
-			qDebug() << driver()->driverName()
-				 << driver()->defaultInvocation().join( spaceChar );
-
-			setSymbolName( symbolName() );
-			emit driverInitialized( driver()->driverName() );
-		}
-	}
-	qDebug() << "After init" << m_d->driverName();
+	setupDriver( std::nullopt );
 }
 
-int Scanner::loadDriverPlugins()
+std::uint16_t Scanner::loadDriverPlugins()
 {
 	m_pluginManager = new PluginManager{ this };
 	return m_pluginManager->pluginsNumber();
@@ -181,15 +149,28 @@ int Scanner::loadDriverPlugins()
 
 std::vector<PluginDriver> Scanner::plugins() const { return m_plugins; }
 
-void Scanner::setupConnections() const
+std::vector<PluginDesc> Scanner::pluginDescription() const
 {
-	// When no driver plugins are found, this shouldn't crash.
-	const Driver* d{ static_cast<Driver*>( driver() ) };
-	if ( d == nullptr ) { return; }
+	std::vector<PluginDesc> v;
+
+	const PluginsTable pluginTable{ m_pluginManager->registeredPlugins() };
+
+	for ( auto const& [pair, initcallback] : pluginTable )
+	{
+		v.push_back( pair );
+	}
+
+	return v;
+}
+
+void Scanner::setupConnections( std::uint16_t counter, const std::string_view drName ) const
+{
+	const IDriver* d{ driver().value() };
+
+	if ( counter ) { return; }
 
 	ConnectVerifier v;
 
-	// v = false;
 	/*
 	 * When the Driver is done producing output in the stdout,
 	 * set the relevant property of Scanner by reading the former.
@@ -220,64 +201,58 @@ void Scanner::setupConnections() const
 		     &Scanner::scanFinished,
 		     Qt::UniqueConnection );
 
-	// Emit a signal when the driver is (re)initialized.
-	v = connect( d,
-		     &Driver::driverInitialized,
+	v = connect( m_pluginManager,
+		     &PluginManager::driverInitialized,
 		     this,
-		     &Scanner::driverInitialized,
-		     Qt::UniqueConnection );
+		     [this]( IDriver* const driver ) {
+			     emit driverInitialized( driver->driverName() );
+		     } );
 
 	v = connect( this,
 		     &Scanner::driverInitialized,
-		     this,
-		     &Scanner::driverInitializedSlot,
-		     Qt::UniqueConnection );
-
-	v = connect( this,
-		     &Scanner::driverReset,
 		     this,
 		     &Scanner::driverInitializedSlot,
 		     Qt::UniqueConnection );
 
 	// Emit a signal when the driver's symbol, internally changed size.
 	v = connect( d,
-		     &Driver::symbolSizeChanged,
+		     &IDriver::symbolSizeChanged,
 		     this,
 		     &Scanner::symbolSizeChanged,
 		     Qt::UniqueConnection );
 }
 
-void Scanner::performScanSlot() const { driver()->exec(); }
+void Scanner::performScanSlot() const { driver().value()->exec(); }
 
 bool Scanner::canQuit() const
 {
 	bool quit = true;
-	if ( IDriver * d{ driver() }; d != nullptr )
+
+	if ( const IDriver * pdriver{ driver().value() }; pdriver != nullptr )
 	{
-		quit = d->canDriverQuit();
+		quit = pdriver->canDriverQuit();
 	}
-	else
-	{
-		throw std::runtime_error( tr( "Driver is null" ).toLatin1() );
-	}
+
 	return quit;
 }
 
-void Scanner::reset( const QString& driverName ) { init( driverName ); }
+void Scanner::reset( std::string_view driverName ) { init( driverName ); }
 
-void Scanner::setDriverName( const QString& driverName )
+void Scanner::setEffectiveDriverName( std::optional<std::string_view> driverName )
 {
-	m_choosenDriverName = driverName;
+	m_selectedDriverName = driverName.value_or( g_emptyStr );
 }
 
-void Scanner::setSymbolName( const QString& symbol )
+const std::string Scanner::selectedDriverName() { return m_selectedDriverName; }
+
+void Scanner::setSymbolName( std::string_view symbol )
 {
-	const QString oldSymbol = symbolName();
+	const std::string_view oldSymbol{ symbolName() };
 
 	// If the symbols don't match, update.
-	if ( int sz = symbol.size(); oldSymbol != symbol && oldSymbol.size() != sz )
+	if ( ( oldSymbol != symbol && oldSymbol.size() != symbol.size() ) )
 	{
-		m_d->setSymbolName( symbol );
+		driver().value()->setSymbolName( symbol );
 
 		/*
 		 * Every time the symbol name is changed, the arguments of the
@@ -288,11 +263,13 @@ void Scanner::setSymbolName( const QString& symbol )
 		 * We call Scanner::setInvocation with m_symbolArg, to let the
 		 * function know it was called after a symbol change took place.
 		 */
-		setInvocation( invocation().join( spaceChar ), m_symbolArg );
+		std::string_view strArguments{ string::join_string_list( invocation() ) };
+		setInvocation( strArguments, Invocation::Source::FromSymbol );
 	}
 }
 
-void Scanner::setInvocation( const QString& arguments, const QString& secret )
+void Scanner::setInvocation( std::string_view		     arguments,
+			     std::optional<std::string_view> secret )
 {
 	/*
 	 * There are three ways for this function to be invoked:
@@ -304,79 +281,116 @@ void Scanner::setInvocation( const QString& arguments, const QString& secret )
 	 * B) secret == m_resetArg which means that this function was called from
 	 * Scanner::resetInvocation when a signal-slot connection asked for it.
 	 *
-	 * C) secret != m_symbolArg && !m_resetArg which means that this function was
-	 * called from somewhere else (ie by a slot connected to a signal) and that
-	 * the passed parameter `args` should be used.
+	 * C) secret != m_symbolArg && !m_resetArg which means that this function
+	 * was called from somewhere else (ie by a slot connected to a signal) and
+	 * that the passed parameter `args` should be used.
 	 */
-	QStringList currentArguments{ secret == m_symbolArg
-					      ? invocation()
-					      : arguments.split( spaceChar ) };
+	std::string currentDriverArgs;
+
+	if ( secret.has_value() )
+	{
+		if ( secret == Invocation::Source::FromSymbol )
+		{
+			currentDriverArgs = string::join_string_list( invocation() );
+		}
+		else if ( secret == Invocation::Source::FromReset )
+		{
+			currentDriverArgs =
+				string::join_string_list( defaultInvocation() );
+		}
+		else { currentDriverArgs = arguments; }
+	}
 
 	/*
-	 * We need the previous symbol name as well, to remove it from the string and
-	 * we need it to keep it's value between function invocations.
+	 * We need the previous symbol name as well to remove it from the string
+	 * and we need  to hold it's value between function invocations.
 	 */
-	const QString	   symbol{ symbolName() };
-	static QString	   oldSymbol;
-	static QStringList oldArguments{ currentArguments };
+	std::string_view   symbol{ symbolName() };
+	static std::string oldSymbol;
+	static std::string oldArguments{ currentDriverArgs };
 
-	if ( oldSymbol.isNull() ) { oldSymbol = symbol; }
+	// The first time a symbol is entered, there isn't an old symbol.
+	if ( oldSymbol.empty() ) { oldSymbol = symbol; }
 
 	// +1 because we need to insert to the next position.
-	int indexOfStop = stopIndexOfDriver().indexOfStop + 1;
-	int rightSize = currentArguments.join( spaceChar ).size() - indexOfStop;
+	int indexOfStop = static_cast<int>( stopIndexOfArguments().indexOfStop ) + 1;
 
 	/*
-	 * Convert the QStringList to string in place and cut it in half, with
-	 * the stopStr being the last character of the first half. Then add the
-	 * parts with symbol to create a single one.
+	 * Convert the QStringList to string in place and cut it in half, with the
+	 * stopStr being the last character of the first half. Then add the parts
+	 * with symbol to create a single one.
 	 *
-	 * Then, call the driver to actually change the arguments for the driver
-	 * to run. Emit that the arguments changed, only if this function was
-	 * called from setSymbolName() or resetInvocation().
+	 * Then, call the driver to actually change the arguments for the driver to
+	 * run. Emit that the arguments changed, only if this function was called
+	 * from setSymbolName() or resetInvocation().
 	 *
 	 * This is to avoid recursively emmiting after editing the text.
 	 */
-	QString untilStopStr{ currentArguments.join( spaceChar ).left( indexOfStop ) };
-	QString afterStopStr{ currentArguments.join( spaceChar ).right( rightSize ) };
+	std::string afterStopStr{
+		currentDriverArgs.substr( indexOfStop, currentDriverArgs.size() ) };
+	std::string_view untilStopStr{ currentDriverArgs.substr( 0, indexOfStop ) };
 
-	if ( afterStopStr.contains( oldSymbol ) )
+	/*
+	 * Delete any occurances of the old symbol from the substring.
+	 * Then, update the current arguments to reflect this change.
+	 */
+	std::string::size_type pos = afterStopStr.find( oldSymbol );
+	if ( pos != std::string::npos )
 	{
-		afterStopStr.remove( oldSymbol );
+		std::string::iterator iter{
+			std::ranges::find( afterStopStr, *oldSymbol.data() ) };
+		afterStopStr.erase( iter );
 	}
 
-	currentArguments = ( untilStopStr + symbol + afterStopStr ).split( spaceChar );
+	currentDriverArgs = string::tostring( untilStopStr )
+			    + string::tostring( symbol ) + afterStopStr;
 
-	bool succedded = driver()->setInvocation( currentArguments );
+	// if driver in null, setting the arguments will lead to crash.
+	const bool succedded = ( driver().has_value() )
+				       ? driver().value()->setInvocation( currentDriverArgs )
+				       : false;
 
-	if ( succedded && ( secret == m_symbolArg || secret == m_resetArg ) )
+	// If setting the arguments succedded, emit a signal.
+	if ( succedded
+	     && ( secret == Invocation::Source::FromSymbol
+		  || secret == Invocation::Source::FromReset ) )
 	{
 		emit argumentsUpdated();
 	}
 
-	// Symbol is now old. A new one will replace it next time.
+	// symbol is now "old". A new one will replace it next time.
 	oldSymbol = symbol;
 }
 
-void Scanner::driverInitializedSlot( const QString& symbol )
+void Scanner::driverInitializedSlot( const std::string_view symbol )
 {
 	resetInvocation();
-	setSymbolName( symbol );
+
+	// Nothing to set if empty
+	if ( !symbol.empty() ) { setSymbolName( symbol ); }
 }
 
-StopIndex Scanner::stopIndexOfDriver() const { return m_d->stopIndex(); }
+StopIndex Scanner::stopIndexOfArguments() const
+{
+	return driver().has_value() ? driver().value()->stopIndex()
+				    : StopIndex::makeStopIndex();
+}
 
-QString Scanner::symbolName() const { return m_d->symbolName(); }
+std::string Scanner::symbolName() const
+{
+	return driver().has_value() ? driver().value()->symbolName()
+				    : string::tostring( g_emptyStr );
+}
 
 void Scanner::setStandardOutSlot()
 {
-	m_stdout = dynamic_cast<Driver*>( m_d )->readAllStandardOutput();
-	qDebug() << m_stdout;
+	m_stdout = driver().value()->readAllStandardOutput();
+	fmt::print( "{}", m_stdout );
 }
 
 void Scanner::setStandardErrSlot()
 {
-	m_stderr = dynamic_cast<Driver*>( m_d )->readAllStandardError();
+	m_stderr = driver().value()->readAllStandardError();
 }
 
 QByteArray Scanner::standardOut() const { return m_stdout; }
@@ -385,20 +399,41 @@ QByteArray Scanner::standardError() const { return m_stderr; }
 
 void Scanner::aboutToCloseSlot() {}
 
-void Scanner::setDriver( IDriver* newDriver )
+void Scanner::setupDriver( std::optional<IDriver*> newDriver )
 {
-	const IDriver* oldDriver{ driver() };
+	/*
+	 * The old driver doesn't exist in the first run, so it
+	 * can be null. Therefore it is declared as an optional.
+	 */
+	std::optional<IDriver*> oldDriver{ driver() };
 
-	if ( oldDriver != newDriver )
+	/*
+	 * If this is the first run there is no value yet, so we create a new
+	 * driver. Else if old and new drivers are different, we take the
+	 * function's argument to set the new driver instance of this class.
+	 */
+	gsl::owner<IDriver*> tmpDriver{ nullptr };
+	if ( !newDriver.has_value() )
 	{
-		m_d = newDriver;
-
-		static QString symbolName{ "" };
-		if ( oldDriver != nullptr )
-		{
-			symbolName = oldDriver->symbolName();
-		}
-
-		emit driverReset( symbolName );
+		std::string_view selectedDriver{ selectedDriverName() };
+		tmpDriver = m_pluginManager->chooseDriver( selectedDriver ).value();
 	}
+	else
+	{
+		if ( oldDriver.value() == newDriver.value() ) { return; }
+
+		tmpDriver = newDriver.value();
+	}
+
+	// Set m_d with new driver.
+	setDriver( std::move( tmpDriver ) );
+
+	std::string_view drName{ driver().has_value() ? driver().value()->driverName()
+						      : g_emptyStr };
+	setEffectiveDriverName( drName );
+
+	// Free the previous plugin memory.
+	if ( oldDriver.has_value() ) { oldDriver.value()->deleteDriver(); }
 }
+
+void Scanner::setDriver( std::optional<IDriver*> d ) { m_d = d; }

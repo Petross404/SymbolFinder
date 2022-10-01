@@ -23,14 +23,18 @@
 #ifndef CONNECTVERIFIER_HPP
 #define CONNECTVERIFIER_HPP
 
-#include <qobject.h>
-
 #include <exception>
-#include <iostream>
 
+/*!
+ * Inherit `std::exception` and create custom functionality
+ */
 struct ConnectVerifierException: public std::exception
 {
-	const char* what() const throw();
+	/*!
+	 * Override std::exception's what() fn and
+	 * provide custom functionality and messages.
+	 */
+	[[nodiscard]] const char* what() const noexcept;
 };
 
 /*!
@@ -47,7 +51,7 @@ public:
 	//! Copy operator of `ConnectVerifier`
 	ConnectVerifier& operator=( const bool& b );
 
-	ConnectVerifier( bool&& b ) = delete;
+	ConnectVerifier( bool&& b )	       = delete;
 	ConnectVerifier&& operator=( bool& b ) = delete;
 
 	~ConnectVerifier() = default;

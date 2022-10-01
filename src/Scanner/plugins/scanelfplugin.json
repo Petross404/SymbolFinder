@@ -1,5 +1,0 @@
-{
-	"name": "scanelf",
-	"arguments": "-qRys + /lib64/",
-	"stopstring": ["+", "-"]
-}

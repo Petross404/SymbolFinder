@@ -16,10 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DRIVER_H
-#define DRIVER_H
+#ifndef DRIVER_HPP
+#define DRIVER_HPP
 
-//#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
 #include <qobjectdefs.h>    // for Q_OBJECT, signals, slots
 #include <qstring.h>	    // for QString
 #include <qstringlist.h>    // for QStringList
@@ -31,46 +30,67 @@ class QObject;
  * `Driver` is a concrete class for the `IDriver`. It defines some generic
  * fuctions for the derived plugins.
  */
-class Driver
-	: public QProcess
-	, public IDriver
+class GenericDriver: public IDriver
 {
 	Q_OBJECT
+	Q_DISABLE_COPY_MOVE( GenericDriver )
 
 public:
-	/*!
-	 * Constructs a Driver.
-	 * \param parent is a pointer to the `QObject` that is passed.
-	 */
-	Driver( QObject* parent = nullptr );
-
 	/*! Destructor */
-	~Driver() override;
+	~GenericDriver() override;
 
-	/*
-	 * Mark the following functions as "final" and don't allow
-	 * derived classes to override them further.
-	 * https://en.cppreference.com/w/cpp/language/final
+	/*!
+	 *
 	 */
-	[[nodiscard]] QString driverName() const final;
+	[[nodiscard]] std::string driverName() const final;
 
+	/*!
+	 * Determines if the symbol to be searched, is already in the
+	 * arguments of the driver.
+	 *
+	 * \return true if the symbol is in the arguments.
+	 */
 	[[nodiscard]] bool isSymbolInArgs() const final;
 
-	[[nodiscard]] QStringList defaultInvocation() const final;
+	/*!
+	 * Default invocation of the selected driver.
+	 *
+	 * \return The default invocation of the selected driver as
+	 * a `QStringList`.
+	 */
+	[[nodiscard]] std::list<std::string_view> defaultInvocation() const final;
 
-	void setSymbolName( const QString& symbolName ) final;
+	/*!
+	 * Set the symbol that is going to be searched.
+	 * \param symbolName is the symbol's name.
+	 */
+	void setSymbolName( std::string_view newSymbolName ) final;
 
-	bool setInvocation( const QStringList& args ) final;
+	/*!
+	 * Set the arguments for the selected driver.
+	 * \param args is the `QStringList` of the arguments.
+	 */
+	bool setInvocation( std::string_view args ) final;
 
-	[[nodiscard]] QString symbolName() const final;
+	/*!
+	 * Read the symbol's name.
+	 * \return the symbol's name.
+	 */
+	[[nodiscard]] std::string symbolName() const final;
 
+	/*!
+	 * Override the `QProcess::exec()` with some `Driver` specific
+	 * functions.
+	 */
 	void exec() final;
 
 	[[nodiscard]] bool canDriverQuit() const final;
 
-	[[nodiscard]] QStringList invocation() const final;
+	[[nodiscard]] std::list<std::string_view> invocation() const final;
 
 	[[nodiscard]] StopIndex stopIndex() const final;
+
+	void deleteDriver() const final;
 
 protected:
 	/*!
@@ -83,16 +103,19 @@ protected:
 	 * \param defArgList is the driver's default argument list.
 	 * \param parent is a pointer to the parent `QObject`.
 	 */
-	Driver( QString program, QStringList defArgList, QObject* parent );
+	explicit GenericDriver( std::string_view	program,
+				std::string_view	defArgList,
+				std::optional<QObject*> parent );
 
 protected slots:
 	/*!
 	 * Set the stop index of the driver's arguments.
+	 *
 	 * \param sIndex is the stop index.
 	 * \sa void Driver::stopIndexUpdated()
 	 * \sa StopIndex IDriver::stopIndex() const
 	 */
-	void setStopIndexSlot( StopIndex sIndex );
+	void setStopIndexSlot( const StopIndex sIndex );
 
 signals:
 	/*!
@@ -107,23 +130,20 @@ signals:
 
 	void stopIndexUpdatingFailed();
 
-	void symbolSizeChanged( uint16_t size );
-
 protected:
-	void setDriverName( const QString& name ) override;
+	void setDriverName( std::string_view name ) override;
 
-	void setDefaultInvocation( const QStringList& argList ) override;
+	void setDefaultInvocation( std::string_view argList ) override;
 
 private:
-	QString m_program; /*!< Program name, ie nm */
-	QString m_symbol;  /*!< Symbol name to search with m_program */
+	std::string m_symbol; /*!< Symbol name to search with m_program */
 
-	QStringList m_defArgList;	/*!< Default arguments */
-	QStringList m_effectiveArgList; /*!< Effective arguments */
+	std::list<std::string_view> m_defArgList;	/*!< Default arguments */
+	std::list<std::string_view> m_effectiveArgList; /*!< Effective arguments */
 
-	StopIndex m_stopIndex;
+	std::optional<StopIndex> m_stopIndex;
 
 	void init();
 };
 
-#endif	  // DRIVER_H
+#endif	  // DRIVER_HPP

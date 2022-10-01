@@ -19,65 +19,120 @@
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H
 
+#include <qdir.h>
 #include <qobject.h>
 
-#include "driverfactory.hpp"
-#include "pluginpair.hpp"
+#include <gsl/pointers>
+#include <optional>
+
+#include "pluginmanageraliases.hpp"
+
+template<typename T> using not_null_owner = gsl::strict_not_null<gsl::owner<T>>;
+
+class PluginManagerPrivate;
 
 /*!
  * `PluginManager` is a class that tries to contain the needed funtionality
  * for the plugins to be discovered, registered and provided to the software.
  */
-class PluginManager
-	: public QObject
-	, public DriverFactory
+class PluginManager: public QObject
 {
 	Q_OBJECT
+	Q_DISABLE_COPY_MOVE( PluginManager )
 
 public:
-	PluginManager( QObject* parent );
-	~PluginManager() override;
+	/*!
+	 * Constructor for `PluginManager`
+	 * \param parent is a `QObject*` that is the parent of this object.
+	 */
+	explicit PluginManager( QObject* parent );
 
 	/*!
-	 * Lookup for plugins at pre-defined locations.
+	 *Destructor
 	 */
-	void look();
+	~PluginManager() override;
 
 	/*!
 	 * Number of plugins that are found.
 	 * \return the number of plugins that are found.
 	 */
-	int pluginsNumber() const;
-
-	/*!
-	 * Register the current driver.
-	 * \param driverName is the name describes the driver.
-	 * \param createCb is the callback to be retrieved and create
-	 * the driver.
-	 */
-	void registerIDriver( const QString& driverName, callback_t createCb );
+	[[nodiscard]] std::uint16_t pluginsNumber() const;
 
 	/*!
 	 * Remove the following driver if existant
 	 * \param driverName is the driver that needs to be removed.
 	 */
-	void unregisterIDriver( const QString& driverName );
+	void unregisterIDriver( std::string_view driverName );
 
-	IDriver* driver( const QString& driverName );
+	/*!
+	 * Find the registered constructor for the driver name and execute it.
+	 * \param driverName is the driver's name to look for.
+	 * \return Not-Null Pointer to newly created `IDriver` plugin.
+	 */
+	std::optional<IDriver*> createDriver( std::string_view driverName );
 
 	/*!
 	 * Return the table that contains the names of the driver
 	 * and their respective callbacks.
 	 * \return the driver's table.
 	 */
-	std::vector<PluginDriver> registeredPlugins();
+	[[nodiscard]] const PluginsTable registeredPlugins() const;
+
+	[[nodiscard]] const std::vector<PluginDesc> pluginsDescription() const;
+
+	[[nodiscard]] std::optional<IDriver*> chooseDriver( std::string_view driverName );
+
+	[[nodiscard]] std::optional<IDriver*> currentDriver() const;
+
+	static std::uint16_t pluginsCounter();
+
+public slots:
+	/*!
+	 * Set the `IDriver` pointer to the current plugin.
+	 * \param driver is the plugin wrapped in `std::optional` type.
+	 */
+	void setCurrentDriver( std::optional<IDriver*> driver );
+
+signals:
+	/*!
+	 * Inform any listeners that a new plugin was initialized.
+	 * \param pdriver is a pointer to the plugin that was initialized.
+	 */
+	void driverInitialized( IDriver* const pdriver );
+
+	/*!
+	 * Inform any listeners that the number of registered plugins changed.
+	 * \param size is the size of the table of drivers (= counter of plugins).
+	 */
+	void tableOfDriversAltered( const std::size_t size );
+
+protected:
+	PluginManagerPrivate* const d_ptr; /*!< Smart pointer to private implemantation */
 
 private:
-	int m_pluginCount = 0;
+	Q_DECLARE_PRIVATE( PluginManager )
 
-	std::vector<PluginDriver> m_vecOfDrivers;
+	std::optional<IDriver*> m_currentDriver; /*!< Optional pointer to current driver */
+	std::uint16_t m_pluginCount{ 0 }; /*!< Counter of plugin number in the system */
 
-	int indexOfLibSuffix( const QString& libName );
+	/*!
+	 * Lookup for plugins at pre-defined locations.
+	 */
+	void lookup();
+
+	/*!
+	 * Discover plugins in the specified directory.
+	 * \param isRunningInRepo determines if this app is still being developed.
+	 * \param pluginDir is the directory that will be searched for plugins.
+	 */
+	void findPlugins( bool isRunningInRepo, const QDir& pluginDir );
+
+	/*!
+	 * Resolve the needed functions for the specified library and if the
+	 * value isn't nullptr, register the plugin.
+	 * \param libraryName is the library to load.
+	 */
+	void preparePlugin( std::string_view libraryName );
 };
 
 #endif	  // PLUGINMANAGER_H

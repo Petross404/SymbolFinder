@@ -19,19 +19,30 @@
 #include "idriver.hpp"
 class QObject;
 
-bool StopIndex::isNull()
+StopIndex::StopIndex( const uint32_t indexOfStop_, std::string_view stopStr_ )
+	: indexOfStop{ indexOfStop_ }
+	, stopStr{ stopStr_ }
+{}
+
+StopIndex StopIndex::makeStopIndex() { return StopIndex{}; }
+
+StopIndex StopIndex::makeStopIndex( const uint32_t indexOfStop_, std::string_view stopStr_ )
 {
-	bool is_null{ true };
-	if ( this->indexOfStop > 0
-	     && ( !this->stopStr.isNull() || !this->stopStr.isEmpty() ) )
-	{
-		is_null = false;
-	}
+	return StopIndex{ indexOfStop_, stopStr_ };
+}
+
+bool StopIndex::isNull() const
+{
+	bool is_null = true;
+	if ( indexOfStop && stopStr.empty() ) { is_null = false; }
+
 	return is_null;
 }
 
-IDriver::IDriver() = default;
-
-IDriver::IDriver( QObject* parent ){ Q_UNUSED( parent ) }
+IDriver::IDriver( const std::string_view name, std::optional<QObject*> parent )
+	: QProcess{ parent.value_or( nullptr ) }
+{
+	emit initialized( name );
+}
 
 IDriver::~IDriver() = default;

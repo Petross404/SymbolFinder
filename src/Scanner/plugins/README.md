@@ -13,7 +13,7 @@ the derived, driver-specific classes.
 						   |
 
 				 ---------------------------------------
-				|  Process::IDriver : public QProcess 	|
+				|  	IDriver : public QProcess 	|
 				 _______________________________________
 
 					 	   ^
@@ -21,7 +21,7 @@ the derived, driver-specific classes.
 					 	   |
 
 				 ---------------------------------------
-				|    Driver : public Process::IDriver	|
+				|	Driver : public IDriver		|
 				 _______________________________________
 
 						   ^
@@ -55,3 +55,7 @@ the derived, driver-specific classes.
 		functions, like different nm-arguments	functions, specific to scanelf and it's
 		etc.					arguments.
 ```
+
+Adding new plugins.
+
+In the directory `./example` there is an example plugin to study and implement your own.

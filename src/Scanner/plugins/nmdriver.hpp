@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NMDRIVER_H
-#define NMDRIVER_H
+#ifndef NMDRIVER_HPP
+#define NMDRIVER_HPP
 
 #include <qfile.h>
 #include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
@@ -25,15 +25,24 @@
 #include <qstring.h>	    // for QString
 #include <qstringlist.h>    // for QStringList
 
-#include "../interface/driver.hpp"    // for IDriver
-class QObject;
+#include "../interface/genericdriver.hpp"    // for IDriver
+
+#if defined( NMDRIVER_HPP )
+#	ifdef Q_OS_WIN
+#		define NMLIB_EXPORT __declspec( dllexport )
+#	else
+#		define NMLIB_EXPORT Q_DECL_EXPORT
+#	endif
+#else
+#	define NMLIB_EXPORT Q_DECL_IMPORT
+#endif
 
 /*!
  * \brief `NmDriver` inherits from `IDriver` and acts as a driver for nm
  *
  * `NmDriver` defines some nm-specific functions.
  */
-class NmDriver: public Driver
+class NMLIB_EXPORT NmDriver: public GenericDriver
 {
 	Q_OBJECT
 	Q_DISABLE_COPY_MOVE( NmDriver )
@@ -43,22 +52,18 @@ public:
 	 * Construct a `NmDriver`
 	 * \param parent is the pointer to the `QObject` parent
 	 */
-	NmDriver( QObject* parent = nullptr );
+	explicit NmDriver( std::optional<QObject*> parent );
 
 	/*! Destructor */
 	~NmDriver() override;
 
-	static IDriver*	   create( QObject* parent );
-	static const char* driverNameStatic();
-	static const char* argumentsStatic();
-
 private slots:
 	void updateStopIndexSlot();
-
-private:
-	QFile	    m_jsonFile;
-	QStringList m_effectiveArgList;
-	QStringList m_defaultArguments;
-	QString	    m_name;
 };
-#endif	  // NMDRIVER_H
+
+extern "C" NMLIB_EXPORT IDriver*    init( QObject* parent );
+extern "C" NMLIB_EXPORT const char* driverNameGlobal();
+extern "C" NMLIB_EXPORT const char* driverDescGlobal();
+extern "C" NMLIB_EXPORT const char* argumentsGlobal();
+
+#endif	  // NMDRIVER_HPP

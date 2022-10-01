@@ -2,33 +2,35 @@
 // SPDX-FileCopyrightText: 2022 Πέτρος Σιλιγκούνας <petross404@gmail.com>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef ARGUMENTSLINEEDIT_H
-#define ARGUMENTSLINEEDIT_H
+#ifndef ARGUMENTSLINEEDIT_HPP
+#define ARGUMENTSLINEEDIT_HPP
 
-#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qglobal.h>	    // for qGetPtrHelper, Q_DECLARE...
 #include <qlineedit.h>	    // for QLineEdit
-#include <qobjectdefs.h>    // for Q_OBJECT, Q_PROPERTY, signals
+#include <qobjectdefs.h>    // for Q_OBJECT, signals, slots
 #include <qstring.h>	    // for QString
 
-#include <cstdint>
+#include <cstdint>	  // for uint16_t
+#include <optional>	  // for optional
+#include <string_view>	  // for string_view
 
-#include "../Scanner/interface/idriver.hpp"
-
-class QKeyEvent;
-class QMouseEvent;
-class QObject;
-class QWidget;
+#include "../Scanner/interface/idriver.hpp"    // for StopIndex
+class ArgumentsLineEditPrivate;		       // lines 18-18
+class QKeyEvent;			       // lines 19-19
+class QMouseEvent;			       // lines 20-20
+class QObject;				       // lines 21-21
+class QWidget;				       // lines 22-22
 
 /*!
  * \brief `ArgumentsLineEdit` is a customized `QLineEdit`.
  *
- * What it offers over the Qt's widget, is that we can handle some special characters and
- * emit signals that are usefull elsewhere.
+ * What it offers over the Qt's widget, is that we can handle some special
+ * characters and emit signals that are usefull elsewhere.
  *
  * Since this widget can both display and edit the driver's arguments, one could by
  * mistake edit the symbol's name here, confusing the program that reads this name
- * from another input widget. Clicking or typing at a certain position in the arguments
- * list, is prohibeted and the user is visually informed about the error.
+ * from another input widget. Clicking or typing at a certain position in the
+ * arguments list, is prohibeted and the user is visually informed about the error.
  */
 class ArgumentsLineEdit: public QLineEdit
 {
@@ -43,14 +45,11 @@ public:
 	 * \param stopString is the `QString` that imediately after we find the symbol's name
 	 * \param parent is the ptr of the parent `QWidget` for this object
 	 */
-	explicit ArgumentsLineEdit( const QString& arguments,
-				    StopIndex	   stopIndex,
-				    QWidget*	   parent = nullptr );
+	explicit ArgumentsLineEdit( std::string_view arguments,
+				    StopIndex	     stopIndex,
+				    QWidget*	     parent = nullptr );
 
-	/*!
-	 * Construct an `ArgumentsLineEdit` object just with the parent `QWidget`
-	 */
-	explicit ArgumentsLineEdit( QWidget* parent = nullptr );
+	explicit ArgumentsLineEdit( std::optional<QWidget*> parent );
 
 	/*!
 	 * Default destructor
@@ -76,12 +75,12 @@ public slots:
 
 signals:
 	/*!
-	 * This signal is emmited when the user tries to edit the symbol's name in this
-	 * widget. The signal is used to warn the user and reset this widget.
+	 * This signal is emmited when the user tries to edit the symbol's name in
+	 * this widget. The signal is used to warn the user and reset this widget.
 	 * \sa void ArgumentsLineEdit::mousePressEvent(QMouseEvent*
 	 * event) \sa void ArgumentsLineEdit::keyPressEvent(QKeyEvent* event)
 	 */
-	void symbolManuallyChanged();
+	void symbolManuallyChanged() const;
 
 	/*!
 	 * This signal is emmited when the symbol changes. It informs any listener about
@@ -92,6 +91,8 @@ signals:
 	void symbolSizeChanged( uint16_t size );
 
 protected:
+	ArgumentsLineEditPrivate* const d_ptr; /*<! Referring to the private class */
+
 	/*!
 	 * Override and re-implement `QLineEdit::mousePressEvent(QMouseEvent*)` so we can
 	 * handle left-clicks above the symbol's name.
@@ -107,20 +108,14 @@ protected:
 	void keyPressEvent( QKeyEvent* event ) override;
 
 private:
-	uint16_t m_synbolSz = 0;
-	QString	 m_text; /*!< Text that this widget contains>*/
+	Q_DECLARE_PRIVATE( ArgumentsLineEdit )
 
-	QString m_specialStr; /*! The string in the argument that immediately after the symbol name exists.
-			       *\sa void ArgumentsLineEdit::stopString() const
-			       */
-
-	StopIndex m_stopIndex;
 	/*!
 	 * The constructors share some functionality.
 	 */
 	void init();
 
-	void checkStopString();
+	void checkStopString() const;
 };
 
-#endif	  // ARGUMENTSLINEEDIT_H
+#endif	  // ARGUMENTSLINEEDIT_HPP

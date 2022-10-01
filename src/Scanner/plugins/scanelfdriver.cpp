@@ -27,29 +27,31 @@
 #include <qpluginloader.h>
 
 #include <cstdint>    // for uint16_t
+#include <cstring>
 
 // TODO When this plugin (and others) are installed, this path won't work
 #include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
-#include "../interface/driver.hpp"			// for Driver
-#include "../interface/idriver.hpp"			// for StopIndex
+#include "../../Helper/string.hpp"
+#include "../interface/genericdriver.hpp"    // for Driver
+#include "../interface/idriver.hpp"	     // for StopIndex
 #include "../interface/pluginmanager.hpp"
 
 class QObject;	  // lines 12-12
 
-const QString	  g_program{ "scanelf" };
-const QStringList g_defaultArguments{ "-qRys + /lib64/" };
+const char g_spaceChar{ ' ' };
 
-ScanelfDriver::ScanelfDriver( QObject* parent )
-	: Driver{ g_program, g_defaultArguments, parent }
-	, m_jsonFile{ "scanelfplugin.json", this }
+constexpr char const* g_program{ "scanelf" };
+constexpr char const* g_defaultArguments{ "-qRys + /lib64/" };
+
+ScanelfDriver::ScanelfDriver( std::optional<QObject*> parent )
+	: GenericDriver{ g_program, g_defaultArguments, parent.value_or( nullptr ) }
 {
 	updateStopIndexSlot();
 
-	qDebug() << "I am scanelf's ctor";
-
 	ConnectVerifier v;
+
 	v = connect( this,
-		     &Driver::stopIndexUpdated,
+		     &GenericDriver::stopIndexUpdated,
 		     this,
 		     &ScanelfDriver::updateStopIndexSlot,
 		     Qt::UniqueConnection );
@@ -59,14 +61,13 @@ ScanelfDriver::~ScanelfDriver() = default;
 
 void ScanelfDriver::updateStopIndexSlot()
 {
-	const QString args = m_effectiveArgList.join( " " );
+	std::string_view args{ string::join_string_list( invocation() ) };
 
 	for ( uint16_t i = 0; i < static_cast<uint16_t>( args.size() ); i++ )
 	{
-		const QChar stopChar = args.at( i );
+		const char stopChar = args.at( i );
 
-		auto symbol{ symbolName() };
-		auto symbolSize{ symbolName().size() };
+		const int symbolSize{ static_cast<int>( symbolName().size() ) };
 
 		/*
 		 * '+' or '-' are considered stopStrings for scanelf's arguments but
@@ -76,27 +77,53 @@ void ScanelfDriver::updateStopIndexSlot()
 		 * That's why we need to match the '-' sign that sits exactly before
 		 * the symbol's name in the arguments list.
 		 */
-		if ( stopChar == '+'
-		     || ( stopChar == '-'
-			  && QStringRef{ &args, i, symbolSize }.contains( symbol ) ) )
+		std::string_view sub{ args.substr( i, symbolSize ) };
+
+		if ( stopChar == '+' || ( stopChar == '-' && ( args.find( sub, i ) ) ) )
 		{
-			QString stopStr{ QString::fromRawData( &stopChar, 1 ) };
-			setStopIndexSlot( StopIndex{ i, stopStr } );
+			setStopIndexSlot( StopIndex::makeStopIndex( i, &stopChar ) );
 		}
 	}
 }
 
-IDriver* ScanelfDriver::create( QObject* parent )
+IDriver* init( QObject* parent ) { return new ScanelfDriver{ parent }; }
+
+const char* driverNameGlobal()
 {
-	return new ScanelfDriver{ parent };
+	const size_t size = std::strlen( g_program );
+
+	char* ptr = new char[size + 1];
+	std::strcpy( ptr, g_program );
+
+	return ptr;
 }
 
-const char* ScanelfDriver::driverNameStatic()
+const char* driverDescGlobal()
 {
-	return g_program.toStdString().c_str();
+	std::unique_ptr<QProcess> pr{ std::make_unique<QProcess>() };
+
+	const QStringList args{ "--help" };
+	pr->start( g_program, QStringList{ g_defaultArguments } );
+	pr->waitForFinished( -1 );
+
+	QByteArray  result{ pr->readAllStandardOutput() };
+	QStringList lines{ QString::fromLocal8Bit( result ).split( '\n' ) };
+	// result = lines.at( 0 ).toLocal8Bit();
+
+	const size_t size = std::strlen( qPrintable( result ) );
+
+	char* pc = new char[size + 1];
+	std::strcpy( pc, result );
+
+	return pc;
 }
 
-const char* ScanelfDriver::argumentsStatic()
+const char* argumentsGlobal()
 {
-	return g_defaultArguments.join( ' ' ).toStdString().c_str();
+	const size_t size = std::strlen( g_defaultArguments );
+
+	char* ptr = new char[size + 1];
+	std::strcpy( ptr, g_defaultArguments );
+
+	return ptr;
 }

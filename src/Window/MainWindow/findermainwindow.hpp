@@ -19,21 +19,25 @@
 #ifndef SYMBOLFINDER_H
 #define SYMBOLFINDER_H
 
-#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qglobal.h>	    // for Q_DISABLE_COPY_...
 #include <qmainwindow.h>    // for QMainWindow
 #include <qobjectdefs.h>    // for Q_OBJECT, signals
 #include <qstring.h>	    // for QString
 
 #include <gsl/pointers>	   // for owner
+#include <optional>	   // for optional, nullopt
+#include <string_view>	   // for string_view
 
 #include "../../DriverWidgets/argumentslineedit.hpp"	// for ArgumentsLineEdit
 
-class QObject;	  // lines 11-11
-class QWidget;	  // lines 12-12
-class Scanner;	  // lines 13-13
+class QCloseEvent;    // lines 33-33
+class QObject;	      // lines 34-34
+class QWidget;	      // lines 35-35
+class Scanner;	      // lines 36-36
 namespace Ui {
 class Interface;
 }    // namespace Ui
+class FinderWindowPrivate;
 
 using ArgsLineEdit = ArgumentsLineEdit;
 
@@ -43,22 +47,22 @@ using ArgsLineEdit = ArgumentsLineEdit;
  * This object is a `QMainWindow` and is providing the UI for
  * a user to interact with the drivers.
  */
-class MainWindow: public QMainWindow
+class FinderWindow: public QMainWindow
 {
 	Q_OBJECT
-	Q_DISABLE_COPY_MOVE( MainWindow )
+	Q_DISABLE_COPY_MOVE( FinderWindow )
 
 public:
 	/*!
 	 * Constructs the MainWindow of SymbolFinder.
 	 * \param parent is the pointer to the `QWidget` parent.
 	 */
-	explicit MainWindow( QWidget* parent = nullptr );
+	explicit FinderWindow( std::optional<QWidget*> parent = std::nullopt );
 
 	/*!
 	 * Default destructor
 	 */
-	~MainWindow() override;
+	~FinderWindow() override;
 
 public slots:
 	/*!
@@ -102,7 +106,7 @@ public slots:
 	/*!
 	 * Slot to set the symbol name with the `Scanner` instance.
 	 */
-	void updateSymbolSlot( const QString& symbol );
+	void updateSymbolSlot( const std::string_view symbol );
 
 	/*!
 	 * Slot to update the arguments, when the symbol name is altered.
@@ -114,7 +118,7 @@ public slots:
 	 * this change.
 	 * \param name is the driver's name.
 	 */
-	void driverInitalizedSlot( const QString& name );
+	void driverInitalizedSlot( const std::string_view name );
 
 	/*!
 	 * Slot to reset the blocked advanced arguments widgets. This
@@ -161,9 +165,9 @@ public slots:
 	 * a new driver will be initialized.
 	 * \param scannerName is the name of the new scanner driver.
 	 */
-	void resetScannerInstanceSlot( const QString& scannerName );
+	void resetScannerInstanceSlot( int index );
 
-	void scannerPlugins();
+	void discoverPlugins();
 
 signals:
 	/*!
@@ -173,12 +177,17 @@ signals:
 	 */
 	void advancedArgumentssUnblocked() const;
 
+	void startScanner() const;
+
 protected:
 	void closeEvent( QCloseEvent* event ) override;
 
 private:
+	Q_DECLARE_PRIVATE( FinderWindow )
+	FinderWindowPrivate* const d_ptr;
+
 	gsl::owner<Ui::Interface*> m_ui; /*!< Ptr to the hand-made user interface */
-	gsl::owner<Scanner*> m_scanner; /*!< Ptr to the scanner instance */
+	gsl::owner<Scanner*>	   m_scanner; /*!< Ptr to the scanner instance */
 
 	void setupConnections();
 	void setupWidgets();

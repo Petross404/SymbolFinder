@@ -9,11 +9,14 @@
 #include <qlineedit.h>	    // for QLineEdit
 #include <qobjectdefs.h>    // for Q_OBJECT, signals, slots
 #include <qstring.h>	    // for QString
-class QEvent;
-class QFocusEvent;
-class QKeyEvent;
-class QObject;
-class QWidget;
+
+#include <string>	  // for string
+#include <string_view>	  // for string_view
+class QEvent;		  // lines 14-14
+class QFocusEvent;	  // lines 15-15
+class QKeyEvent;	  // lines 16-16
+class QObject;		  // lines 17-17
+class QWidget;		  // lines 18-18
 
 /*!
  * `SymbolLineEdit` extends Qt's `QLineEdit` and adds more functionality
@@ -29,20 +32,21 @@ public:
 	 * \param parent is the ptr to the parent widget
 	 */
 	explicit SymbolLineEdit( QWidget* parent = nullptr );
+
 	/*!
 	 * Constructs a `SymbolLineEdit` from the following:
 	 * \param text is the default text
 	 * \param parent is the ptr to the parent widget
 	 */
-	explicit SymbolLineEdit( const QString& text   = "printf",
-				 QWidget*	parent = nullptr );
+	explicit SymbolLineEdit( std::string_view text	 = "printf",
+				 QWidget*	  parent = nullptr );
 
 	/*!
 	 * Virtual, default destructor
 	 */
 	~SymbolLineEdit() override;
 
-	QString text() const;
+	[[nodiscard]] QString text() const;
 
 public slots:
 	/*!
@@ -59,7 +63,7 @@ signals:
 	 * Emit the new text
 	 * \param txt is the new text in the widget
 	 */
-	void symbolChanged( const QString& txt );
+	void symbolChanged( std::string_view txt );
 
 	/*!
 	 * Emit when the enabled or disabled status of some widgets should
@@ -86,11 +90,12 @@ protected:
 	void keyPressEvent( QKeyEvent* event ) override;
 
 private:
-	bool m_enableSearch{ false };
+	bool m_enableSearch = false;
 
-	const QString msg{ tr( "Enter a symbol (ie printf)" ) };
+	std::string_view msg{ tr( "Enter a symbol (ie printf)" ).toStdString() };
 
 	void init();
+	void setMessage();
 };
 
 #endif	  // SYMBOLLINEEDIT_H

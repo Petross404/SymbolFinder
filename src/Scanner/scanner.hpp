@@ -29,15 +29,19 @@
 #include <stdint.h>	    // for uint16_t
 
 #include <gsl/pointers>	   // for owner
+#include <optional>
 #include <utility>
 #include <vector>
 
-#include "interface/driverfactory.hpp"
 #include "interface/idriver.hpp"    // for StopIndex
+#include "interface/pluginmanager.hpp"
 #include "interface/pluginpair.hpp"
 
-class Driver;
+class GenericDriver;
 class PluginManager;
+
+template<typename T>
+using OptionalRef = std::optional<typename std::reference_wrapper<const T>::type>;
 
 /*!
  * `Scanner` class can create and hold an `IDriver*` instance.
@@ -58,31 +62,24 @@ public:
 	 * Default constructor
 	 * \param parent is the `QObject*` that is the parent for `Scanner` class
 	 */
-	Scanner( QObject* parent = nullptr );
+	explicit Scanner( std::optional<QObject*> parent );
 
 	/*!
-	 * Constructor that accepts the name of the driver
-	 * \param driverName is the name of the driver
-	 * \param parent is the `QObject*` that is the parent for `Scanner` class
-	 */
-	Scanner( const QString& driverName, QObject* parent = nullptr );
-
-	/*!
-	 * Return the `IDriver` ptr (m_d for this class)
+	 * Return the `IDriver` ptr (`m_d` for this class)
 	 * \return The driver that is selected.
 	 */
-	[[nodiscard]] IDriver* driver() const;
+	[[nodiscard]] std::optional<IDriver*> driver() const;
 
 	/*! Return the default arguments that the active driver is called
 	 * \return A list of default arguments
 	 */
-	[[nodiscard]] QStringList defaultInvocation() const;
+	[[nodiscard]] std::list<std::string_view> defaultInvocation() const;
 
 	/*!
 	 * Return the current arguments of the active driver
 	 * \return A list of the current arguments
 	 */
-	[[nodiscard]] QStringList invocation() const;
+	[[nodiscard]] std::list<std::string_view> invocation() const;
 
 	/*! Reset the driver's arguments to the default list. */
 	void resetInvocation();
@@ -97,9 +94,10 @@ public:
 	 * simple way was chosen.
 	 * \sa `void setSymbolName(const QString& symbol)`
 	 */
-	void setInvocation( const QString& arguments, const QString& secret = "" );
+	void setInvocation( std::string_view		    arguments,
+			    std::optional<std::string_view> secret );
 
-	[[nodiscard]] StopIndex stopIndexOfDriver() const;
+	[[nodiscard]] StopIndex stopIndexOfArguments() const;
 
 	/*!
 	 * Read the stderr that the driver produced
@@ -120,13 +118,13 @@ public:
 	 * emmited.
 	 * \sa void Scanner::argumentsUpdated(const QStringList& args)+
 	 */
-	void setSymbolName( const QString& symbol );
+	void setSymbolName( std::string_view symbol );
 
 	/*!
 	 * Read the name of the symbol.
 	 * \return the name of the symbol.
 	 */
-	[[nodiscard]] QString symbolName() const;
+	[[nodiscard]] std::string symbolName() const;
 
 	/*!
 	 * Can the driver quit (hence the application) or is it still searching?
@@ -139,18 +137,20 @@ public:
 	 * `Driver`.
 	 * \param driverName is the new driver's name.
 	 */
-	void reset( const QString& driverName );
+	void reset( std::string_view driverName );
 
 	[[nodiscard]] std::vector<PluginDriver> plugins() const;
 
 	/*! Destructor */
 	~Scanner() override;
 
+	[[nodiscard]] std::vector<PluginDesc> pluginDescription() const;
+
 public slots:
 	/*! The function that searches for the symbol with the predefined driver. */
 	void performScanSlot() const;
 
-	void driverInitializedSlot( const QString& symbol );
+	void driverInitializedSlot( const std::string_view symbol );
 
 	void aboutToCloseSlot();
 
@@ -186,11 +186,9 @@ signals:
 	 * Emit this signal when the driver is initialized.
 	 * \param name is the driver's name.
 	 */
-	void driverInitialized( const QString& name );
+	void driverInitialized( std::string_view name ) const;
 
-	void driverReset( const QString& symbolName );
-
-	void pluginsLoaded( const QStringList& pluginNames );
+	void pluginsLoaded( std::reference_wrapper<const QStringList> pluginNames );
 
 	void aboutToClose();
 
@@ -200,7 +198,11 @@ protected:
 	 * the `IDriver` instance, thus it isn't public.
 	 * \param driverName is the driver's name.
 	 */
-	void setDriverName( const QString& driverName );
+	void setEffectiveDriverName( std::optional<std::string_view> driverName );
+
+	/*!
+	 */
+	const std::string selectedDriverName();
 
 protected slots:
 	/*! Read the stderr of the `IDriver` to set the `m_stderr` */
@@ -209,32 +211,41 @@ protected slots:
 	void setStandardOutSlot();
 
 private:
-	uint32_t   m_pluginCount = 0;
-	QString	   m_choosenDriverName; /*!< Driver's name */
-	QByteArray m_stdout; /*!< stdout text from the underlying driver */
-	QByteArray m_stderr; /*!< stderr text from the underlying driver */
+	std::uint32_t m_pluginCount = 0;
+	std::string   m_selectedDriverName; /*!< Driver's name */
+	QByteArray    m_stdout; /*!< stdout text from the underlying driver */
+	QByteArray    m_stderr; /*!< stderr text from the underlying driver */
 
-	gsl::owner<IDriver*> m_d{ nullptr }; /*!< Ptr to the `IDriver` instance */
+	std::optional<IDriver*> m_d{ std::nullopt }; /*!< Ptr to the `IDriver` instance */
 
 	gsl::owner<PluginManager*> m_pluginManager{ nullptr };
 
 	std::vector<PluginDriver> m_plugins;
 
-	/*! Private function to setup all the connections that have to be made */
-	void setupConnections() const;
+	/*!
+	 * Private function to setup all the connections
+	 */
+	void setupConnections( const std::uint16_t    counter,
+			       const std::string_view drName ) const;
 
 	void init();
-	void init( const QString& driverName, bool calledFromConstructor = false );
+	void init( std::string_view driverName );
 
-	int loadDriverPlugins();
+	std::uint16_t loadDriverPlugins();
 
 	/*!
-	 * Copy and set the newDriver in the paired driver (with QPluginLoader)
-	 * and also copy the value to m_d
-	 * \param pairDriver is the IDriver* paired with it's QPluginLoader
-	 * \param newDriver is the newly created IDriver*
+	 * Setup the new driver for `Scanner` and destroy the previous
+	 * one (if any).
+	 * \param newDriver is an `std::optional` for the new driver because
+	 * it can be null.
 	 */
-	void setDriver( IDriver* newDriver );
+	void setupDriver( std::optional<IDriver*> newDriver );
+
+	/*!
+	 * Low-level function to set `m_d`.
+	 * \param d is the `std::optional` driver.
+	 */
+	void setDriver( std::optional<IDriver*> d );
 };
 
 #endif	  // SCANNER_H

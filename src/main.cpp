@@ -17,15 +17,21 @@
  */
 
 #include <qapplication.h>    // for QApplication
+#include <qnamespace.h>	     // for AA_EnableHighDpiSc...
+
+#include <memory>    // for make_unique, uniqu...
 
 #include "Window/MainWindow/findermainwindow.hpp"    // for MainWindow
 
 int main( int argc, char *argv[] )
 {
-	QApplication app{ argc, argv };
+	QApplication::setAttribute( Qt::AA_ShareOpenGLContexts );
+	QApplication::setAttribute( Qt::AA_EnableHighDpiScaling );
 
-	MainWindow w;
-	w.show();
+	std::unique_ptr<QApplication> app{ std::make_unique<QApplication>( argc, argv ) };
 
-	return app.exec();
+	std::unique_ptr<FinderWindow> w{ std::make_unique<FinderWindow>() };
+	w->show();
+
+	return app->exec();
 }

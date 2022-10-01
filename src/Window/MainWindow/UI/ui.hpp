@@ -16,27 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INTERFACE_H
-#define INTERFACE_H
+#ifndef INTERFACE_HPP
+#define INTERFACE_HPP
 
-#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
-#include <qobjectdefs.h>    // for Q_OBJECT
+#include <qglobal.h>	    // for qGetPtrHelper, Q_DECLARE_PRIVATE, Q_DISABLE...
+#include <qobjectdefs.h>    // for Q_OBJECT, signals, slots
 #include <qstring.h>	    // for QString
 #include <qwidget.h>	    // for QWidget
 
-#include <gsl/pointers>	    // for owner
-class ArgumentsLineEdit;    // lines 38-38
-class QAction;		    // lines 27-27
-class QCheckBox;	    // lines 33-33
-class QComboBox;	    // lines 31-31
-class QGridLayout;	    // lines 28-28
-class QGroupBox;	    // lines 35-35
-class QObject;
-class QPushButton;	 // lines 30-30
-class QTabWidget;	 // lines 32-32
-class QTextEdit;	 // lines 36-36
-class Scanner;		 // lines 26-26
-class SymbolLineEdit;	 // lines 39-39
+#include <gsl/pointers>	    // for owner, strict_not_null
+class ArgumentsLineEdit;    // lines 28-28
+class InterfacePrivate;	    // lines 39-39
+class PluginsComboBox;	    // lines 29-29
+class QAction;		    // lines 30-30
+class QCheckBox;	    // lines 31-31
+class QGridLayout;	    // lines 32-32
+class QGroupBox;	    // lines 33-33
+class QObject;		    // lines 34-34
+class QPushButton;	    // lines 35-35
+class QShowEvent;
+class QTabWidget;	 // lines 36-36
+class QTextEdit;	 // lines 37-37
+class SymbolLineEdit;	 // lines 38-38
+
+template<typename T> using not_null_owner = gsl::strict_not_null<gsl::owner<T>>;
 
 namespace Ui {
 /*!
@@ -52,8 +55,6 @@ class Interface: public QWidget
 public:
 	/*!
 	 * Construct the User Interface for the main window.
-	 * \param scanner is a ptr to the `Scanner` instance. We
-	 * need this to extract some info for our custom widgets.
 	 * \param parent is a ptr to the parent widget.
 	 */
 	explicit Interface( QWidget* parent = nullptr );
@@ -63,51 +64,43 @@ public:
 	 */
 	~Interface() override;
 
-	gsl::owner<QGridLayout*> gridLayout();
-	gsl::owner<QGridLayout*> buttonsGrid();
-	gsl::owner<QGridLayout*> tabsGrid();
-	gsl::owner<QGroupBox*>	 buttonsGroup();
-	gsl::owner<QGroupBox*>	 tabsGroup();
-	gsl::owner<QPushButton*> closeBtn();
-	gsl::owner<QPushButton*> searchBtn();
-	gsl::owner<QPushButton*> resetArgsBtn();
-	gsl::owner<QComboBox*>	 scannersBox();
-	gsl::owner<QCheckBox*>	 advancedCheckBox();
+	not_null_owner<QGridLayout*> gridLayout();
+	not_null_owner<QGridLayout*> buttonsGrid();
+	not_null_owner<QGridLayout*> tabsGrid();
+	not_null_owner<QGroupBox*>   buttonsGroup();
+	not_null_owner<QGroupBox*>   tabsGroup();
+	not_null_owner<QPushButton*> closeBtn();
+	not_null_owner<QPushButton*> searchBtn();
+	not_null_owner<QPushButton*> resetArgsBtn();
+	not_null_owner<QCheckBox*>   advancedCheckBox();
 
-	gsl::owner<SymbolLineEdit*>    symbolEdit();
-	gsl::owner<ArgumentsLineEdit*> argumentsEdit();
+	not_null_owner<PluginsComboBox*>   scannersBox();
+	not_null_owner<SymbolLineEdit*>	   symbolEdit();
+	not_null_owner<ArgumentsLineEdit*> argumentsEdit();
 
-	gsl::owner<QTabWidget*> tabWidget();
-	gsl::owner<QTextEdit*>	textBrowserStdOut();
-	gsl::owner<QTextEdit*>	textBrowserStdErr();
-	gsl::owner<QAction*>	actionScan();
-	gsl::owner<QAction*>	actionQuit();
-	gsl::owner<QAction*>	actionAboutQt();
+	not_null_owner<QTabWidget*> tabWidget();
+	not_null_owner<QTextEdit*>  textBrowserStdOut();
+	not_null_owner<QTextEdit*>  textBrowserStdErr();
+	not_null_owner<QAction*>    actionScan();
+	not_null_owner<QAction*>    actionQuit();
+	not_null_owner<QAction*>    actionAboutQt();
+
+signals:
+	void startScanning() const;
+	void uiIsShown() const;
 
 public slots:
 	void resizeLineEditWidgetsSlot( int w ) const;
 
+protected:
+	InterfacePrivate* const d_ptr; /*!< Pointer to the private implementation */
+
+	/*!
+	 */
+	void showEvent( QShowEvent* event ) override;
+
 private:
-	gsl::owner<QGridLayout*> m_gridLayout; /*!< Central grid layout */
-	gsl::owner<QGridLayout*> m_buttonsGrid; /*!< Upper grid layout, for the buttons */
-	gsl::owner<QGridLayout*> m_tabsGrid; /*!< Last grid layout, for the tabWidget */
-	gsl::owner<QGroupBox*>	 m_buttonsGroup;
-	gsl::owner<QGroupBox*>	 m_tabsGroup;
-	gsl::owner<QPushButton*> m_closeBtn;
-	gsl::owner<QPushButton*> m_searchBtn;
-	gsl::owner<QPushButton*> m_resetArgsBtn;
-	gsl::owner<QComboBox*>	 m_scannersBox;
-	gsl::owner<QCheckBox*>	 m_advancedCheckBox;
-
-	gsl::owner<SymbolLineEdit*>    m_symbolEdit;
-	gsl::owner<ArgumentsLineEdit*> m_argumentsEdit;
-
-	gsl::owner<QTabWidget*> m_tabWidget;
-	gsl::owner<QTextEdit*>	m_textEditStdOut;
-	gsl::owner<QTextEdit*>	m_textEditStdErr;
-	gsl::owner<QAction*>	m_actionScan;
-	gsl::owner<QAction*>	m_actionQuit;
-	gsl::owner<QAction*>	m_actionAboutQt;
+	Q_DECLARE_PRIVATE( Interface )
 };
 }    // end namespace Ui
-#endif	  // INTERFACE_H
+#endif	  // INTERFACE_HPP
