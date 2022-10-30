@@ -119,3 +119,9 @@ install( TARGETS symbolfinder
 	RUNTIME		DESTINATION ${CMAKE_INSTALL_BINDIR}
 	LIBRARY		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+install(DIRECTORY	"${CMAKE_SOURCE_DIR}/" # source directory
+        DESTINATION	${CMAKE_INSTALL_INCLUDEDIR} # target directory
+        FILES_MATCHING	# install only matched files
+        PATTERN "*.h*"	# select header files
+)
