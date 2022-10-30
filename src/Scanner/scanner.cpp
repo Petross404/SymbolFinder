@@ -38,9 +38,6 @@
 #include "../ConnectVerifier/connectverifier.hpp"    // for ConnectVerifier
 #include "../Helper/string.hpp"
 #include "interface/pluginmanager.hpp"
-#include "plugins/nmdriver.hpp"		// for NmDriver
-#include "plugins/scanelfdriver.hpp"	// for ScanelfDriver
-// #include <QtConcurrent/qtconcurrentrun.h>
 
 constexpr char g_spaceChar{ ' ' };
 constexpr int  NoPlugin = -1;
