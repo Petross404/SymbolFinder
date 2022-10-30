@@ -2,7 +2,6 @@ set(Scanner_SRC
 	scanner.cpp
 )
 
-add_subdirectory(plugins/)
 add_subdirectory(interface/)
 
 add_library(scanner SHARED ${Scanner_SRC})
