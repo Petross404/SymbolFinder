@@ -120,7 +120,7 @@ install( TARGETS symbolfinder
 	LIBRARY		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-install(DIRECTORY	"${CMAKE_SOURCE_DIR}/src/*" # source directory
+install(DIRECTORY	"${CMAKE_SOURCE_DIR}/src/" # source directory
         DESTINATION	${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME} # target directory
         FILES_MATCHING	# install only matched files
         PATTERN "*.h*"	# select header files
