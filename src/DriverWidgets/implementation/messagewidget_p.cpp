@@ -1,4 +1,4 @@
-#include "messagewidget_p.h"
+#include "messagewidget_p.hpp"
 
 #include <qaction.h>	     // for QAction
 #include <qapplication.h>    // for QApplication, qApp
@@ -9,7 +9,10 @@
 #include <qmargins.h>	     // for operator+, QMar...
 #include <qnamespace.h>	     // for UniqueConnection
 #include <qobject.h>	     // for QObject
+#include <qpainter.h>	     // for QPainter, QPain...
 #include <qpalette.h>	     // for QPalette, QPale...
+#include <qpen.h>	     // for QPen
+#include <qrect.h>	     // for QRect
 #include <qsize.h>	     // for QSize
 #include <qsizepolicy.h>     // for QSizePolicy
 #include <qstyle.h>	     // for QStyle, QStyle:...
@@ -24,19 +27,19 @@
 #include "../../ConnectVerifier/connectverifier.hpp"	// for ConnectVerifier
 #include "../../Helper/string.hpp"			// for toqstring
 #include "../messagewidget.hpp"				// for MessageWidget
-#include "messagewidgettype.hpp"			// for MessageType
+#include "messagewidgettype.hpp"			// for MessageType::Type
 
 constexpr int borderSz = 2;
 
 MessageWidgetPrivate::MessageWidgetPrivate( MessageWidget*	   messageWidget,
 					    const std::string_view text,
-					    MessageType::Type	   type )
+					    std::optional<MessageType::Type> type )
 	: q_ptr{ messageWidget }
 	, m_closeBtn{ gsl::make_not_null( new QToolButton{ messageWidget } ) }
 	, m_closeAction{ gsl::make_not_null( new QAction{ messageWidget } ) }
 	, m_gridLayout{ gsl::make_not_null( new QGridLayout{ messageWidget } ) }
 	, m_label{ gsl::make_not_null( new QLabel{ string::toqstring( text ), messageWidget } ) }
-	, m_messageType{ type }
+	, m_messageType{ type.value_or( MessageType::Type::Information ) }
 {
 	setupWidgets();
 	setupConnections();
@@ -154,6 +157,35 @@ void MessageWidgetPrivate::setupConnections()
 		q,
 		std::bind( &MessageWidget::setPallete, q, std::placeholders::_1, true ),
 		Qt::UniqueConnection );
+}
+
+void MessageWidgetPrivate::handlePaintEvent()
+{
+	Q_Q( MessageWidget );
+
+	QPainter painter{ q };
+
+	constexpr float radius = 4 * 0.6;
+	const QRect innerRect = q->rect().marginsRemoved( QMargins{} + borderSize() / 2 );
+	const QColor	color = q->palette().color( QPalette::Window );
+	constexpr float alpha = 0.2;
+
+	const QColor parentWindowColor{ ( q->parentWidget() != nullptr
+						  ? q->parentWidget()->palette()
+						  : qApp->palette() )
+						.color( QPalette::Window ) };
+
+	const int newRed =
+		( color.red() * alpha ) + ( parentWindowColor.red() * ( 1 - alpha ) );
+	const int newGreen = ( color.green() * alpha )
+			     + ( parentWindowColor.green() * ( 1 - alpha ) );
+	const int newBlue = ( color.blue() * alpha )
+			    + ( parentWindowColor.blue() * ( 1 - alpha ) );
+
+	painter.setPen( QPen( color, borderSize() ) );
+	painter.setBrush( QColor( newRed, newGreen, newBlue ) );
+	painter.setRenderHint( QPainter::Antialiasing );
+	painter.drawRoundedRect( innerRect, radius, radius );
 }
 
 bool MessageWidgetPrivate::isCloseButtonVisible() const

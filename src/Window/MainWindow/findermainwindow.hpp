@@ -19,25 +19,26 @@
 #ifndef SYMBOLFINDER_H
 #define SYMBOLFINDER_H
 
-#include <qglobal.h>	    // for Q_DISABLE_COPY_...
+#include <qglobal.h>	    // for qGetPtrHelper
 #include <qmainwindow.h>    // for QMainWindow
 #include <qobjectdefs.h>    // for Q_OBJECT, signals
+#include <qprocess.h>	    // for QProcess, QProc...
 #include <qstring.h>	    // for QString
 
 #include <gsl/pointers>	   // for owner
+#include <memory>	   // for unique_ptr
 #include <optional>	   // for optional, nullopt
 #include <string_view>	   // for string_view
 
 #include "../../DriverWidgets/argumentslineedit.hpp"	// for ArgumentsLineEdit
-
-class QCloseEvent;    // lines 33-33
-class QObject;	      // lines 34-34
-class QWidget;	      // lines 35-35
-class Scanner;	      // lines 36-36
+class FinderWindowPrivate;				// lines 33-33
+class QCloseEvent;					// lines 34-34
+class QObject;						// lines 35-35
+class QWidget;						// lines 36-36
+class Scanner;						// lines 37-37
 namespace Ui {
 class Interface;
 }    // namespace Ui
-class FinderWindowPrivate;
 
 using ArgsLineEdit = ArgumentsLineEdit;
 
@@ -106,7 +107,7 @@ public slots:
 	/*!
 	 * Slot to set the symbol name with the `Scanner` instance.
 	 */
-	void updateSymbolSlot( const std::string_view symbol );
+	void updateSymbolSlot( std::string_view symbol );
 
 	/*!
 	 * Slot to update the arguments, when the symbol name is altered.
@@ -118,7 +119,7 @@ public slots:
 	 * this change.
 	 * \param name is the driver's name.
 	 */
-	void driverInitalizedSlot( const std::string_view name );
+	void driverInitalizedSlot( std::string_view name );
 
 	/*!
 	 * Slot to reset the blocked advanced arguments widgets. This
@@ -151,7 +152,7 @@ public slots:
 	 * to interact again.
 	 * \sa void MainWindow::scanStartedSlot()
 	 */
-	void scanFinishedSlot();
+	void scanFinishedSlot( int exitCode, QProcess::ExitStatus exitStatus );
 
 	/*!
 	 * Slot to set the scanner's arguments. The arguments are taken
@@ -180,11 +181,12 @@ signals:
 	void startScanner() const;
 
 protected:
+	std::unique_ptr<FinderWindowPrivate> const d_ptr;
+
 	void closeEvent( QCloseEvent* event ) override;
 
 private:
 	Q_DECLARE_PRIVATE( FinderWindow )
-	FinderWindowPrivate* const d_ptr;
 
 	gsl::owner<Ui::Interface*> m_ui; /*!< Ptr to the hand-made user interface */
 	gsl::owner<Scanner*>	   m_scanner; /*!< Ptr to the scanner instance */

@@ -65,7 +65,8 @@ std::string GenericDriver::driverName() const
 
 bool GenericDriver::isSymbolInArgs() const
 {
-	auto it{ std::find( m_effectiveArgList.begin(), m_effectiveArgList.end(), m_symbol ) };
+	std::list<std::string_view>::const_iterator it{
+		std::find( m_effectiveArgList.begin(), m_effectiveArgList.end(), m_symbol ) };
 	return it != m_effectiveArgList.end();
 }
 
@@ -104,8 +105,8 @@ std::string GenericDriver::symbolName() const { return m_symbol; }
 
 bool GenericDriver::canDriverQuit() const
 {
-	return state() == QProcess::ProcessState::Running
-	       || state() == QProcess::ProcessState::Starting;
+	return state() != QProcess::ProcessState::Running
+	       || state() != QProcess::ProcessState::Starting;
 }
 
 void GenericDriver::exec()

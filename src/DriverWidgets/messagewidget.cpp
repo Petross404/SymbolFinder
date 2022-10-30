@@ -4,33 +4,26 @@
 
 #include "messagewidget.hpp"
 
-#include <qapplication.h>    // for QApplication, qApp
-#include <qcolor.h>	     // for QColor
-#include <qcoreevent.h>	     // for QEvent, QEvent::Pare...
-#include <qlabel.h>	     // for QLabel
-#include <qmargins.h>	     // for operator+, QMargins
-#include <qpainter.h>	     // for QPainter, QPainter::...
-#include <qpalette.h>	     // for QPalette, QPalette::...
-#include <qpen.h>	     // for QPen
-#include <qrect.h>	     // for QRect
-#include <qtoolbutton.h>     // for QToolButton
-#include <qwidget.h>	     // for QWidget
+#include <qcoreevent.h>	    // for QEvent, QEvent::Pare...
+#include <qlabel.h>	    // for QLabel
+#include <qpalette.h>	    // for QPalette
+#include <qtoolbutton.h>    // for QToolButton
 
-#include "implementation/messagewidget_p.h"	   // for MessageWidgetPrivate
-#include "implementation/messagewidgettype.hpp"	   // for MessageType, Message...
-class QCloseEvent;				   // lines 27-27
-class QPaintEvent;				   // lines 28-28
+#include "implementation/messagewidget_p.hpp"	   // for MessageWidgetPrivate
+#include "implementation/messagewidgettype.hpp"	   // for MessageType::Type
+class QCloseEvent;				   // lines 21-21
+class QPaintEvent;				   // lines 22-22
 
-MessageWidget::MessageWidget( const std::string_view  text,
-			      std::optional<QWidget*> parent,
-			      MessageType::Type	      type,
-			      QFrame::Shape	      shape,
-			      QFrame::Shadow	      shadow )
+MessageWidget::MessageWidget( const std::string_view	       text,
+			      std::optional<QWidget*>	       parent,
+			      std::optional<MessageType::Type> type,
+			      std::optional<QFrame::Shape>     shape,
+			      std::optional<QFrame::Shadow>    shadow )
 	: QFrame{ parent.value_or( nullptr ) }
-	, d_ptr{ new MessageWidgetPrivate{ this, text, type } }
+	, d_ptr{ std::make_unique<MessageWidgetPrivate>( this, text, type ) }
 {
-	setFrameShape( shape );
-	setFrameShadow( shadow );
+	setFrameShape( shape.value_or( QFrame::Shape::StyledPanel ) );
+	setFrameShadow( shadow.value_or( QFrame::Shadow::Raised ) );
 	createLayout();
 	setPallete();
 	ensurePolished();
@@ -39,7 +32,7 @@ MessageWidget::MessageWidget( const std::string_view  text,
 	update();
 }
 
-MessageWidget::~MessageWidget() { delete d_ptr; }
+MessageWidget::~MessageWidget() = default;
 
 void MessageWidget::setPallete( const QPalette& paletteArgument, bool forceParameter )
 {
@@ -155,28 +148,7 @@ void MessageWidget::paintEvent( QPaintEvent* event )
 	Q_D( MessageWidget );
 	Q_UNUSED( event )
 
-	QPainter painter{ this };
-
-	constexpr float radius = 4 * 0.6;
-	const QRect innerRect = rect().marginsRemoved( QMargins() + d->borderSize() / 2 );
-	const QColor	color = palette().color( QPalette::Window );
-	constexpr float alpha = 0.2;
-
-	const QColor parentWindowColor{
-		( parentWidget() != nullptr ? parentWidget()->palette() : qApp->palette() )
-			.color( QPalette::Window ) };
-
-	const int newRed =
-		( color.red() * alpha ) + ( parentWindowColor.red() * ( 1 - alpha ) );
-	const int newGreen = ( color.green() * alpha )
-			     + ( parentWindowColor.green() * ( 1 - alpha ) );
-	const int newBlue = ( color.blue() * alpha )
-			    + ( parentWindowColor.blue() * ( 1 - alpha ) );
-
-	painter.setPen( QPen( color, d->borderSize() ) );
-	painter.setBrush( QColor( newRed, newGreen, newBlue ) );
-	painter.setRenderHint( QPainter::Antialiasing );
-	painter.drawRoundedRect( innerRect, radius, radius );
+	d->handlePaintEvent();
 }
 
 void MessageWidget::closeEvent( QCloseEvent* event )

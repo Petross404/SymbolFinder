@@ -27,6 +27,7 @@
 #include <qlibraryinfo.h>
 #include <qregularexpression.h>
 
+#include <QtConcurrent/QtConcurrent>
 #include <functional>
 #include <gsl/pointers>	   // for owner
 #include <iostream>
@@ -47,13 +48,10 @@ std::uint16_t g_pluginsNumber{ 0 };
 
 PluginManager::PluginManager( QObject* parent )
 	: QObject{ parent }
-	, d_ptr{ new PluginManagerPrivate( this ) }
+	, d_ptr{ std::make_unique<PluginManagerPrivate>( this ) }
 	, m_currentDriver{ std::make_optional<IDriver*>() }
 {
-	Q_D( PluginManager );
-	Q_ASSERT_X( d->q_ptr == this, "", "" );
-
-	lookup();
+	QtConcurrent::run( this, &PluginManager::lookup );
 
 	ConnectVerifier v;
 
@@ -64,7 +62,7 @@ PluginManager::PluginManager( QObject* parent )
 		     Qt::UniqueConnection );
 }
 
-PluginManager::~PluginManager() { delete d_ptr; }
+PluginManager::~PluginManager() = default;
 
 void PluginManager::lookup()
 {

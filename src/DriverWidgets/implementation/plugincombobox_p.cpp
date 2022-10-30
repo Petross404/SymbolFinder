@@ -1,20 +1,23 @@
 #include "plugincombobox_p.hpp"
-#include <bits/utility.h>           // for tuple_element<>::type
-#include <fmt/core.h>               // for print
-#include <qcolor.h>                 // for QColor
-#include <qicon.h>                  // for QIcon
-#include <qnamespace.h>             // for ItemDataRole, AlignCenter, Alignm...
-#include <qpainter.h>               // for QPainter
-#include <qpalette.h>               // for QPalette
-#include <qstringliteral.h>         // for QStringLiteral
-#include <stdio.h>                  // for stderr
-#include <algorithm>                // for transform
-#include <cctype>                   // for toupper
-#include <cstdint>                  // for uint16_t
-#include <string>                   // for string
-#include <string_view>              // for string_view
-#include "../../Helper/string.hpp"  // for toqstring
-#include "../pluginscombobox.hpp"   // for PluginsComboBox
+
+#include <bits/utility.h>      // for tuple_element<>::type
+#include <fmt/core.h>	       // for print
+#include <qcolor.h>	       // for QColor
+#include <qicon.h>	       // for QIcon
+#include <qnamespace.h>	       // for ItemDataRole, AlignCenter, Alignm...
+#include <qpainter.h>	       // for QPainter
+#include <qpalette.h>	       // for QPalette
+#include <qstringliteral.h>    // for QStringLiteral
+#include <stdio.h>	       // for stderr
+
+#include <algorithm>	  // for transform
+#include <cctype>	  // for toupper
+#include <cstdint>	  // for uint16_t
+#include <string>	  // for string
+#include <string_view>	  // for string_view
+
+#include "../../Helper/string.hpp"    // for toqstring
+#include "../pluginscombobox.hpp"     // for PluginsComboBox
 
 void setBoxItemData( PluginsComboBox*	 pluginCombobox,
 		     const std::uint16_t indexOfItem,
@@ -79,9 +82,12 @@ void PluginsComboBoxPrivate::setWarningColor( std::optional<QPaintEvent*> event,
 	// Exit if not empty
 	if ( q->count() ) { return; }
 
-	QPainter p{q};
-	p.setPen(Qt::GlobalColor::black);
-	p.drawText(q->rect(), Qt::AlignCenter, QStringLiteral("No drivers found."));
+	QPainter ppainter{ q };
+	ppainter.setPen( Qt::GlobalColor::black );
+
+	ppainter.drawText( q->rect(),
+			   Qt::AlignmentFlag::AlignCenter,
+			   QStringLiteral( "No drivers found." ) );
 
 	const QPalette warnPalette{ warnColor.has_value()
 					    ? warnColor.value()

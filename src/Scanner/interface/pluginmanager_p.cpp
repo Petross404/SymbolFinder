@@ -138,8 +138,10 @@ void PluginManagerPrivate::registerPlugin( const DriverNameCB& driverNameGlobal,
 	}
 	else
 	{
+		std::size_t size{ m_tableOfDrivers.size() };
+
 		Q_Q( PluginManager );
-		emit q->tableOfDriversAltered( m_tableOfDrivers.size() );
+		emit q->tableOfDriversAltered( size );
 	}
 }
 

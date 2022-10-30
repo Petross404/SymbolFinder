@@ -92,7 +92,7 @@ protected:
 private:
 	bool m_enableSearch = false;
 
-	std::string_view msg{ tr( "Enter a symbol (ie printf)" ).toStdString() };
+	std::string msg{ "Enter a symbol (ie printf)" };
 
 	void init();
 	void setMessage();

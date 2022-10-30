@@ -13,17 +13,18 @@
 #include <qstring.h>	    // for QString
 
 #include <gsl/pointers>	   // for owner, strict_not_null
+#include <memory>	   // for unique_ptr
 #include <optional>	   // for optional
 #include <string_view>	   // for string_view
 
 #include "implementation/messagewidgettype.hpp"	   // for MessageType, Message...
-class MessageWidgetPrivate;			   // lines 33-33
+class MessageWidgetPrivate;			   // lines 20-20
 class QAction;					   // lines 21-21
 class QCloseEvent;				   // lines 22-22
 class QEvent;					   // lines 23-23
-class QObject;					   // lines 26-26
-class QPaintEvent;				   // lines 27-27
-class QWidget;					   // lines 29-29
+class QObject;					   // lines 24-24
+class QPaintEvent;				   // lines 25-25
+class QWidget;					   // lines 26-26
 
 template<typename T> using not_null_owner = gsl::strict_not_null<gsl::owner<T>>;
 
@@ -45,13 +46,15 @@ public:
 	 * \param shape is of type `QFrame::StyledPanel`.
 	 * \param shadow is of type `QFrame::Shadow`.
 	 */
-	explicit MessageWidget( const std::string_view	text,
-				std::optional<QWidget*> parent,
-				MessageType::Type type = MessageType::Type::Information,
-				QFrame::Shape  shape  = QFrame::StyledPanel,
-				QFrame::Shadow shadow = QFrame::Raised );
+	explicit MessageWidget( const std::string_view		 text,
+				std::optional<QWidget*>		 parent,
+				std::optional<MessageType::Type> type,
+				std::optional<QFrame::Shape>	 shape,
+				std::optional<QFrame::Shadow>	 shadow );
 
-	/*! Virtual destructor */
+	/*!
+	 *Virtual destructor
+	 */
 	~MessageWidget() override;
 
 	void setPallete( const QPalette& paletteArgument = QPalette{},
@@ -81,7 +84,7 @@ signals:
 	void messageWidgetClosed() const;
 
 protected:
-	MessageWidgetPrivate* const d_ptr; /*!< Pointer to the private implementation */
+	std::unique_ptr<MessageWidgetPrivate> const d_ptr; /*!< Pointer to the private implementation */
 
 	/*!
 	 * Re-implement this function to paint this widget.

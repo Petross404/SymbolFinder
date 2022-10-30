@@ -10,7 +10,8 @@
 #include <qstring.h>	 // for QString
 
 #include <gsl/pointers>	   // for owner, strict_not_null
-#include <string_view>	   // for string_view
+#include <optional>
+#include <string_view>	  // for string_view
 
 #include "messagewidgettype.hpp"    // for MessageType, MessageType::Type, Mes...
 class MessageWidget;		    // lines 33-33
@@ -36,7 +37,7 @@ public:
 	 */
 	explicit MessageWidgetPrivate( MessageWidget*	      messageWidget,
 				       const std::string_view text,
-				       MessageType::Type type = MessageType::Type::Information );
+				       std::optional<MessageType::Type> type );
 
 	/*! destructor */
 	virtual ~MessageWidgetPrivate();
@@ -86,6 +87,7 @@ private:
 
 	void setupWidgets();
 	void setupConnections();
+	void handlePaintEvent();
 };
 
 #endif	  // MESSAGEWIDGET_P_HPP

@@ -14,22 +14,24 @@
 #include "../Scanner/interface/idriver.hpp"	     // for StopIndex
 #include "implementation/argumentslineedit_p.hpp"    // for ArgumentsLineEditP...
 
-ArgumentsLineEdit::ArgumentsLineEdit( std::string_view text, StopIndex stopIndex, QWidget* parent )
+ArgumentsLineEdit::ArgumentsLineEdit( std::string_view text,
+				      const StopIndex  stopIndex,
+				      QWidget*	       parent )
 	: QLineEdit{ string::toqstring( text ), parent }
-	, d_ptr{ new ArgumentsLineEditPrivate{
-		  this, string::toqstring( text ), std::move( stopIndex ) } }
+	, d_ptr{ std::make_unique<ArgumentsLineEditPrivate>(
+		  this, string::toqstring( text ), std::move( stopIndex ) ) }
 {
 	init();
 }
 
 ArgumentsLineEdit::ArgumentsLineEdit( std::optional<QWidget*> parent )
 	: QLineEdit{ parent.value_or( nullptr ) }
-	, d_ptr{ new ArgumentsLineEditPrivate{ this } }
+	, d_ptr{ std::make_unique<ArgumentsLineEditPrivate>( this ) }
 {
 	init();
 }
 
-ArgumentsLineEdit::~ArgumentsLineEdit() { delete d_ptr; }
+ArgumentsLineEdit::~ArgumentsLineEdit() = default;
 
 void ArgumentsLineEdit::setStopIndex( const StopIndex& stopIndex )
 {
@@ -59,14 +61,10 @@ void ArgumentsLineEdit::setSymbolSizeSlot( uint16_t size )
 
 void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
 {
-	if ( Qt::MouseButton btn = event->button();
-	     btn == Qt::MouseButton::LeftButton || btn == Qt::MouseButton::RightButton )
-	{
-		QPoint position{ event->pos() };
+	QPoint position{ event->pos() };
 
-		Q_D( const ArgumentsLineEdit );
-		d->handleCursorPosition( cursorPositionAt( position ) );
-	}
+	Q_D( const ArgumentsLineEdit );
+	d->handleCursorPosition( cursorPositionAt( position ), event->button() );
 
 	QLineEdit::mousePressEvent( event );
 }
@@ -74,7 +72,7 @@ void ArgumentsLineEdit::mousePressEvent( QMouseEvent* event )
 void ArgumentsLineEdit::keyPressEvent( QKeyEvent* event )
 {
 	Q_D( const ArgumentsLineEdit );
-	d->handleCursorPosition( cursorPosition() );
+	d->handleCursorPosition( cursorPosition(), Qt::MouseButton::NoButton );
 
 	QLineEdit::keyPressEvent( event );
 }

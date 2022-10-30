@@ -11,6 +11,7 @@
 #include <qstring.h>	    // for QString
 
 #include <cstdint>	  // for uint16_t
+#include <memory>	  // for unique_ptr
 #include <optional>	  // for optional
 #include <string_view>	  // for string_view
 
@@ -46,7 +47,7 @@ public:
 	 * \param parent is the ptr of the parent `QWidget` for this object
 	 */
 	explicit ArgumentsLineEdit( std::string_view arguments,
-				    StopIndex	     stopIndex,
+				    const StopIndex  stopIndex,
 				    QWidget*	     parent = nullptr );
 
 	explicit ArgumentsLineEdit( std::optional<QWidget*> parent );
@@ -82,6 +83,8 @@ signals:
 	 */
 	void symbolManuallyChanged() const;
 
+	void symbolPaste() const;
+
 	/*!
 	 * This signal is emmited when the symbol changes. It informs any listener about
 	 * the symbol's size so the interested widgets can find the boundaries of the
@@ -91,7 +94,7 @@ signals:
 	void symbolSizeChanged( uint16_t size );
 
 protected:
-	ArgumentsLineEditPrivate* const d_ptr; /*<! Referring to the private class */
+	std::unique_ptr<ArgumentsLineEditPrivate> const d_ptr; /*<! Referring to the private class */
 
 	/*!
 	 * Override and re-implement `QLineEdit::mousePressEvent(QMouseEvent*)` so we can

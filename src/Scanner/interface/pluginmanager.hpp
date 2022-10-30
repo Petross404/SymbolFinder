@@ -107,7 +107,7 @@ signals:
 	void tableOfDriversAltered( const std::size_t size );
 
 protected:
-	PluginManagerPrivate* const d_ptr; /*!< Smart pointer to private implemantation */
+	std::unique_ptr<PluginManagerPrivate> const d_ptr; /*!< Smart pointer to private implemantation */
 
 private:
 	Q_DECLARE_PRIVATE( PluginManager )

@@ -5,14 +5,15 @@
 #ifndef ARGUMENTSLINEEDITPRIVATE_HPP_INCLUDED
 #define ARGUMENTSLINEEDITPRIVATE_HPP_INCLUDED
 
-#include <qglobal.h>	// for Q_DECLARE_PUBLIC, Q_D...
-#include <qstring.h>	// for QString
+#include <qglobal.h>	   // for Q_DECLARE_PUBLIC, Q_D...
+#include <qnamespace.h>	   // for MouseButton
+#include <qstring.h>	   // for QString
 
 #include <cstdint>     // for uint16_t
 #include <optional>    // for optional
 
 #include "../../Scanner/interface/idriver.hpp"	  // for StopIndex
-class ArgumentsLineEdit;			  // lines 13-13
+class ArgumentsLineEdit;			  // lines 15-15			  // lines 13-13
 
 class ArgumentsLineEditPrivate
 {
@@ -74,7 +75,8 @@ private:
 
 	void checkStopString() const;
 
-	void handleCursorPosition( std::uint16_t positionAt ) const;
+	void handleCursorPosition( std::uint16_t	 positionAt,
+				   const Qt::MouseButton button ) const;
 };
 
 #endif	  // ARGUMENTSLINEEDITPRIVATE_HPP_INCLUDED

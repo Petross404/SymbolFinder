@@ -88,15 +88,31 @@ void ArgumentsLineEditPrivate::checkStopString() const
 	}
 }
 
-void ArgumentsLineEditPrivate::handleCursorPosition( std::uint16_t positionAt ) const
+void ArgumentsLineEditPrivate::handleCursorPosition( std::uint16_t positionAt,
+						     const Qt::MouseButton button ) const
 {
 	Q_Q( const ArgumentsLineEdit );
 
 	int index = stopIndex().indexOfStop;
 
-	if ( positionAt >= index && positionAt < ( index + symbolSize() ) )
+	/*
+	 * Position shouldn't be near the index
+	 */
+	if ( !( positionAt >= index && positionAt < ( index + symbolSize() ) ) )
 	{
-		emit q->symbolManuallyChanged();
+		return;
+	}
+
+	switch ( button )
+	{
+		case Qt::MouseButton::LeftButton:
+			emit q->symbolManuallyChanged();
+			break;
+
+		case Qt::MouseButton::RightButton:
+		case Qt::MouseButton::MiddleButton: emit q->symbolPaste(); break;
+
+		default: break;
 	}
 }
 

@@ -83,6 +83,7 @@ class IDriver: public QProcess
 {
 	Q_OBJECT
 	Q_DISABLE_COPY_MOVE( IDriver )
+	Q_CLASSINFO( "Author", "Peter Siligkounas" )
 
 public:
 	/*!

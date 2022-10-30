@@ -26,10 +26,10 @@
 #include <qcheckbox.h>
 #include <qcoreapplication.h>
 #include <qevent.h>
+#include <qframe.h>
 #include <qgridlayout.h>
 #include <qgroupbox.h>
 #include <qmessagebox.h>
-#include <qnamespace.h>
 #include <qpushbutton.h>
 #include <qstatusbar.h>
 #include <qstringliteral.h>
@@ -54,7 +54,7 @@
 #include "src/DriverWidgets/implementation/messagewidgettype.hpp"
 #include "src/Scanner/interface/idriver.hpp"
 #include "src/Scanner/interface/pluginmanageraliases.hpp"
-class QWidget;	  // lines 60-60
+class QWidget;	  // lines 56-56
 
 constexpr std::chrono::milliseconds g_milliseconds{ 3000 };
 
@@ -62,7 +62,7 @@ constexpr QChar g_spaceChar{ ' ' };
 
 FinderWindow::FinderWindow( std::optional<QWidget*> parent )
 	: QMainWindow{ parent.value_or( nullptr ) }
-	, d_ptr{ new FinderWindowPrivate{ this } }
+	, d_ptr{ std::make_unique<FinderWindowPrivate>( this ) }
 	, m_ui{ gsl::make_strict_not_null( new Ui::Interface{ this } ) }
 	, m_scanner{ gsl::make_strict_not_null( new Scanner{ this } ) }
 {
@@ -73,7 +73,7 @@ FinderWindow::FinderWindow( std::optional<QWidget*> parent )
 	setupConnections();
 }
 
-FinderWindow::~FinderWindow() { delete d_ptr; }
+FinderWindow::~FinderWindow() = default;
 
 void FinderWindow::setupConnections()
 {
@@ -127,7 +127,7 @@ void FinderWindow::updateStdOutputSlot()
 	m_ui->textBrowserStdOut()->setText( output );
 }
 
-void FinderWindow::updateSymbolSlot( const std::string_view symbol )
+void FinderWindow::updateSymbolSlot( std::string_view symbol )
 {
 	m_scanner->setSymbolName( symbol );
 }
@@ -151,13 +151,14 @@ void FinderWindow::resetAdvancedLineEditSlot()
 	 * After showing a warning widget with the message to the user, we need to signal
 	 * this widget when to close and re-enable the advanced argument's QLineEdit.
 	 */
-	const std::string_view message{
-		"Do not edit the symbol name in this widget." };
+	std::string_view message{ "Do not edit the symbol name in this widget." };
 
-	gsl::owner<MessageWidget*> messageWidget{
-		new MessageWidget{ message, this, MessageType::Type::Error } };
-
-	messageWidget->setAttribute( Qt::WA_DeleteOnClose );
+	gsl::owner<MessageWidget*> messageWidget{ new MessageWidget{
+		message,
+		this,
+		std::make_optional<MessageType::Type>( MessageType::Type::Error ),
+		std::nullopt,
+		std::nullopt } };
 
 	/*
 	 * While the MessageWidget is active, let's replace the checkbox
@@ -179,7 +180,7 @@ void FinderWindow::resetAdvancedLineEditSlot()
 	m_ui->advancedCheckBox()->toggle();
 
 	// Fire up a timer to countdown until the widget is "unblocked" again.
-	QTimer::singleShot( g_milliseconds.count(), [this, oldText, messageWidget]() {
+	QTimer::singleShot( g_milliseconds.count(), [this, oldText, messageWidget]() -> void {
 		m_ui->advancedCheckBox()->setEnabled( true );
 		m_ui->resetArgsBtn()->setEnabled( true );
 		m_ui->advancedCheckBox()->toggle();
@@ -190,7 +191,7 @@ void FinderWindow::resetAdvancedLineEditSlot()
 	} );
 }
 
-void FinderWindow::driverInitalizedSlot( const std::string_view name )
+void FinderWindow::driverInitalizedSlot( std::string_view name )
 {
 	qApp->setApplicationName( qAppName() + string::toqstring( name ) );
 
@@ -210,18 +211,20 @@ void FinderWindow::resetAdvancedArgumentsSlot() { m_scanner->resetInvocation(); 
 
 void FinderWindow::resetSymbolLineWarningSlot()
 {
-	const std::string message{ "Wrong symbol name" };
+	std::string_view message{ "Wrong symbol name" };
 
-	gsl::owner<MessageWidget*> messageWidget{
-		new MessageWidget{ message, this, MessageType::Type::Error } };
-
-	messageWidget->setAttribute( Qt::WA_DeleteOnClose );
+	gsl::owner<MessageWidget*> messageWidget{ new MessageWidget{
+		message,
+		this,
+		std::make_optional<MessageType::Type>( MessageType::Type::Error ),
+		std::nullopt,
+		std::nullopt } };
 
 	m_ui->symbolEdit()->hide();
 	m_ui->searchBtn()->setEnabled( false );
 	m_ui->buttonsGrid()->replaceWidget( m_ui->symbolEdit(), messageWidget );
 
-	QTimer::singleShot( g_milliseconds.count(), [this, messageWidget]() {
+	QTimer::singleShot( g_milliseconds.count(), [this, messageWidget]() -> void {
 		m_ui->searchBtn()->setEnabled( true );
 		m_ui->symbolEdit()->show();
 		m_ui->buttonsGrid()->replaceWidget( messageWidget, m_ui->symbolEdit() );
@@ -239,12 +242,13 @@ void FinderWindow::resetScannerInstanceSlot( int index )
 {
 	std::string driverName{ m_ui->scannersBox()->itemText( index ).toStdString() };
 
-	std::ranges::transform( driverName,
-				driverName.begin(),
-				[=]( unsigned char c ) -> unsigned char {
-					// TODO convert tolower only the first char
-					return std::tolower( c );
-				} );
+	std::function<unsigned char( unsigned char )> f_lowercase
+	{
+		[=]( unsigned char c ) -> unsigned char {
+			return static_cast<unsigned char>( std::tolower( c ) );
+		} };
+
+	std::ranges::transform( driverName, driverName.begin(), f_lowercase );
 
 	m_scanner->reset( driverName );
 }
@@ -255,14 +259,20 @@ void FinderWindow::scanStartedSlot()
 	setWindowTitle( QStringLiteral( "Searching" ) );
 }
 
-void FinderWindow::scanFinishedSlot()
+void FinderWindow::scanFinishedSlot( int exitCode, QProcess::ExitStatus exitStatus )
 {
 	m_ui->buttonsGroup()->setEnabled( true );
 	setWindowTitle( qAppName() );
 
-	// Update the output.
-	updateStdOutputSlot();
-	updateStdErrorSlot();
+	/*
+	 * Update the output based on the exit status
+	 */
+	emit m_scanner->readyReadStandardOutput();
+
+	if ( exitStatus != QProcess::ExitStatus::NormalExit || exitCode )
+	{
+		emit m_scanner->readyReadStandardError();
+	}
 }
 
 void FinderWindow::discoverPlugins()
@@ -273,18 +283,23 @@ void FinderWindow::discoverPlugins()
 
 void FinderWindow::closeEvent( QCloseEvent* event )
 {
-	if ( m_scanner->canQuit() )
+	// Return early if it can't quit
+	if ( !m_scanner->canQuit() ) { return; }
+
+	std::string_view question{ "Quit while still looking?" };
+	std::string_view title{ "Still searching..." };
+
+	// Pop-up a QMessageBox to ask for confirmation
+	if ( QMessageBox::StandardButton::Yes
+	     == QMessageBox::question( this,
+				       string::toqstring( title ),
+				       string::toqstring( question ),
+				       QMessageBox::StandardButton::Yes
+					       | QMessageBox::StandardButton::No ) )
 	{
-		const QString question{
-			"Do you want to quit while still looking?" };
-		const QString title{ "Still searching..." };
-
-		auto ans{ QMessageBox::question( this,
-						 title,
-						 question,
-						 QMessageBox::Yes | QMessageBox::No ) };
-
-		if ( QMessageBox::Yes == ans ) { event->ignore(); }
-		else { event->accept(); }
+		event->ignore();
 	}
+	else { event->accept(); }
+
+	QMainWindow::closeEvent( event );
 }

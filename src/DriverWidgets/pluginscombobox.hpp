@@ -6,19 +6,19 @@
 #define PLUGINSCOMBOBOX_H
 
 #include <qcombobox.h>	    // for QComboBox
-#include <qglobal.h>	    // for Q_DISABLE_COPY_MOVE
+#include <qglobal.h>	    // for qGetPtrHelper
 #include <qobjectdefs.h>    // for Q_OBJECT
 #include <qstring.h>	    // for QString
 
+#include <memory>      // for unique_ptr
 #include <optional>    // for optional
 #include <vector>      // for vector
 
 #include "../Scanner/interface/pluginmanageraliases.hpp"    // for PluginDesc
-
-class QObject;	  // lines 17-17
-class QPaintEvent;
-class QWidget;	  // lines 18-18
-class PluginsComboBoxPrivate;
+class PluginsComboBoxPrivate;				    // lines 21-21
+class QObject;						    // lines 18-18
+class QPaintEvent;					    // lines 19-19
+class QWidget;						    // lines 20-20
 
 /*!
  * Implement a custom `QComboBox` to override some functions.
@@ -45,7 +45,7 @@ public:
 	void initScannerBox( std::vector<PluginDesc>& vec );
 
 protected:
-	PluginsComboBoxPrivate* const d_ptr; /*!< Pointer to the private implemantation */
+	std::unique_ptr<PluginsComboBoxPrivate> const d_ptr; /*!< Pointer to the private implemantation */
 
 	/*!
 	 * Override `QComboBox::paintEvent`.

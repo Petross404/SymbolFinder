@@ -25,13 +25,13 @@ void setBoxItemData( PluginsComboBox* combobox,
 
 PluginsComboBox::PluginsComboBox( std::optional<QWidget*> parent )
 	: QComboBox{ parent.value_or( nullptr ) }
-	, d_ptr{ new PluginsComboBoxPrivate{ this } }
+	, d_ptr{ std::make_unique<PluginsComboBoxPrivate>( this ) }
 {
 	Q_D( PluginsComboBox );
 	Q_ASSERT_X( d->q_ptr == this, "", "" );
 }
 
-PluginsComboBox::~PluginsComboBox() { delete d_ptr; }
+PluginsComboBox::~PluginsComboBox() = default;
 
 void PluginsComboBox::initScannerBox( std::vector<PluginDesc>& vec )
 {

@@ -188,7 +188,7 @@ void FinderWindowPrivate::setupWidgets()
 	q->hideStdErrorTab();
 	q->m_ui->searchBtn()->setEnabled( !q->m_ui->symbolEdit()->text().isEmpty() );
 	q->m_ui->symbolEdit()->setEnabled( q->m_scanner->driver().has_value() );
-	/**********************************************************/
+	/*********************************************************/
 
 	QString symbolName{ q->m_ui->symbolEdit()->text() };
 
