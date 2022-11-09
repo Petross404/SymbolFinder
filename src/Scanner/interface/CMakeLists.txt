@@ -7,5 +7,5 @@ set_target_properties(driver PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})
 target_link_libraries(driver Qt5::Core Qt5::Widgets)
 
 install(TARGETS		driver
-	LIBRARY		DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	LIBRARY		DESTINATION "${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}"
 )
