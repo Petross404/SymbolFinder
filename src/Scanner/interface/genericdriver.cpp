@@ -66,7 +66,7 @@ std::string GenericDriver::driverName() const
 bool GenericDriver::isSymbolInArgs() const
 {
 	std::list<std::string_view>::const_iterator it{
-		std::find( m_effectiveArgList.begin(), m_effectiveArgList.end(), m_symbol ) };
+		std::ranges::find( m_effectiveArgList, m_symbol ) };
 	return it != m_effectiveArgList.end();
 }
 

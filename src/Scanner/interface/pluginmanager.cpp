@@ -174,7 +174,8 @@ std::optional<IDriver*> PluginManager::createDriver( std::string_view driverName
 
 std::optional<IDriver*> PluginManager::chooseDriver( std::string_view driverName )
 {
-	return createDriver( driverName );
+	setCurrentDriver( createDriver( driverName ) );
+	return currentDriver();
 }
 
 std::optional<IDriver*> PluginManager::currentDriver() const

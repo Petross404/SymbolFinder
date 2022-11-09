@@ -2,8 +2,8 @@
 // SPDX-FileCopyrightText: 2022 Πέτρος Σιλιγκούνας <petross404@gmail.com>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef PLUGINPAIR_H
-#define PLUGINPAIR_H
+#ifndef PLUGINPAIR_HPP
+#define PLUGINPAIR_HPP
 
 #include <QString>
 #include <QStringList>
@@ -17,4 +17,4 @@ struct PluginDriver
 	IDriver*    driver;
 };
 
-#endif
+#endif	  // PLUGINPAIR_HPP

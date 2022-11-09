@@ -106,11 +106,17 @@ void ArgumentsLineEditPrivate::handleCursorPosition( std::uint16_t positionAt,
 	switch ( button )
 	{
 		case Qt::MouseButton::LeftButton:
+		{
 			emit q->symbolManuallyChanged();
 			break;
+		}
 
 		case Qt::MouseButton::RightButton:
-		case Qt::MouseButton::MiddleButton: emit q->symbolPaste(); break;
+		case Qt::MouseButton::MiddleButton:
+		{
+			emit q->symbolPaste();
+			break;
+		}
 
 		default: break;
 	}

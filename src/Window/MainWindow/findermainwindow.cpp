@@ -242,8 +242,7 @@ void FinderWindow::resetScannerInstanceSlot( int index )
 {
 	std::string driverName{ m_ui->scannersBox()->itemText( index ).toStdString() };
 
-	std::function<unsigned char( unsigned char )> f_lowercase
-	{
+	std::function<unsigned char( unsigned char )> f_lowercase{
 		[=]( unsigned char c ) -> unsigned char {
 			return static_cast<unsigned char>( std::tolower( c ) );
 		} };

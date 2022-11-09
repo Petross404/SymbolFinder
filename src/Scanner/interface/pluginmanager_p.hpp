@@ -36,8 +36,9 @@ public:
 
 	/*!
 	 * Register the driver.
-	 * \param name is the driver's name
-	 * \param cb is the driver's callback to create an instance.
+	 * \param driverNameGlobal is the driver's name callback
+	 * \param driverDescGlobal is the driver's description callback
+	 * \param initcb is the driver's callback to create an instance.
 	 */
 	void registerPlugin( const DriverNameCB& driverNameGlobal,
 			     const DriverDescCB& driverDescGlobal,
